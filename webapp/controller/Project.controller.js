@@ -1,15 +1,11 @@
 sap.ui.define([
-    "sap/ui/core/mvc/Controller"
-], function (Controller) {
+    "ui5/vizframe/app/controller/BaseController"
+], function (BaseController) {
     "use strict";
 
-    return Controller.extend("ui5.vizframe.app.controller.Project", {
+    return BaseController.extend("ui5.vizframe.app.controller.Project", {
         onNavBack: function () {
             this.getOwnerComponent().getRouter().navTo("main");
-        },
-
-        onSapLink: function () {
-            window.open("https://www.sap.com", "_blank");
         }
     });
 });

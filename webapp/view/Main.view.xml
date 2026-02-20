@@ -14,13 +14,13 @@
             <Bar>
                 <contentLeft>
                     <core:Icon src="sap-icon://sap-logo" size="1.5rem"/>
-                    <Title text="Geschäftsprozesse" level="H2"/>
+                    <Title text="KPI Dashboard" level="H2"/>
                 </contentLeft>
                 <contentMiddle/>
                 <contentRight>
-                    <Button id="prozesseButton" text="Prozesse ▾" press=".onProzessePress"/>
-                    <Button text="Über dieses Projekt" press=".onNavToProject"/>
-                    <Button text="SAP.com" press=".onSapLink" type="Transparent"/>
+                    <Button id="burgerButton" icon="sap-icon://menu2" press=".onBurgerPress" class="headerBurgerButton"/>
+                    <Button text="Über dieses Projekt" press=".onNavToProject" class="headerDesktopActions"/>
+                    <Button id="prozesseButton" text="Prozesse ▾" press=".onProzessePress" class="headerDesktopActions"/>
                 </contentRight>
             </Bar>
         </customHeader>
@@ -30,7 +30,7 @@
                 gridTemplateColumns="1fr 1fr"
                 gridGap="2rem"
                 gridTemplateRows="1fr 1fr"
-                class="sapUiMediumMargin processTilesGrid">
+                class="processTilesGrid">
                 <!-- O2C Tile -->
                 <GenericTile
                     id="tileO2C"

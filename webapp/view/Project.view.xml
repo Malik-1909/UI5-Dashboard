@@ -14,7 +14,7 @@
                 </contentLeft>
                 <contentMiddle/>
                 <contentRight>
-                    <Button text="SAP.com" press=".onSapLink" type="Transparent"/>
+                    <Button id="burgerButton" icon="sap-icon://menu2" press=".onBurgerPress" class="headerBurgerButton"/>
                 </contentRight>
             </Bar>
         </customHeader>
@@ -29,19 +29,20 @@
                         <StandardListItem title="sap.m" info="Mobile-first UI Controls"/>
                         <StandardListItem title="sap.ui.core" info="Kern-Framework"/>
                         <StandardListItem title="sap.ui.layout" info="Layout-Controls (CSSGrid, etc.)"/>
-                        <StandardListItem title="sap.viz" info="VizFrame Charts – Bar, Line, Pie, Donut, Stacked Bar, Combination"/>
+                        <StandardListItem title="sap.viz" info="VizFrame Charts – Column, Bar, Line, Pie, Donut"/>
                         <StandardListItem title="themelib_sap_horizon" info="SAP Horizon Design Theme"/>
                     </List>
                     <Title text="Umsetzung" level="H3" class="sapUiSmallMarginTop"/>
-                    <Text text="Die App wurde mit UI5 Tooling aufgebaut. Das Framework wird über den fiori-tools-proxy von ui5.sap.com geladen. Die Struktur folgt dem Standard: Component.js, manifest.json, XML-Views und Controller. Das Routing ermöglicht die Navigation zwischen Dashboard und Projektseite."
+                    <Text text="Die App wurde mit UI5 Tooling aufgebaut. Das Framework wird über den fiori-tools-proxy von ui5.sap.com geladen. Die Struktur folgt dem Standard: Component.js, manifest.json, XML-Views und Controller. Das Routing ermöglicht die Navigation zwischen Startseite, vier Geschäftsprozess-Detailseiten und dieser Projektseite."
                         class="sapUiSmallMarginBottom"/>
                     <Title text="Enthaltene Inhalte" level="H4"/>
                     <List>
-                        <StandardListItem title="Header/Navbar" info="SAP-Logo, Titel, Menüpunkt, SAP.com-Link"/>
-                        <StandardListItem title="KPI-Tile" info="Umsatz Q1 2026 mit NumericContent"/>
-                        <StandardListItem title="10 VizFrame-Charts" info="Monatsumsatz, Produktanteile, Region Ist vs. Ziel, Gewinn vs. Kosten, Mitarbeiterzufriedenheit, Ticket-Volumen, Budget-Verteilung, Conversion Funnel, Bestellungen vs. Retouren, Kundensegmente"/>
-                        <StandardListItem title="Responsives Grid-Layout" info="sap.ui.layout.cssgrid.CSSGrid"/>
-                        <StandardListItem title="Popover" info="Klick auf Chart-Datenpunkte zeigt Details"/>
+                        <StandardListItem title="Header" info="SAP-Logo, Titel KPI Dashboard, Prozesse-Dropdown, Über dieses Projekt"/>
+                        <StandardListItem title="Startseite" info="4 große GenericTiles mit VizFrame-Charts (O2C, P2P, R2R, PtP) – je ein Chart pro Prozess als Übersicht"/>
+                        <StandardListItem title="4 Geschäftsprozesse" info="O2C (Order-to-Cash), P2P (Procure-to-Pay), R2R (Record-to-Report), PtP (Plan-to-Produce)"/>
+                        <StandardListItem title="Detailseiten" info="Jede Prozessseite hat 3 VizFrame-Charts mit Prozessbeschreibung und -schritten"/>
+                        <StandardListItem title="Responsives Grid-Layout" info="2x2 CSSGrid auf der Startseite, Padding und volle Breite"/>
+                        <StandardListItem title="Prozesse-Popover / Burger-Menü" info="Dropdown auf Desktop, Burger-Menü auf Mobile zur Navigation"/>
                     </List>
                     <Title text="Deployment" level="H3" class="sapUiSmallMarginTop"/>
                     <Text text="Die App kann mit ui5 build gebaut und auf SAP BTP Cloud Foundry (staticfile_buildpack) oder in den SAP Build Work Zone (Fiori Launchpad) deployt werden. Im Launchpad-Kontext stellt SAP die UI5-Ressourcen bereit – sap.viz funktioniert dort zuverlässig."

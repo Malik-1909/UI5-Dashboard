@@ -1,10 +1,10 @@
 sap.ui.define([
-    "sap/ui/core/mvc/Controller",
+    "ui5/vizframe/app/controller/BaseController",
     "sap/viz/ui5/controls/Popover"
-], function (Controller, VizPopover) {
+], function (BaseController, VizPopover) {
     "use strict";
 
-    return Controller.extend("ui5.vizframe.app.controller.R2R", {
+    return BaseController.extend("ui5.vizframe.app.controller.R2R", {
         onAfterRendering: function () {
             var aChartIds = ["r2rFunnelChart", "r2rEntriesChart", "r2rCloseChart"];
             aChartIds.forEach(function (sId) {
@@ -17,9 +17,6 @@ sap.ui.define([
         },
         onNavBack: function () {
             this.getOwnerComponent().getRouter().navTo("main");
-        },
-        onSapLink: function () {
-            window.open("https://www.sap.com", "_blank");
         }
     });
 });

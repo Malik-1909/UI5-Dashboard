@@ -1,10 +1,10 @@
 sap.ui.define([
-    "sap/ui/core/mvc/Controller",
+    "ui5/vizframe/app/controller/BaseController",
     "sap/viz/ui5/controls/Popover"
-], function (Controller, VizPopover) {
+], function (BaseController, VizPopover) {
     "use strict";
 
-    return Controller.extend("ui5.vizframe.app.controller.PtP", {
+    return BaseController.extend("ui5.vizframe.app.controller.PtP", {
         onAfterRendering: function () {
             var aChartIds = ["ptpFunnelChart", "ptpCapacityChart", "ptpOutputChart"];
             aChartIds.forEach(function (sId) {
@@ -17,9 +17,6 @@ sap.ui.define([
         },
         onNavBack: function () {
             this.getOwnerComponent().getRouter().navTo("main");
-        },
-        onSapLink: function () {
-            window.open("https://www.sap.com", "_blank");
         }
     });
 });

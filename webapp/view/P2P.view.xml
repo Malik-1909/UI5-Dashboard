@@ -17,7 +17,7 @@
                 </contentLeft>
                 <contentMiddle/>
                 <contentRight>
-                    <Button text="SAP.com" press=".onSapLink" type="Transparent"/>
+                    <Button id="burgerButton" icon="sap-icon://menu2" press=".onBurgerPress" class="headerBurgerButton"/>
                 </contentRight>
             </Bar>
         </customHeader>
