@@ -48,3 +48,57 @@ html, body {
         grid-column: span 1;
     }
 }
+
+/* Große Prozess-Tiles auf der Startseite: 2 pro Reihe, volle Breite */
+.processTilesGrid {
+    width: 100%;
+    max-width: none;
+    min-height: 80vh;
+}
+
+.processTilesGrid .processTile {
+    width: 100% !important;
+    min-width: 0;
+    min-height: 100px;
+    height: 100%;
+}
+
+.processTilesGrid .processTile .sapMTileContent {
+    min-height: 300px;
+    height: 100% !important;
+    overflow: visible !important;
+    padding: 1rem 1.25rem 1.5rem !important;
+    box-sizing: border-box;
+}
+
+/* Tile-Content-Container: height 100% für vollständige Diagrammanzeige */
+[id*="tileO2C-content"],
+[id*="tileP2P-content"],
+[id*="tileR2R-content"],
+[id*="tilePtP-content"] {
+    height: 100% !important;
+    min-height: 280px !important;
+}
+
+/* VizFrame: füllt den Content-Container */
+.processTilesGrid .sapVizFrame {
+    overflow: visible !important;
+    min-width: 200px;
+    min-height: 240px !important;
+    height: 100% !important;
+}
+
+
+/* Grid-Kinder (Tiles) füllen die Zelle komplett */
+.processTilesGrid > div,
+.processTilesGrid .sapMTile {
+    width: 100% !important;
+    max-width: none !important;
+    min-height: 380px;
+}
+
+@media (max-width: 960px) {
+    .processTilesGrid[id*="processTilesGrid"] {
+        grid-template-columns: 1fr !important;
+    }
+}

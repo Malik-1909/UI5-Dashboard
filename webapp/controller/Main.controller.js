@@ -46,6 +46,18 @@ sap.ui.define([
 
         onSapLink: function () {
             window.open("https://www.sap.com", "_blank");
+        },
+
+        onTilePress: function (oEvent) {
+            var oTile = oEvent.getSource();
+            var sId = oTile.getId();
+            var mRouteMap = { "O2C": "o2c", "P2P": "p2p", "R2R": "r2r", "PtP": "ptp" };
+            for (var key in mRouteMap) {
+                if (sId.indexOf(key) >= 0) {
+                    this.getOwnerComponent().getRouter().navTo(mRouteMap[key]);
+                    return;
+                }
+            }
         }
     });
 });
