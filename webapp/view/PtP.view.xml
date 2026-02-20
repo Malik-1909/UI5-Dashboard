@@ -1,0 +1,27 @@
+<mvc:View
+    controllerName="ui5.vizframe.app.controller.PtP"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns="sap.m"
+    xmlns:core="sap.ui.core"
+    displayBlock="true">
+    <Page id="ptpPage" enableScrolling="true" showHeader="true">
+        <customHeader>
+            <Bar>
+                <contentLeft>
+                    <Button icon="sap-icon://nav-back" press=".onNavBack"/>
+                    <Title text="PtP (Plan-to-Produce)" level="H2"/>
+                </contentLeft>
+                <contentMiddle/>
+                <contentRight>
+                    <Button text="SAP.com" press=".onSapLink" type="Transparent"/>
+                </contentRight>
+            </Bar>
+        </customHeader>
+        <content>
+            <VBox class="sapUiSmallMargin">
+                <Title text="Plan-to-Produce" level="H3"/>
+                <Text text="Plan-to-Produce (PtP) beschreibt den Produktionsprozess von der Planung bis zur Fertigstellung: Bedarfsplanung, Produktionsplanung, Materialbereitstellung, Fertigung und Qualitätsprüfung. Der Prozess verbindet Planung, Produktion und Logistik."/>
+            </VBox>
+        </content>
+    </Page>
+</mvc:View>

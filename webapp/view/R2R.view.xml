@@ -1,0 +1,27 @@
+<mvc:View
+    controllerName="ui5.vizframe.app.controller.R2R"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns="sap.m"
+    xmlns:core="sap.ui.core"
+    displayBlock="true">
+    <Page id="r2rPage" enableScrolling="true" showHeader="true">
+        <customHeader>
+            <Bar>
+                <contentLeft>
+                    <Button icon="sap-icon://nav-back" press=".onNavBack"/>
+                    <Title text="R2R (Record-to-Report)" level="H2"/>
+                </contentLeft>
+                <contentMiddle/>
+                <contentRight>
+                    <Button text="SAP.com" press=".onSapLink" type="Transparent"/>
+                </contentRight>
+            </Bar>
+        </customHeader>
+        <content>
+            <VBox class="sapUiSmallMargin">
+                <Title text="Record-to-Report" level="H3"/>
+                <Text text="Record-to-Report (R2R) umfasst den Finanz- und Rechnungswesen-Prozess von der Buchung bis zum Abschluss: Transaktionserfassung, Kontenabstimmung, Periodenabschluss, Konsolidierung und Reporting. Der Prozess bildet die Grundlage für die Finanzberichterstattung."/>
+            </VBox>
+        </content>
+    </Page>
+</mvc:View>

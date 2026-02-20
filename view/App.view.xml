@@ -1,0 +1,9 @@
+<mvc:View controllerName="app.controller.App"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns="sap.m">
+    <Page title="Hallo Welt">
+        <content>
+            <Button text="Klick mich" press=".onPress"/>
+        </content>
+    </Page>
+</mvc:View>

@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UI5</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="sapUiBody">
+    <div id="content">Lade UI5…</div>
+    <script id="sap-ui-bootstrap" src="https://openui5.hana.ondemand.com/1.130.0/resources/sap-ui-core.js"
+        data-sap-ui-theme="sap_horizon"
+        data-sap-ui-libs="sap.m,sap.ui.layout"
+        data-sap-ui-compatVersion="edge">
+    </script>
+    <script>
+        function initUI5() {
+        try {
+        sap.ui.getCore().attachInit(function () {
+            sap.ui.require([
+                "sap/ui/core/mvc/XMLView",
+                "sap/ui/core/mvc/Controller",
+                "sap/m/MessageToast"
+            ], function (XMLView, Controller, MessageToast) {
+                sap.ui.define("app.controller.App", ["sap/ui/core/mvc/Controller", "sap/m/MessageToast"], function (Ctrl, Toast) {
+                    return Ctrl.extend("app.controller.App", {
+                        onPress: function () {
+                            Toast.show("Hallo UI5!");
+                            this.byId("helloButton").setText("Geklickt!");
+                        },
+                        onSapLink: function () {
+                            window.open("https://www.sap.com", "_blank");
+                        }
+                    });
+                });
+                XMLView.create({
+                    definition: '<mvc:View controllerName="app.controller.App" xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m" xmlns:core="sap.ui.core" displayBlock="true">' +
+                        '<App><pages><Page title="Hallo Welt" enableScrolling="true">' +
+                        '<content>' +
+                          '<VBox class="sapUiSmallMargin">' +
+                            '<Button id="helloButton" text="Klick mich" press=".onPress"/>' +
+                          '</VBox>' +
+                          '<VBox class="sapUiSmallMarginBeginEnd sapUiSmallMarginBottom">' +
+                            '<GenericTile header="Umsatz" subheader="Q1 2026" frameType="TwoByOne" class="sapUiSmallMarginBottom" width="20rem">' +
+                              '<tileContent>' +
+                                '<TileContent footer="vs. Vorjahr +12%">' +
+                                  '<content>' +
+                                    '<NumericContent value="84" unit="K EUR" indicator="Up" valueColor="Good"/>' +
+                                  '</content>' +
+                                '</TileContent>' +
+                              '</tileContent>' +
+                            '</GenericTile>' +
+                            '<core:HTML content="&lt;svg xmlns=\'http://www.w3.org/2000/svg\' width=\'100%\' viewBox=\'0 0 320 160\' style=\'max-width:20rem;display:block;font-family:system-ui,sans-serif\'&gt;&lt;rect width=\'320\' height=\'160\' rx=\'8\' fill=\'#f5f6f7\'/&gt;&lt;text x=\'12\' y=\'20\' font-size=\'11\' fill=\'#32363a\' font-weight=\'bold\'&gt;Monatsumsatz (T EUR)&lt;/text&gt;&lt;line x1=\'32\' y1=\'130\' x2=\'308\' y2=\'130\' stroke=\'#d9d9d9\' stroke-width=\'1\'/&gt;&lt;rect x=\'40\' y=\'60\' width=\'36\' height=\'70\' rx=\'3\' fill=\'#0070F2\'/&gt;&lt;text x=\'58\' y=\'55\' font-size=\'10\' fill=\'#32363a\' text-anchor=\'middle\'&gt;63&lt;/text&gt;&lt;text x=\'58\' y=\'145\' font-size=\'10\' fill=\'#6a6d70\' text-anchor=\'middle\'&gt;Jan&lt;/text&gt;&lt;rect x=\'96\' y=\'45\' width=\'36\' height=\'85\' rx=\'3\' fill=\'#0070F2\'/&gt;&lt;text x=\'114\' y=\'40\' font-size=\'10\' fill=\'#32363a\' text-anchor=\'middle\'&gt;71&lt;/text&gt;&lt;text x=\'114\' y=\'145\' font-size=\'10\' fill=\'#6a6d70\' text-anchor=\'middle\'&gt;Feb&lt;/text&gt;&lt;rect x=\'152\' y=\'75\' width=\'36\' height=\'55\' rx=\'3\' fill=\'#0070F2\'/&gt;&lt;text x=\'170\' y=\'70\' font-size=\'10\' fill=\'#32363a\' text-anchor=\'middle\'&gt;58&lt;/text&gt;&lt;text x=\'170\' y=\'145\' font-size=\'10\' fill=\'#6a6d70\' text-anchor=\'middle\'&gt;Mrz&lt;/text&gt;&lt;rect x=\'208\' y=\'35\' width=\'36\' height=\'95\' rx=\'3\' fill=\'#0070F2\'/&gt;&lt;text x=\'226\' y=\'30\' font-size=\'10\' fill=\'#32363a\' text-anchor=\'middle\'&gt;84&lt;/text&gt;&lt;text x=\'226\' y=\'145\' font-size=\'10\' fill=\'#6a6d70\' text-anchor=\'middle\'&gt;Apr&lt;/text&gt;&lt;rect x=\'264\' y=\'50\' width=\'36\' height=\'80\' rx=\'3\' fill=\'#0070F2\' opacity=\'0.6\'/&gt;&lt;text x=\'282\' y=\'45\' font-size=\'10\' fill=\'#32363a\' text-anchor=\'middle\'&gt;76&lt;/text&gt;&lt;text x=\'282\' y=\'145\' font-size=\'10\' fill=\'#6a6d70\' text-anchor=\'middle\'&gt;Mai&lt;/text&gt;&lt;/svg&gt;"/>' +
+                          '</VBox>' +
+                        '</content>' +
+                        '<footer><Bar>' +
+                        '<contentLeft><core:Icon src="sap-icon://sap-logo" size="1rem"/></contentLeft>' +
+                        '<contentMiddle><Text text="Powered by OpenUI5"/></contentMiddle>' +
+                        '<contentRight><Button text="SAP.com" press=".onSapLink" type="Transparent"/></contentRight></Bar></footer></Page></pages></App></mvc:View>'
+                }).then(function (oView) {
+                    document.getElementById("content").innerHTML = "";
+                    oView.placeAt("content");
+                }).catch(function (err) {
+                    document.getElementById("content").innerHTML = "<pre style='padding:1rem;color:red;'>" + (err.message || String(err)) + "</pre>";
+                    console.error("UI5 Error:", err);
+                });
+            }, function (err) {
+                document.getElementById("content").innerHTML = "<pre style='padding:1rem;color:red'>Module-Fehler: " + (err.message || err) + "</pre>";
+            });
+        });
+        } catch (e) {
+            document.getElementById("content").innerHTML = "<pre style='padding:1rem;color:red'>" + (e.message || e) + "</pre>";
+        }
+        }
+        document.getElementById("sap-ui-bootstrap").addEventListener("error", function () {
+            document.getElementById("content").innerHTML = "<p style='padding:1rem;color:red'>OpenUI5 konnte nicht geladen werden.</p>";
+        });
+        function waitForSap() {
+            if (typeof sap !== "undefined") {
+                initUI5();
+            } else {
+                setTimeout(waitForSap, 50);
+            }
+        }
+        waitForSap();
+    </script>
+</body>
+</html>

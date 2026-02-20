@@ -1,0 +1,27 @@
+<mvc:View
+    controllerName="ui5.vizframe.app.controller.P2P"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns="sap.m"
+    xmlns:core="sap.ui.core"
+    displayBlock="true">
+    <Page id="p2pPage" enableScrolling="true" showHeader="true">
+        <customHeader>
+            <Bar>
+                <contentLeft>
+                    <Button icon="sap-icon://nav-back" press=".onNavBack"/>
+                    <Title text="P2P (Procure-to-Pay)" level="H2"/>
+                </contentLeft>
+                <contentMiddle/>
+                <contentRight>
+                    <Button text="SAP.com" press=".onSapLink" type="Transparent"/>
+                </contentRight>
+            </Bar>
+        </customHeader>
+        <content>
+            <VBox class="sapUiSmallMargin">
+                <Title text="Procure-to-Pay" level="H3"/>
+                <Text text="Procure-to-Pay (P2P) beschreibt den Beschaffungsprozess von der Bedarfsmeldung bis zur Zahlung an den Lieferanten: Bestellanforderung, Bestellung, Wareneingang, Rechnungsprüfung und Zahlungsabwicklung. Der Prozess verbindet Einkauf, Logistik und Finanzen."/>
+            </VBox>
+        </content>
+    </Page>
+</mvc:View>

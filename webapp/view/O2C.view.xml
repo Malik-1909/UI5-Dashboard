@@ -1,0 +1,27 @@
+<mvc:View
+    controllerName="ui5.vizframe.app.controller.O2C"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns="sap.m"
+    xmlns:core="sap.ui.core"
+    displayBlock="true">
+    <Page id="o2cPage" enableScrolling="true" showHeader="true">
+        <customHeader>
+            <Bar>
+                <contentLeft>
+                    <Button icon="sap-icon://nav-back" press=".onNavBack"/>
+                    <Title text="O2C (Order-to-Cash)" level="H2"/>
+                </contentLeft>
+                <contentMiddle/>
+                <contentRight>
+                    <Button text="SAP.com" press=".onSapLink" type="Transparent"/>
+                </contentRight>
+            </Bar>
+        </customHeader>
+        <content>
+            <VBox class="sapUiSmallMargin">
+                <Title text="Order-to-Cash" level="H3"/>
+                <Text text="Order-to-Cash (O2C) umfasst den gesamten Prozess von der Kundenbestellung bis zum Zahlungseingang: Auftragserfassung, Lieferung, Rechnungsstellung und Forderungseinzug. Der Prozess verbindet Vertrieb, Logistik und Finanzen."/>
+            </VBox>
+        </content>
+    </Page>
+</mvc:View>

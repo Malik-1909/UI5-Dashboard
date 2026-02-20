@@ -1,0 +1,50 @@
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+#content {
+    height: 100%;
+    min-height: 100vh;
+    clear: both;
+}
+
+#content .sapMApp {
+    height: 100%;
+}
+
+#content .sapMPage {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+#content .sapMPageEnableScrolling {
+    flex: 1 1 auto;
+    min-height: 100px;
+    overflow-y: auto;
+}
+
+#content .sapMPageFooter,
+#content .sapMBar {
+    flex-shrink: 0;
+}
+
+.chartCard {
+    background: #fff;
+    border-radius: 0.75rem;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+    padding: 0.75rem;
+    overflow: hidden;
+}
+
+.chartWide {
+    grid-column: span 2;
+}
+
+@media (max-width: 900px) {
+    .chartWide {
+        grid-column: span 1;
+    }
+}

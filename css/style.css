@@ -1,0 +1,40 @@
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+/* sap-ui-static float fix - verhindert Layout-Probleme */
+#sap-ui-static {
+    position: absolute !important;
+    left: -9999px !important;
+}
+
+#content {
+    height: 100%;
+    min-height: 100vh;
+    clear: both;
+}
+
+/* UI5 App und Page Layout */
+#content .sapMApp {
+    height: 100%;
+}
+
+#content .sapMPage {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+#content .sapMPageEnableScrolling {
+    flex: 1 1 auto;
+    min-height: 100px;
+    overflow-y: auto;
+}
+
+/* Footer sichtbar am unteren Rand */
+#content .sapMPageFooter,
+#content .sapMBar {
+    flex-shrink: 0;
+}

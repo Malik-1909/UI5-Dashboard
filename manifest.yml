@@ -1,0 +1,4 @@
+applications:
+  - name: ui5-app
+    buildpack: staticfile_buildpack
+    memory: 64M

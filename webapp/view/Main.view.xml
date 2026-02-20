@@ -1,0 +1,42 @@
+<mvc:View
+    controllerName="ui5.vizframe.app.controller.Main"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns="sap.m"
+    xmlns:core="sap.ui.core"
+    displayBlock="true">
+    <Page id="mainPage" enableScrolling="true" showHeader="true">
+        <customHeader>
+            <Bar>
+                <contentLeft>
+                    <core:Icon src="sap-icon://sap-logo" size="1.5rem"/>
+                    <Title text="VizFrame Dashboard" level="H2"/>
+                </contentLeft>
+                <contentMiddle/>
+                <contentRight>
+                    <Button id="prozesseButton" text="Prozesse ▾" press=".onProzessePress"/>
+                    <Button text="Über dieses Projekt" press=".onNavToProject"/>
+                    <Button text="SAP.com" press=".onSapLink" type="Transparent"/>
+                </contentRight>
+            </Bar>
+        </customHeader>
+        <content>
+            <VBox class="sapUiSmallMarginBeginEnd sapUiSmallMarginBottom">
+                <GenericTile
+                    header="Umsatz"
+                    subheader="Q1 2026"
+                    frameType="TwoByOne"
+                    class="sapUiSmallMarginBottom"
+                    width="20rem">
+                    <tileContent>
+                        <TileContent footer="vs. Vorjahr +12%">
+                            <content>
+                                <NumericContent value="84" unit="K EUR" indicator="Up" valueColor="Good"/>
+                            </content>
+                        </TileContent>
+                    </tileContent>
+                </GenericTile>
+            </VBox>
+            <mvc:XMLView viewName="ui5.vizframe.app.view.Chart"/>
+        </content>
+    </Page>
+</mvc:View>
