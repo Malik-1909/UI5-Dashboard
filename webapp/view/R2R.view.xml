@@ -3,6 +3,10 @@
     xmlns:mvc="sap.ui.core.mvc"
     xmlns="sap.m"
     xmlns:core="sap.ui.core"
+    xmlns:l="sap.ui.layout"
+    xmlns:viz="sap.viz.ui5.controls"
+    xmlns:viz.data="sap.viz.ui5.data"
+    xmlns:viz.feeds="sap.viz.ui5.controls.common.feeds"
     displayBlock="true">
     <Page id="r2rPage" enableScrolling="true" showHeader="true">
         <customHeader>
@@ -18,10 +22,125 @@
             </Bar>
         </customHeader>
         <content>
-            <VBox class="sapUiSmallMargin">
-                <Title text="Record-to-Report" level="H3"/>
-                <Text text="Record-to-Report (R2R) umfasst den Finanz- und Rechnungswesen-Prozess von der Buchung bis zum Abschluss: Transaktionserfassung, Kontenabstimmung, Periodenabschluss, Konsolidierung und Reporting. Der Prozess bildet die Grundlage für die Finanzberichterstattung."/>
-            </VBox>
+            <ScrollContainer height="100%" vertical="true" class="sapUiSmallMargin">
+                <l:VerticalLayout class="sapUiContentPadding" width="100%">
+                    <Title text="Record-to-Report Prozess" level="H3"/>
+                    <Text text="Record-to-Report (R2R) umfasst den Finanz- und Rechnungswesen-Prozess von der Buchung bis zum Abschluss. Der Prozess bildet die Grundlage für die Finanzberichterstattung."
+                        class="sapUiSmallMarginBottom"/>
+                    <Title text="Prozessschritte" level="H4"/>
+                    <List>
+                        <StandardListItem title="1. Buchung" info="Transaktionserfassung und -validierung"/>
+                        <StandardListItem title="2. Kontenabstimmung" info="Bank- und Sachkontenabstimmung"/>
+                        <StandardListItem title="3. Periodenabschluss" info="Monats- und Jahresabschluss"/>
+                        <StandardListItem title="4. Konsolidierung" info="Konzernabschluss und Intercompany"/>
+                        <StandardListItem title="5. Reporting" info="Finanzberichte und Analysen"/>
+                    </List>
+                    <Title text="Wichtige Diagramme für R2R" level="H3" class="sapUiSmallMarginTop"/>
+                    <Text text="Die folgenden Diagramme unterstützen die Steuerung des Finanzprozesses: Buchungsvolumen, Abschlussaktivitäten und Close-Cycle-Zeit."
+                        class="sapUiSmallMarginBottom"/>
+                    <Panel headerText="1. Buchungen nach Kontenklasse" expandable="true" expanded="true" class="sapUiSmallMarginBottom">
+                        <content>
+                            <Text text="Zeigt die Verteilung der Buchungen auf Kontenklassen. Typisch für R2R – wo entstehen die meisten Buchungen?"
+                                class="sapUiSmallMarginBottom"/>
+                            <viz:VizFrame
+                                id="r2rFunnelChart"
+                                vizType="pie"
+                                height="280px"
+                                width="100%"
+                                uiConfig="{applicationSet:'fiori'}"
+                                vizProperties="{
+                                    title: { text: 'Buchungsverteilung nach Kontenklasse (%)' },
+                                    plotArea: { dataLabel: { visible: true, type: 'percentage' }, colorPalette: ['#0070F2','#1B90FF','#5AAAFF','#107E3E','#F58B00'] },
+                                    legend: { visible: true }
+                                }">
+                                <viz:dataset>
+                                    <viz.data:FlattenedDataset data="{sales>/r2rByAccountType}">
+                                        <viz.data:dimensions>
+                                            <viz.data:DimensionDefinition name="Kontenklasse" value="{sales>type}"/>
+                                        </viz.data:dimensions>
+                                        <viz.data:measures>
+                                            <viz.data:MeasureDefinition name="Anteil" value="{sales>share}"/>
+                                        </viz.data:measures>
+                                    </viz.data:FlattenedDataset>
+                                </viz:dataset>
+                                <viz:feeds>
+                                    <viz.feeds:FeedItem uid="size" type="Measure" values="Anteil"/>
+                                    <viz.feeds:FeedItem uid="color" type="Dimension" values="Kontenklasse"/>
+                                </viz:feeds>
+                            </viz:VizFrame>
+                        </content>
+                    </Panel>
+                    <Panel headerText="2. Buchungen pro Periode" expandable="true" expanded="true" class="sapUiSmallMarginBottom">
+                        <content>
+                            <Text text="Zeigt das Buchungsvolumen je Monat. Wichtig für die Ressourcenplanung und Spitzenerkennung."
+                                class="sapUiSmallMarginBottom"/>
+                            <viz:VizFrame
+                                id="r2rEntriesChart"
+                                vizType="column"
+                                height="280px"
+                                width="100%"
+                                uiConfig="{applicationSet:'fiori'}"
+                                vizProperties="{
+                                    title: { text: 'Buchungen pro Periode' },
+                                    plotArea: { dataLabel: { visible: true }, colorPalette: ['#0070F2'] },
+                                    categoryAxis: { title: { visible: false } },
+                                    valueAxis: { title: { visible: false } }
+                                }">
+                                <viz:dataset>
+                                    <viz.data:FlattenedDataset data="{sales>/r2rJournalEntries}">
+                                        <viz.data:dimensions>
+                                            <viz.data:DimensionDefinition name="Periode" value="{sales>period}"/>
+                                        </viz.data:dimensions>
+                                        <viz.data:measures>
+                                            <viz.data:MeasureDefinition name="Buchungen" value="{sales>entries}"/>
+                                        </viz.data:measures>
+                                    </viz.data:FlattenedDataset>
+                                </viz:dataset>
+                                <viz:feeds>
+                                    <viz.feeds:FeedItem uid="valueAxis" type="Measure" values="Buchungen"/>
+                                    <viz.feeds:FeedItem uid="categoryAxis" type="Dimension" values="Periode"/>
+                                </viz:feeds>
+                            </viz:VizFrame>
+                        </content>
+                    </Panel>
+                    <Panel headerText="3. Close-Cycle-Zeit (Tage)" expandable="true" expanded="true" class="sapUiSmallMarginBottom">
+                        <content>
+                            <Text text="Zeigt die Dauer des Periodenabschlusses in Tagen. Wichtig für die rechtzeitige Berichterstattung."
+                                class="sapUiSmallMarginBottom"/>
+                            <viz:VizFrame
+                                id="r2rCloseChart"
+                                vizType="line"
+                                height="280px"
+                                width="100%"
+                                uiConfig="{applicationSet:'fiori'}"
+                                vizProperties="{
+                                    title: { text: 'Abschlussdauer (Tage)' },
+                                    plotArea: { dataLabel: { visible: true }, colorPalette: ['#107E3E'] },
+                                    categoryAxis: { title: { visible: false } },
+                                    valueAxis: { title: { visible: false } }
+                                }">
+                                <viz:dataset>
+                                    <viz.data:FlattenedDataset data="{sales>/r2rCloseCycle}">
+                                        <viz.data:dimensions>
+                                            <viz.data:DimensionDefinition name="Monat" value="{sales>month}"/>
+                                        </viz.data:dimensions>
+                                        <viz.data:measures>
+                                            <viz.data:MeasureDefinition name="Tage" value="{sales>days}"/>
+                                        </viz.data:measures>
+                                    </viz.data:FlattenedDataset>
+                                </viz:dataset>
+                                <viz:feeds>
+                                    <viz.feeds:FeedItem uid="valueAxis" type="Measure" values="Tage"/>
+                                    <viz.feeds:FeedItem uid="categoryAxis" type="Dimension" values="Monat"/>
+                                </viz:feeds>
+                            </viz:VizFrame>
+                        </content>
+                    </Panel>
+                    <Title text="Zusammenfassung" level="H4"/>
+                    <Text text="Für R2R sind Kreisdiagramme (Buchungsverteilung), Säulendiagramme (Buchungsvolumen pro Periode) und Liniendiagramme (Close-Cycle) relevant."
+                        class="sapUiSmallMarginBottom"/>
+                </l:VerticalLayout>
+            </ScrollContainer>
         </content>
     </Page>
 </mvc:View>

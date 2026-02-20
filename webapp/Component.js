@@ -90,6 +90,99 @@ sap.ui.define([
                     { segment: "Mid-Market", revenue: 260, customers: 180 },
                     { segment: "SMB", revenue: 150, customers: 520 },
                     { segment: "Startup", revenue: 60, customers: 340 }
+                ],
+                o2cProcessFunnel: [
+                    { stage: "Auftrag", count: 1250 },
+                    { stage: "Kommissionierung", count: 1180 },
+                    { stage: "Lieferung", count: 1090 },
+                    { stage: "Rechnung", count: 1050 },
+                    { stage: "Zahlung", count: 980 }
+                ],
+                o2cRevenueByStage: [
+                    { stage: "Auftrag", revenue: 420, target: 400 },
+                    { stage: "Lieferung", revenue: 385, target: 380 },
+                    { stage: "Rechnung", revenue: 372, target: 370 },
+                    { stage: "Zahlung", revenue: 348, target: 350 }
+                ],
+                o2cDSO: [
+                    { month: "Jan", days: 42 },
+                    { month: "Feb", days: 38 },
+                    { month: "Mrz", days: 45 },
+                    { month: "Apr", days: 39 },
+                    { month: "Mai", days: 36 },
+                    { month: "Jun", days: 35 }
+                ],
+                p2pProcessFunnel: [
+                    { stage: "Bedarfsmeldung", count: 890 },
+                    { stage: "Bestellung", count: 820 },
+                    { stage: "Wareneingang", count: 780 },
+                    { stage: "Rechnungsprüfung", count: 745 },
+                    { stage: "Zahlung", count: 710 }
+                ],
+                p2pSpendByCategory: [
+                    { category: "Rohstoffe", amount: 320, target: 300 },
+                    { category: "Betriebsstoffe", amount: 95, target: 90 },
+                    { category: "Dienstleistungen", amount: 180, target: 200 },
+                    { category: "Investitionen", amount: 120, target: 110 }
+                ],
+                p2pInvoiceCycle: [
+                    { month: "Jan", days: 18 },
+                    { month: "Feb", days: 15 },
+                    { month: "Mrz", days: 22 },
+                    { month: "Apr", days: 16 },
+                    { month: "Mai", days: 14 },
+                    { month: "Jun", days: 12 }
+                ],
+                r2rProcessFunnel: [
+                    { stage: "Buchung", count: 4500 },
+                    { stage: "Kontenabstimmung", count: 4200 },
+                    { stage: "Periodenabschluss", count: 6 },
+                    { stage: "Konsolidierung", count: 4 },
+                    { stage: "Reporting", count: 12 }
+                ],
+                r2rByAccountType: [
+                    { type: "Debitoren", share: 28 },
+                    { type: "Kreditoren", share: 22 },
+                    { type: "Sachkonten", share: 35 },
+                    { type: "Bank", share: 12 },
+                    { type: "Anlagen", share: 3 }
+                ],
+                r2rJournalEntries: [
+                    { period: "Jan", entries: 1250 },
+                    { period: "Feb", entries: 1180 },
+                    { period: "Mrz", entries: 1420 },
+                    { period: "Apr", entries: 1100 },
+                    { period: "Mai", entries: 1350 },
+                    { period: "Jun", entries: 1280 }
+                ],
+                r2rCloseCycle: [
+                    { month: "Jan", days: 8 },
+                    { month: "Feb", days: 6 },
+                    { month: "Mrz", days: 12 },
+                    { month: "Apr", days: 7 },
+                    { month: "Mai", days: 5 },
+                    { month: "Jun", days: 6 }
+                ],
+                ptpProcessFunnel: [
+                    { stage: "Bedarfsplanung", count: 450 },
+                    { stage: "Produktionsplanung", count: 420 },
+                    { stage: "Materialbereitstellung", count: 395 },
+                    { stage: "Fertigung", count: 365 },
+                    { stage: "Qualitätsprüfung", count: 340 }
+                ],
+                ptpCapacityUtil: [
+                    { workcenter: "Montage 1", util: 85, target: 80 },
+                    { workcenter: "Montage 2", util: 72, target: 80 },
+                    { workcenter: "Lackierung", util: 90, target: 85 },
+                    { workcenter: "Verpackung", util: 78, target: 75 }
+                ],
+                ptpOutput: [
+                    { month: "Jan", output: 320 },
+                    { month: "Feb", output: 285 },
+                    { month: "Mrz", output: 350 },
+                    { month: "Apr", output: 310 },
+                    { month: "Mai", output: 365 },
+                    { month: "Jun", output: 340 }
                 ]
             };
 
