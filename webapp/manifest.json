@@ -31,12 +31,7 @@
       "compact": true,
       "cozy": true
     },
-    "models": {
-      "salesModel": {
-        "type": "sap.ui.model.json.JSONModel",
-        "uri": "model/salesData.json"
-      }
-    },
+"models": {},
     "rootView": {
       "viewName": "ui5.vizframe.app.view.App",
       "type": "XML",
