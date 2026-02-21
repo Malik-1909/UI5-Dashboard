@@ -1,0 +1,14 @@
+# Context7 – UI5 / OpenUI5 Dokumentation
+
+Wenn der Nutzer nach folgenden Themen fragt, nutze automatisch Context7 MCP für aktuelle Dokumentation:
+- UI5 / OpenUI5 / SAPUI5 APIs und Controls
+- UI5 Web Components (ui5/webcomponents)
+- sap.m, sap.ui.layout, sap.ui.core und andere UI5-Bibliotheken
+- Code-Beispiele für UI5-Komponenten, Views, Controller
+- Framework-Setup, Konfiguration, Best Practices
+
+Verwende explizit Context7 mit den Library-IDs:
+- `ui5/webcomponents` für UI5 Web Components
+- `SAP/openui5` für OpenUI5 Core
+
+Verlasse dich nicht auf Trainingsdaten für UI5-spezifischen Code – hole aktuelle Docs über Context7.

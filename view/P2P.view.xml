@@ -1,0 +1,146 @@
+<mvc:View
+    controllerName="ui5.vizframe.app.controller.P2P"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns="sap.m"
+    xmlns:core="sap.ui.core"
+    xmlns:l="sap.ui.layout"
+    xmlns:viz="sap.viz.ui5.controls"
+    xmlns:viz.data="sap.viz.ui5.data"
+    xmlns:viz.feeds="sap.viz.ui5.controls.common.feeds"
+    displayBlock="true">
+    <Page id="p2pPage" enableScrolling="true" showHeader="true">
+        <customHeader>
+            <Bar>
+                <contentLeft>
+                    <Button icon="sap-icon://nav-back" press=".onNavBack"/>
+                    <Title text="P2P (Procure-to-Pay)" level="H2"/>
+                </contentLeft>
+                <contentMiddle/>
+                <contentRight>
+                    <Button id="burgerButton" icon="sap-icon://menu2" press=".onBurgerPress" class="headerBurgerButton"/>
+                </contentRight>
+            </Bar>
+        </customHeader>
+        <content>
+            <ScrollContainer height="100%" vertical="true" class="sapUiSmallMargin">
+                <l:VerticalLayout class="sapUiContentPadding" width="100%">
+                    <Title text="Procure-to-Pay Prozess" level="H3"/>
+                    <Text text="Procure-to-Pay (P2P) beschreibt den Beschaffungsprozess von der Bedarfsmeldung bis zur Zahlung an den Lieferanten. Der Prozess verbindet Einkauf, Logistik und Finanzen."
+                        class="sapUiSmallMarginBottom"/>
+                    <Title text="Prozessschritte" level="H4"/>
+                    <List>
+                        <StandardListItem title="1. Bedarfsmeldung" info="Bedarfsanforderung wird erstellt und freigegeben"/>
+                        <StandardListItem title="2. Bestellung" info="Bestellung beim Lieferanten wird ausgelöst"/>
+                        <StandardListItem title="3. Wareneingang" info="Wareneingang und Prüfung"/>
+                        <StandardListItem title="4. Rechnungsprüfung" info="Dreiseitenabgleich und Rechnungsfreigabe"/>
+                        <StandardListItem title="5. Zahlung" info="Zahlungsabwicklung an den Lieferanten"/>
+                    </List>
+                    <Title text="Wichtige Diagramme für P2P" level="H3" class="sapUiSmallMarginTop"/>
+                    <Text text="Die folgenden Diagramme unterstützen die Steuerung des Beschaffungsprozesses: Durchlaufmengen, Ausgaben nach Kategorie und Zahlungszyklus."
+                        class="sapUiSmallMarginBottom"/>
+                    <Panel headerText="1. P2P-Prozess-Funnel" expandable="true" expanded="true" class="sapUiSmallMarginBottom">
+                        <content>
+                            <Text text="Zeigt die Anzahl Bestellvorgänge pro Stufe. Wichtig zur Identifikation von Engpässen (z.B. viele offene Rechnungsprüfungen)."
+                                class="sapUiSmallMarginBottom"/>
+                            <viz:VizFrame
+                                id="p2pFunnelChart"
+                                vizType="bar"
+                                height="280px"
+                                width="100%"
+                                uiConfig="{applicationSet:'fiori'}"
+                                vizProperties="{
+                                    title: { text: 'Bestellvorgänge pro Prozessstufe' },
+                                    plotArea: { dataLabel: { visible: true }, colorPalette: ['#0070F2'] },
+                                    categoryAxis: { title: { visible: false } },
+                                    valueAxis: { title: { visible: false } }
+                                }">
+                                <viz:dataset>
+                                    <viz.data:FlattenedDataset data="{sales>/p2pProcessFunnel}">
+                                        <viz.data:dimensions>
+                                            <viz.data:DimensionDefinition name="Stufe" value="{sales>stage}"/>
+                                        </viz.data:dimensions>
+                                        <viz.data:measures>
+                                            <viz.data:MeasureDefinition name="Anzahl" value="{sales>count}"/>
+                                        </viz.data:measures>
+                                    </viz.data:FlattenedDataset>
+                                </viz:dataset>
+                                <viz:feeds>
+                                    <viz.feeds:FeedItem uid="valueAxis" type="Measure" values="Anzahl"/>
+                                    <viz.feeds:FeedItem uid="categoryAxis" type="Dimension" values="Stufe"/>
+                                </viz:feeds>
+                            </viz:VizFrame>
+                        </content>
+                    </Panel>
+                    <Panel headerText="2. Verteilung der Ausgaben nach Kategorie" expandable="true" expanded="true" class="sapUiSmallMarginBottom">
+                        <content>
+                            <Text text="Zeigt die Anteile der Ausgaben je Kategorie. Wichtig für die Schwerpunktanalyse im Einkauf (wo fließt das Geld hin?)."
+                                class="sapUiSmallMarginBottom"/>
+                            <viz:VizFrame
+                                id="p2pSpendChart"
+                                vizType="donut"
+                                height="280px"
+                                width="100%"
+                                uiConfig="{applicationSet:'fiori'}"
+                                vizProperties="{
+                                    title: { text: 'Ausgabenverteilung (%)' },
+                                    plotArea: { dataLabel: { visible: true, type: 'percentage' }, colorPalette: ['#0070F2','#1B90FF','#5AAAFF','#107E3E'] },
+                                    legend: { visible: true }
+                                }">
+                                <viz:dataset>
+                                    <viz.data:FlattenedDataset data="{sales>/p2pSpendByCategory}">
+                                        <viz.data:dimensions>
+                                            <viz.data:DimensionDefinition name="Kategorie" value="{sales>category}"/>
+                                        </viz.data:dimensions>
+                                        <viz.data:measures>
+                                            <viz.data:MeasureDefinition name="Anteil" value="{sales>amount}"/>
+                                        </viz.data:measures>
+                                    </viz.data:FlattenedDataset>
+                                </viz:dataset>
+                                <viz:feeds>
+                                    <viz.feeds:FeedItem uid="size" type="Measure" values="Anteil"/>
+                                    <viz.feeds:FeedItem uid="color" type="Dimension" values="Kategorie"/>
+                                </viz:feeds>
+                            </viz:VizFrame>
+                        </content>
+                    </Panel>
+                    <Panel headerText="3. Rechnungsbearbeitungszeit (Tage)" expandable="true" expanded="true" class="sapUiSmallMarginBottom">
+                        <content>
+                            <Text text="Zeigt die durchschnittliche Zeit von Rechnungseingang bis Zahlung. Wichtig für Lieferantenbeziehungen und Cashflow."
+                                class="sapUiSmallMarginBottom"/>
+                            <viz:VizFrame
+                                id="p2pInvoiceChart"
+                                vizType="line"
+                                height="280px"
+                                width="100%"
+                                uiConfig="{applicationSet:'fiori'}"
+                                vizProperties="{
+                                    title: { text: 'Rechnungsbearbeitung (Tage)' },
+                                    plotArea: { dataLabel: { visible: true }, colorPalette: ['#107E3E'] },
+                                    categoryAxis: { title: { visible: false } },
+                                    valueAxis: { title: { visible: false } }
+                                }">
+                                <viz:dataset>
+                                    <viz.data:FlattenedDataset data="{sales>/p2pInvoiceCycle}">
+                                        <viz.data:dimensions>
+                                            <viz.data:DimensionDefinition name="Monat" value="{sales>month}"/>
+                                        </viz.data:dimensions>
+                                        <viz.data:measures>
+                                            <viz.data:MeasureDefinition name="Tage" value="{sales>days}"/>
+                                        </viz.data:measures>
+                                    </viz.data:FlattenedDataset>
+                                </viz:dataset>
+                                <viz:feeds>
+                                    <viz.feeds:FeedItem uid="valueAxis" type="Measure" values="Tage"/>
+                                    <viz.feeds:FeedItem uid="categoryAxis" type="Dimension" values="Monat"/>
+                                </viz:feeds>
+                            </viz:VizFrame>
+                        </content>
+                    </Panel>
+                    <Title text="Zusammenfassung" level="H4"/>
+                    <Text text="Für P2P sind Funnel-Diagramme (Bestelldurchlauf), Donut-Diagramme (Ausgabenverteilung) und Liniendiagramme (Zahlungszyklus) relevant."
+                        class="sapUiSmallMarginBottom"/>
+                </l:VerticalLayout>
+            </ScrollContainer>
+        </content>
+    </Page>
+</mvc:View>

@@ -1,0 +1,199 @@
+<mvc:View
+    controllerName="ui5.vizframe.app.controller.Main"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns="sap.m"
+    xmlns:core="sap.ui.core"
+    xmlns:l="sap.ui.layout"
+    xmlns:cssgrid="sap.ui.layout.cssgrid"
+    xmlns:viz="sap.viz.ui5.controls"
+    xmlns:viz.data="sap.viz.ui5.data"
+    xmlns:viz.feeds="sap.viz.ui5.controls.common.feeds"
+    displayBlock="true">
+    <Page id="mainPage" enableScrolling="true" showHeader="true">
+        <customHeader>
+            <Bar>
+                <contentLeft>
+                    <core:Icon src="sap-icon://sap-logo" size="1.5rem"/>
+                    <Title text="KPI Dashboard" level="H2"/>
+                </contentLeft>
+                <contentMiddle/>
+                <contentRight>
+                    <Button id="burgerButton" icon="sap-icon://menu2" press=".onBurgerPress" class="headerBurgerButton"/>
+                    <Button text="Über dieses Projekt" press=".onNavToProject" class="headerDesktopActions"/>
+                    <Button id="prozesseButton" text="Prozesse ▾" press=".onProzessePress" class="headerDesktopActions"/>
+                </contentRight>
+            </Bar>
+        </customHeader>
+        <content>
+            <cssgrid:CSSGrid
+                id="processTilesGrid"
+                gridTemplateColumns="1fr 1fr"
+                gridGap="2rem"
+                gridTemplateRows="1fr 1fr"
+                class="processTilesGrid">
+                <!-- O2C Tile -->
+                <GenericTile
+                    id="tileO2C"
+                    header="O2C (Order-to-Cash)"
+                    subheader="Auftrag bis Zahlung"
+                    class="processTile"
+                    press=".onTilePress">
+                    <tileContent>
+                        <TileContent>
+                            <content>
+                                <viz:VizFrame
+                                    id="tileChartO2C"
+                                    vizType="column"
+                                    height="100%"
+                                    width="100%"
+                                    uiConfig="{applicationSet:'fiori'}"
+                                    vizProperties="{
+                                        title: { visible: false },
+                                        plotArea: { dataLabel: { visible: false }, colorPalette: ['#0070F2'], margin: { top: 15, right: 25, bottom: 35, left: 45 } },
+                                        categoryAxis: { title: { visible: false } },
+                                        valueAxis: { title: { visible: false } }
+                                    }">
+                                    <viz:dataset>
+                                        <viz.data:FlattenedDataset data="{sales>/o2cProcessFunnel}">
+                                            <viz.data:dimensions>
+                                                <viz.data:DimensionDefinition name="Stufe" value="{sales>stage}"/>
+                                            </viz.data:dimensions>
+                                            <viz.data:measures>
+                                                <viz.data:MeasureDefinition name="Anzahl" value="{sales>count}"/>
+                                            </viz.data:measures>
+                                        </viz.data:FlattenedDataset>
+                                    </viz:dataset>
+                                    <viz:feeds>
+                                        <viz.feeds:FeedItem uid="valueAxis" type="Measure" values="Anzahl"/>
+                                        <viz.feeds:FeedItem uid="categoryAxis" type="Dimension" values="Stufe"/>
+                                    </viz:feeds>
+                                </viz:VizFrame>
+                            </content>
+                        </TileContent>
+                    </tileContent>
+                </GenericTile>
+                <!-- P2P Tile -->
+                <GenericTile
+                    id="tileP2P"
+                    header="P2P (Procure-to-Pay)"
+                    subheader="Beschaffung bis Zahlung"
+                    class="processTile"
+                    press=".onTilePress">
+                    <tileContent>
+                        <TileContent>
+                            <content>
+                                <viz:VizFrame
+                                    id="tileChartP2P"
+                                    vizType="donut"
+                                    height="100%"
+                                    width="100%"
+                                    uiConfig="{applicationSet:'fiori'}"
+                                    vizProperties="{
+                                        title: { visible: false },
+                                        plotArea: { dataLabel: { visible: false }, colorPalette: ['#0070F2','#1B90FF','#5AAAFF','#107E3E'], margin: { top: 15, right: 25, bottom: 25, left: 25 } },
+                                        legend: { visible: false }
+                                    }">
+                                    <viz:dataset>
+                                        <viz.data:FlattenedDataset data="{sales>/p2pSpendByCategory}">
+                                            <viz.data:dimensions>
+                                                <viz.data:DimensionDefinition name="Kategorie" value="{sales>category}"/>
+                                            </viz.data:dimensions>
+                                            <viz.data:measures>
+                                                <viz.data:MeasureDefinition name="Anteil" value="{sales>amount}"/>
+                                            </viz.data:measures>
+                                        </viz.data:FlattenedDataset>
+                                    </viz:dataset>
+                                    <viz:feeds>
+                                        <viz.feeds:FeedItem uid="size" type="Measure" values="Anteil"/>
+                                        <viz.feeds:FeedItem uid="color" type="Dimension" values="Kategorie"/>
+                                    </viz:feeds>
+                                </viz:VizFrame>
+                            </content>
+                        </TileContent>
+                    </tileContent>
+                </GenericTile>
+                <!-- R2R Tile -->
+                <GenericTile
+                    id="tileR2R"
+                    header="R2R (Record-to-Report)"
+                    subheader="Buchung bis Abschluss"
+                    class="processTile"
+                    press=".onTilePress">
+                    <tileContent>
+                        <TileContent>
+                            <content>
+                                <viz:VizFrame
+                                    id="tileChartR2R"
+                                    vizType="pie"
+                                    height="100%"
+                                    width="100%"
+                                    uiConfig="{applicationSet:'fiori'}"
+                                    vizProperties="{
+                                        title: { visible: false },
+                                        plotArea: { dataLabel: { visible: false }, colorPalette: ['#0070F2','#1B90FF','#5AAAFF','#107E3E','#F58B00'], margin: { top: 15, right: 25, bottom: 25, left: 25 } },
+                                        legend: { visible: false }
+                                    }">
+                                    <viz:dataset>
+                                        <viz.data:FlattenedDataset data="{sales>/r2rByAccountType}">
+                                            <viz.data:dimensions>
+                                                <viz.data:DimensionDefinition name="Kontenklasse" value="{sales>type}"/>
+                                            </viz.data:dimensions>
+                                            <viz.data:measures>
+                                                <viz.data:MeasureDefinition name="Anteil" value="{sales>share}"/>
+                                            </viz.data:measures>
+                                        </viz.data:FlattenedDataset>
+                                    </viz:dataset>
+                                    <viz:feeds>
+                                        <viz.feeds:FeedItem uid="size" type="Measure" values="Anteil"/>
+                                        <viz.feeds:FeedItem uid="color" type="Dimension" values="Kontenklasse"/>
+                                    </viz:feeds>
+                                </viz:VizFrame>
+                            </content>
+                        </TileContent>
+                    </tileContent>
+                </GenericTile>
+                <!-- PtP Tile -->
+                <GenericTile
+                    id="tilePtP"
+                    header="PtP (Plan-to-Produce)"
+                    subheader="Planung bis Fertigung"
+                    class="processTile"
+                    press=".onTilePress">
+                    <tileContent>
+                        <TileContent>
+                            <content>
+                                <viz:VizFrame
+                                    id="tileChartPtP"
+                                    vizType="line"
+                                    height="100%"
+                                    width="100%"
+                                    uiConfig="{applicationSet:'fiori'}"
+                                    vizProperties="{
+                                        title: { visible: false },
+                                        plotArea: { dataLabel: { visible: false }, colorPalette: ['#107E3E'], margin: { top: 15, right: 25, bottom: 35, left: 45 } },
+                                        categoryAxis: { title: { visible: false } },
+                                        valueAxis: { title: { visible: false } }
+                                    }">
+                                    <viz:dataset>
+                                        <viz.data:FlattenedDataset data="{sales>/ptpOutput}">
+                                            <viz.data:dimensions>
+                                                <viz.data:DimensionDefinition name="Monat" value="{sales>month}"/>
+                                            </viz.data:dimensions>
+                                            <viz.data:measures>
+                                                <viz.data:MeasureDefinition name="Output" value="{sales>output}"/>
+                                            </viz.data:measures>
+                                        </viz.data:FlattenedDataset>
+                                    </viz:dataset>
+                                    <viz:feeds>
+                                        <viz.feeds:FeedItem uid="valueAxis" type="Measure" values="Output"/>
+                                        <viz.feeds:FeedItem uid="categoryAxis" type="Dimension" values="Monat"/>
+                                    </viz:feeds>
+                                </viz:VizFrame>
+                            </content>
+                        </TileContent>
+                    </tileContent>
+                </GenericTile>
+            </cssgrid:CSSGrid>
+        </content>
+    </Page>
+</mvc:View>

@@ -1,0 +1,2 @@
+sap.ui.define(["ui5/vizframe/app/controller/BaseController","sap/viz/ui5/controls/Popover"],function(n,e){"use strict";return n.extend("ui5.vizframe.app.controller.P2P",{onAfterRendering:function(){var n=["p2pFunnelChart","p2pSpendChart","p2pInvoiceChart"];n.forEach(function(n){var t=this.byId(n);if(t){var r=new e({});r.connect(t.getVizUid())}}.bind(this))},onNavBack:function(){this.getOwnerComponent().getRouter().navTo("main")}})});
+//# sourceMappingURL=P2P.controller.js.map

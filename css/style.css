@@ -1,0 +1,162 @@
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+#content {
+    height: 100%;
+    min-height: 100vh;
+    clear: both;
+}
+
+#content .sapMApp {
+    height: 100%;
+}
+
+#content .sapMPage {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+#content .sapMPageEnableScrolling {
+    flex: 1 1 auto;
+    min-height: 100px;
+    overflow-y: auto;
+}
+
+#content .sapMPageFooter,
+#content .sapMBar {
+    flex-shrink: 0;
+}
+
+.chartCard {
+    background: #fff;
+    border-radius: 0.75rem;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+    padding: 0.75rem;
+    overflow: hidden;
+}
+
+.chartWide {
+    grid-column: span 2;
+}
+
+@media (max-width: 900px) {
+    .chartWide {
+        grid-column: span 1;
+    }
+}
+
+/* Große Prozess-Tiles auf der Startseite: 2 pro Reihe, volle Breite */
+.processTilesGrid {
+    width: 100%;
+    max-width: none;
+    min-height: 80vh;
+    box-sizing: border-box;
+    padding: 1rem 1.5rem 1.5rem;
+}
+
+/* Page-Content: Padding rechts und links, damit Cards nicht aus dem Bild laufen */
+#content .sapMPage .sapMPageContent,
+#content .sapMPageSection {
+    padding: 1rem 1.5rem 1.5rem !important;
+    box-sizing: border-box;
+}
+
+.processTilesGrid .processTile {
+    width: 100% !important;
+    min-width: 0;
+    min-height: 100px;
+    height: 100%;
+}
+
+.processTilesGrid .processTile .sapMTileContent {
+    min-height: 300px;
+    height: 100% !important;
+    overflow: visible !important;
+    padding: 1rem 1.25rem 1.5rem !important;
+    box-sizing: border-box;
+}
+
+/* Tile-Content-Container: height 100% für vollständige Diagrammanzeige */
+[id*="tileO2C-content"],
+[id*="tileP2P-content"],
+[id*="tileR2R-content"],
+[id*="tilePtP-content"] {
+    height: 100% !important;
+    min-height: 280px !important;
+}
+
+/* VizFrame: füllt den Content-Container */
+.processTilesGrid .sapVizFrame {
+    overflow: visible !important;
+    min-width: 200px;
+    min-height: 240px !important;
+    height: 100% !important;
+}
+
+
+/* Grid-Kinder (Tiles) füllen die Zelle komplett, min-width verhindert Overflow */
+.processTilesGrid > div,
+.processTilesGrid .sapMTile {
+    width: 100% !important;
+    max-width: none !important;
+    min-width: 0;
+    min-height: 380px;
+}
+
+@media (max-width: 960px) {
+    .processTilesGrid[id*="processTilesGrid"] {
+        grid-template-columns: 1fr !important;
+    }
+}
+
+/* Responsive Header: Burger-Menü auf Mobile, normale Buttons auf Desktop */
+.headerBurgerButton {
+    display: none !important;
+}
+
+.headerDesktopActions {
+    display: inline-flex !important;
+}
+
+@media (max-width: 600px) {
+    .headerBurgerButton {
+        display: inline-flex !important;
+    }
+
+    .headerDesktopActions {
+        display: none !important;
+    }
+
+    /* Mobile: Kompakterer Header */
+    .sapMBar .sapMBarChild {
+        margin: 0 0.25rem;
+    }
+
+    /* Mobile: Tiles und Grid anpassen */
+    .processTilesGrid {
+        padding: 0.75rem 1rem 1rem;
+        min-height: auto;
+    }
+
+    .processTilesGrid .sapMTile,
+    .processTilesGrid > div {
+        min-height: 320px;
+    }
+
+    .processTilesGrid .processTile .sapMTileContent {
+        padding: 0.75rem 1rem 1rem !important;
+    }
+
+    .processTilesGrid .sapVizFrame {
+        min-height: 200px !important;
+    }
+
+    /* Mobile: Detailseiten-Content Padding */
+    .sapMPage .sapMScrollCont {
+        padding: 0.75rem 1rem !important;
+    }
+}

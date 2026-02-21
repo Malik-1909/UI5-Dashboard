@@ -1,0 +1,148 @@
+<mvc:View
+    controllerName="ui5.vizframe.app.controller.O2C"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns="sap.m"
+    xmlns:core="sap.ui.core"
+    xmlns:l="sap.ui.layout"
+    xmlns:viz="sap.viz.ui5.controls"
+    xmlns:viz.data="sap.viz.ui5.data"
+    xmlns:viz.feeds="sap.viz.ui5.controls.common.feeds"
+    displayBlock="true">
+    <Page id="o2cPage" enableScrolling="true" showHeader="true">
+        <customHeader>
+            <Bar>
+                <contentLeft>
+                    <Button icon="sap-icon://nav-back" press=".onNavBack"/>
+                    <Title text="O2C (Order-to-Cash)" level="H2"/>
+                </contentLeft>
+                <contentMiddle/>
+                <contentRight>
+                    <Button id="burgerButton" icon="sap-icon://menu2" press=".onBurgerPress" class="headerBurgerButton"/>
+                </contentRight>
+            </Bar>
+        </customHeader>
+        <content>
+            <ScrollContainer height="100%" vertical="true" class="sapUiSmallMargin">
+                <l:VerticalLayout class="sapUiContentPadding" width="100%">
+                    <Title text="Order-to-Cash Prozess" level="H3"/>
+                    <Text text="Order-to-Cash (O2C) umfasst den gesamten Prozess von der Kundenbestellung bis zum Zahlungseingang. Der Prozess verbindet Vertrieb, Logistik und Finanzen."
+                        class="sapUiSmallMarginBottom"/>
+                    <Title text="Prozessschritte" level="H4"/>
+                    <List>
+                        <StandardListItem title="1. Auftrag" info="Kundenbestellung wird erfasst und freigegeben"/>
+                        <StandardListItem title="2. Kommissionierung" info="Ware wird gepickt und verpackt"/>
+                        <StandardListItem title="3. Lieferung" info="Versand und Übergabe an den Kunden"/>
+                        <StandardListItem title="4. Rechnung" info="Rechnungsstellung und Versand"/>
+                        <StandardListItem title="5. Zahlung" info="Zahlungseingang und Forderungsausgleich"/>
+                    </List>
+                    <Title text="Wichtige Diagramme für O2C" level="H3" class="sapUiSmallMarginTop"/>
+                    <Text text="Die folgenden Diagramme sind für die Steuerung und Überwachung des Order-to-Cash-Prozesses zentral. Sie zeigen Engpässe, Durchlaufzeiten und den Umsatzfluss."
+                        class="sapUiSmallMarginBottom"/>
+                    <Panel headerText="1. O2C-Prozess-Funnel" expandable="true" expanded="true" class="sapUiSmallMarginBottom">
+                        <content>
+                            <Text text="Zeigt die Durchlaufmenge pro Prozessstufe. Säulendiagramm für den Auftragsdurchlauf – wichtig zur Identifikation von Abbrüchen und Engpässen."
+                                class="sapUiSmallMarginBottom"/>
+                            <viz:VizFrame
+                                id="o2cFunnelChart"
+                                vizType="column"
+                                height="280px"
+                                width="100%"
+                                uiConfig="{applicationSet:'fiori'}"
+                                vizProperties="{
+                                    title: { text: 'Aufträge pro Prozessstufe' },
+                                    plotArea: { dataLabel: { visible: true }, colorPalette: ['#0070F2'] },
+                                    categoryAxis: { title: { visible: false } },
+                                    valueAxis: { title: { visible: false } }
+                                }">
+                                <viz:dataset>
+                                    <viz.data:FlattenedDataset data="{sales>/o2cProcessFunnel}">
+                                        <viz.data:dimensions>
+                                            <viz.data:DimensionDefinition name="Stufe" value="{sales>stage}"/>
+                                        </viz.data:dimensions>
+                                        <viz.data:measures>
+                                            <viz.data:MeasureDefinition name="Anzahl" value="{sales>count}"/>
+                                        </viz.data:measures>
+                                    </viz.data:FlattenedDataset>
+                                </viz:dataset>
+                                <viz:feeds>
+                                    <viz.feeds:FeedItem uid="valueAxis" type="Measure" values="Anzahl"/>
+                                    <viz.feeds:FeedItem uid="categoryAxis" type="Dimension" values="Stufe"/>
+                                </viz:feeds>
+                            </viz:VizFrame>
+                        </content>
+                    </Panel>
+                    <Panel headerText="2. Umsatz pro Prozessstufe (Ist vs. Ziel)" expandable="true" expanded="true" class="sapUiSmallMarginBottom">
+                        <content>
+                            <Text text="Vergleicht den tatsächlichen Umsatz mit dem Zielwert je Stufe. Wichtig für die Steuerung von Liefertreue und Forderungsmanagement."
+                                class="sapUiSmallMarginBottom"/>
+                            <viz:VizFrame
+                                id="o2cRevenueChart"
+                                vizType="bar"
+                                height="280px"
+                                width="100%"
+                                uiConfig="{applicationSet:'fiori'}"
+                                vizProperties="{
+                                    title: { text: 'Umsatz (T EUR) pro Stufe' },
+                                    plotArea: { dataLabel: { visible: false }, colorPalette: ['#0070F2','#F58B00'] },
+                                    categoryAxis: { title: { visible: false } },
+                                    valueAxis: { title: { visible: false } }
+                                }">
+                                <viz:dataset>
+                                    <viz.data:FlattenedDataset data="{sales>/o2cRevenueByStage}">
+                                        <viz.data:dimensions>
+                                            <viz.data:DimensionDefinition name="Stufe" value="{sales>stage}"/>
+                                        </viz.data:dimensions>
+                                        <viz.data:measures>
+                                            <viz.data:MeasureDefinition name="Umsatz" value="{sales>revenue}"/>
+                                            <viz.data:MeasureDefinition name="Ziel" value="{sales>target}"/>
+                                        </viz.data:measures>
+                                    </viz.data:FlattenedDataset>
+                                </viz:dataset>
+                                <viz:feeds>
+                                    <viz.feeds:FeedItem uid="valueAxis" type="Measure" values="Umsatz,Ziel"/>
+                                    <viz.feeds:FeedItem uid="categoryAxis" type="Dimension" values="Stufe"/>
+                                </viz:feeds>
+                            </viz:VizFrame>
+                        </content>
+                    </Panel>
+                    <Panel headerText="3. DSO (Days Sales Outstanding)" expandable="true" expanded="true" class="sapUiSmallMarginBottom">
+                        <content>
+                            <Text text="Zeigt die durchschnittliche Zahlungszielüberschreitung in Tagen. Wichtig für das Forderungsmanagement und die Liquiditätsplanung."
+                                class="sapUiSmallMarginBottom"/>
+                            <viz:VizFrame
+                                id="o2cDSOChart"
+                                vizType="line"
+                                height="280px"
+                                width="100%"
+                                uiConfig="{applicationSet:'fiori'}"
+                                vizProperties="{
+                                    title: { text: 'Ausstehende Forderungen (Tage)' },
+                                    plotArea: { dataLabel: { visible: true }, colorPalette: ['#107E3E'] },
+                                    categoryAxis: { title: { visible: false } },
+                                    valueAxis: { title: { visible: false } }
+                                }">
+                                <viz:dataset>
+                                    <viz.data:FlattenedDataset data="{sales>/o2cDSO}">
+                                        <viz.data:dimensions>
+                                            <viz.data:DimensionDefinition name="Monat" value="{sales>month}"/>
+                                        </viz.data:dimensions>
+                                        <viz.data:measures>
+                                            <viz.data:MeasureDefinition name="Tage" value="{sales>days}"/>
+                                        </viz.data:measures>
+                                    </viz.data:FlattenedDataset>
+                                </viz:dataset>
+                                <viz:feeds>
+                                    <viz.feeds:FeedItem uid="valueAxis" type="Measure" values="Tage"/>
+                                    <viz.feeds:FeedItem uid="categoryAxis" type="Dimension" values="Monat"/>
+                                </viz:feeds>
+                            </viz:VizFrame>
+                        </content>
+                    </Panel>
+                    <Title text="Zusammenfassung" level="H4"/>
+                    <Text text="Für O2C sind Säulen- und Balkendiagramme (Auftragsdurchlauf, Ist vs. Ziel) sowie Liniendiagramme (DSO-Trend) relevant. Sie ermöglichen die Überwachung von Durchsatz, Liefertreue und Zahlungsmoral."
+                        class="sapUiSmallMarginBottom"/>
+                </l:VerticalLayout>
+            </ScrollContainer>
+        </content>
+    </Page>
+</mvc:View>

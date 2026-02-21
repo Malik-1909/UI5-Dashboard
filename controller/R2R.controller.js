@@ -1,0 +1,2 @@
+sap.ui.define(["ui5/vizframe/app/controller/BaseController","sap/viz/ui5/controls/Popover"],function(n,r){"use strict";return n.extend("ui5.vizframe.app.controller.R2R",{onAfterRendering:function(){var n=["r2rFunnelChart","r2rEntriesChart","r2rCloseChart"];n.forEach(function(n){var e=this.byId(n);if(e){var t=new r({});t.connect(e.getVizUid())}}.bind(this))},onNavBack:function(){this.getOwnerComponent().getRouter().navTo("main")}})});
+//# sourceMappingURL=R2R.controller.js.map

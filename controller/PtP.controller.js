@@ -1,0 +1,2 @@
+sap.ui.define(["ui5/vizframe/app/controller/BaseController","sap/viz/ui5/controls/Popover"],function(t,n){"use strict";return t.extend("ui5.vizframe.app.controller.PtP",{onAfterRendering:function(){var t=["ptpFunnelChart","ptpCapacityChart","ptpOutputChart"];t.forEach(function(t){var e=this.byId(t);if(e){var r=new n({});r.connect(e.getVizUid())}}.bind(this))},onNavBack:function(){this.getOwnerComponent().getRouter().navTo("main")}})});
+//# sourceMappingURL=PtP.controller.js.map

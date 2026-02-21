@@ -1,0 +1,1 @@
+{"version":3,"file":"Project.controller.js","names":["sap","ui","define","BaseController","extend","onNavBack","this","getOwnerComponent","getRouter","navTo"],"sources":["Project-dbg.controller.js"],"mappings":"AAAAA,IAAIC,GAAGC,OAAO,CACV,8CACD,SAAUC,GACT,aAEA,OAAOA,EAAeC,OAAO,sCAAuC,CAChEC,UAAW,WACPC,KAAKC,oBAAoBC,YAAYC,MAAM,OAC/C,GAER","ignoreList":[]}

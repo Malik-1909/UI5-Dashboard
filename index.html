@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <base href="/UI5-Dashboard/">
+    <title>UI5 VizFrame App</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect fill='%230070f2' width='32' height='32'/></svg>">
+    <script id="sap-ui-bootstrap"
+        src="https://ui5.sap.com/1.130.0/resources/sap-ui-core.js"
+        data-sap-ui-theme="sap_horizon"
+        data-sap-ui-libs="sap.m,sap.ui.core,sap.ui.layout,sap.viz"
+        data-sap-ui-async="true"
+        data-sap-ui-onInit="module:sap/ui/core/ComponentSupport"
+        data-sap-ui-compatVersion="edge"
+        data-sap-ui-resourceroots='{ "ui5.vizframe.app": "/UI5-Dashboard" }'>
+    </script>
+</head>
+<body class="sapUiBody" id="content" style="opacity:1;min-height:100vh">
+    <div id="loading" style="padding:2rem;font-family:sans-serif;color:#666">Lade UI5 App…</div>
+    <div data-sap-ui-component
+         data-name="ui5.vizframe.app"
+         data-id="container"
+         data-settings='{ "id": "ui5.vizframe.app" }'
+         style="height: 100%">
+    </div>
+    <noscript>JavaScript muss aktiviert sein.</noscript>
+    <script>
+        (function() {
+            var container = document.querySelector('[data-sap-ui-component]');
+            var loading = document.getElementById('loading');
+            var checkLoaded = function() {
+                if (container && container.querySelector && container.querySelector('.sapMApp')) {
+                    if (loading) loading.style.display = 'none';
+                    return true;
+                }
+                return false;
+            };
+            var fallback = function() {
+                if (!checkLoaded()) {
+                    if (loading) {
+                        loading.innerHTML = '<h2 style="color:#c00">App konnte nicht laden</h2><p>Öffne die Browser-Konsole (F12) für Fehlerdetails.</p><p>Typische Ursachen: 404 für Component.js, CORS oder blockiertes CDN.</p>';
+                    }
+                    document.body.removeAttribute('unresolved');
+                    document.body.style.opacity = '1';
+                }
+            };
+            var iv = setInterval(function() { if (checkLoaded()) clearInterval(iv); }, 500);
+            setTimeout(fallback, 4000);
+        })();
+    </script>
+</body>
+</html>

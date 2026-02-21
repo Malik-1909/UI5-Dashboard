@@ -1,0 +1,2 @@
+sap.ui.define(["sap/ui/core/mvc/Controller","sap/m/MessageToast"],function(e,n){"use strict";return e.extend("ui5.vizframe.app.controller.App",{onPress:function(){n.show("Hallo UI5!");this.byId("helloButton").setText("Geklickt!")},onSapLink:function(){window.open("https://www.sap.com","_blank")}})});
+//# sourceMappingURL=App.controller.js.map

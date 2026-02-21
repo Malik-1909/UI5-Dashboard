@@ -1,0 +1,334 @@
+<mvc:View
+    controllerName="ui5.vizframe.app.controller.Chart"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns="sap.m"
+    xmlns:core="sap.ui.core"
+    xmlns:l="sap.ui.layout"
+    xmlns:cssgrid="sap.ui.layout.cssgrid"
+    xmlns:viz="sap.viz.ui5.controls"
+    xmlns:viz.data="sap.viz.ui5.data"
+    xmlns:viz.feeds="sap.viz.ui5.controls.common.feeds">
+
+    <cssgrid:CSSGrid id="chartGrid"
+        gridTemplateColumns="1fr 1fr"
+        gridGap="1rem"
+        class="sapUiSmallMarginBeginEnd sapUiSmallMarginBottom">
+
+        <!-- 1) Monatsumsatz - Bar - GROSS -->
+        <VBox class="chartCard chartWide">
+            <viz:VizFrame
+                id="chartBar"
+                vizType="bar"
+                height="300px"
+                width="100%"
+                uiConfig="{applicationSet:'fiori'}"
+                vizProperties="{
+                    title: { text: 'Monatsumsatz (T EUR)' },
+                    plotArea: { dataLabel: { visible: true }, colorPalette: ['#0070F2'] },
+                    categoryAxis: { title: { visible: false } },
+                    valueAxis: { title: { visible: false } }
+                }">
+                <viz:dataset>
+                    <viz.data:FlattenedDataset data="{sales>/monthlyRevenue}">
+                        <viz.data:dimensions>
+                            <viz.data:DimensionDefinition name="Monat" value="{sales>month}"/>
+                        </viz.data:dimensions>
+                        <viz.data:measures>
+                            <viz.data:MeasureDefinition name="Umsatz" value="{sales>revenue}"/>
+                        </viz.data:measures>
+                    </viz.data:FlattenedDataset>
+                </viz:dataset>
+                <viz:feeds>
+                    <viz.feeds:FeedItem id="f1v" uid="valueAxis" type="Measure" values="Umsatz"/>
+                    <viz.feeds:FeedItem id="f1c" uid="categoryAxis" type="Dimension" values="Monat"/>
+                </viz:feeds>
+            </viz:VizFrame>
+        </VBox>
+
+        <!-- 2) Produktanteile - Donut -->
+        <VBox class="chartCard">
+            <viz:VizFrame
+                id="chartDonut"
+                vizType="donut"
+                height="280px"
+                width="100%"
+                uiConfig="{applicationSet:'fiori'}"
+                vizProperties="{
+                    title: { text: 'Produktanteile (%)' },
+                    plotArea: { dataLabel: { visible: true, type: 'percentage' }, colorPalette: ['#0070F2','#1B90FF','#5AAAFF','#91C8FF','#BFE0FF'] },
+                    legend: { visible: true }
+                }">
+                <viz:dataset>
+                    <viz.data:FlattenedDataset data="{sales>/productShare}">
+                        <viz.data:dimensions>
+                            <viz.data:DimensionDefinition name="Produkt" value="{sales>product}"/>
+                        </viz.data:dimensions>
+                        <viz.data:measures>
+                            <viz.data:MeasureDefinition name="Anteil" value="{sales>share}"/>
+                        </viz.data:measures>
+                    </viz.data:FlattenedDataset>
+                </viz:dataset>
+                <viz:feeds>
+                    <viz.feeds:FeedItem id="f2s" uid="size" type="Measure" values="Anteil"/>
+                    <viz.feeds:FeedItem id="f2c" uid="color" type="Dimension" values="Produkt"/>
+                </viz:feeds>
+            </viz:VizFrame>
+        </VBox>
+
+        <!-- 3) Region Ist vs. Ziel - Grouped Bar -->
+        <VBox class="chartCard">
+            <viz:VizFrame
+                id="chartGroupedBar"
+                vizType="bar"
+                height="280px"
+                width="100%"
+                uiConfig="{applicationSet:'fiori'}"
+                vizProperties="{
+                    title: { text: 'Region: Ist vs. Ziel' },
+                    plotArea: { dataLabel: { visible: false }, colorPalette: ['#0070F2','#F58B00'] },
+                    categoryAxis: { title: { visible: false } },
+                    valueAxis: { title: { visible: false } }
+                }">
+                <viz:dataset>
+                    <viz.data:FlattenedDataset data="{sales>/regionRevenue}">
+                        <viz.data:dimensions>
+                            <viz.data:DimensionDefinition name="Region" value="{sales>region}"/>
+                        </viz.data:dimensions>
+                        <viz.data:measures>
+                            <viz.data:MeasureDefinition name="Umsatz" value="{sales>revenue}"/>
+                            <viz.data:MeasureDefinition name="Ziel" value="{sales>target}"/>
+                        </viz.data:measures>
+                    </viz.data:FlattenedDataset>
+                </viz:dataset>
+                <viz:feeds>
+                    <viz.feeds:FeedItem id="f3v" uid="valueAxis" type="Measure" values="Umsatz,Ziel"/>
+                    <viz.feeds:FeedItem id="f3c" uid="categoryAxis" type="Dimension" values="Region"/>
+                </viz:feeds>
+            </viz:VizFrame>
+        </VBox>
+
+        <!-- 4) Gewinn vs. Kosten - Line - GROSS -->
+        <VBox class="chartCard chartWide">
+            <viz:VizFrame
+                id="chartLine"
+                vizType="line"
+                height="300px"
+                width="100%"
+                uiConfig="{applicationSet:'fiori'}"
+                vizProperties="{
+                    title: { text: 'Gewinn vs. Kosten (Mio EUR)' },
+                    plotArea: { dataLabel: { visible: true }, colorPalette: ['#107E3E','#BB0000'] },
+                    categoryAxis: { title: { visible: false } },
+                    valueAxis: { title: { visible: false } }
+                }">
+                <viz:dataset>
+                    <viz.data:FlattenedDataset data="{sales>/quarterlyProfit}">
+                        <viz.data:dimensions>
+                            <viz.data:DimensionDefinition name="Quartal" value="{sales>quarter}"/>
+                        </viz.data:dimensions>
+                        <viz.data:measures>
+                            <viz.data:MeasureDefinition name="Gewinn" value="{sales>profit}"/>
+                            <viz.data:MeasureDefinition name="Kosten" value="{sales>cost}"/>
+                        </viz.data:measures>
+                    </viz.data:FlattenedDataset>
+                </viz:dataset>
+                <viz:feeds>
+                    <viz.feeds:FeedItem id="f4v" uid="valueAxis" type="Measure" values="Gewinn,Kosten"/>
+                    <viz.feeds:FeedItem id="f4c" uid="categoryAxis" type="Dimension" values="Quartal"/>
+                </viz:feeds>
+            </viz:VizFrame>
+        </VBox>
+
+        <!-- 5) Mitarbeiterzufriedenheit - Column -->
+        <VBox class="chartCard">
+            <viz:VizFrame
+                id="chartHBar"
+                vizType="column"
+                height="280px"
+                width="100%"
+                uiConfig="{applicationSet:'fiori'}"
+                vizProperties="{
+                    title: { text: 'Mitarbeiterzufriedenheit' },
+                    plotArea: { dataLabel: { visible: true }, colorPalette: ['#1B90FF'] },
+                    categoryAxis: { title: { visible: false } },
+                    valueAxis: { title: { visible: false } }
+                }">
+                <viz:dataset>
+                    <viz.data:FlattenedDataset data="{sales>/employeeSatisfaction}">
+                        <viz.data:dimensions>
+                            <viz.data:DimensionDefinition name="Abteilung" value="{sales>department}"/>
+                        </viz.data:dimensions>
+                        <viz.data:measures>
+                            <viz.data:MeasureDefinition name="Score" value="{sales>score}"/>
+                        </viz.data:measures>
+                    </viz.data:FlattenedDataset>
+                </viz:dataset>
+                <viz:feeds>
+                    <viz.feeds:FeedItem id="f5v" uid="valueAxis" type="Measure" values="Score"/>
+                    <viz.feeds:FeedItem id="f5c" uid="categoryAxis" type="Dimension" values="Abteilung"/>
+                </viz:feeds>
+            </viz:VizFrame>
+        </VBox>
+
+        <!-- 6) Ticket-Volumen - Stacked Bar -->
+        <VBox class="chartCard">
+            <viz:VizFrame
+                id="chartStacked"
+                vizType="stacked_bar"
+                height="280px"
+                width="100%"
+                uiConfig="{applicationSet:'fiori'}"
+                vizProperties="{
+                    title: { text: 'Ticket-Volumen nach Priorit\u00e4t' },
+                    plotArea: { dataLabel: { visible: false }, colorPalette: ['#BB0000','#E78C07','#2B7D2B','#5899DA'] },
+                    categoryAxis: { title: { visible: false } },
+                    valueAxis: { title: { visible: false } }
+                }">
+                <viz:dataset>
+                    <viz.data:FlattenedDataset data="{sales>/ticketVolume}">
+                        <viz.data:dimensions>
+                            <viz.data:DimensionDefinition name="Monat" value="{sales>month}"/>
+                        </viz.data:dimensions>
+                        <viz.data:measures>
+                            <viz.data:MeasureDefinition name="Kritisch" value="{sales>critical}"/>
+                            <viz.data:MeasureDefinition name="Hoch" value="{sales>high}"/>
+                            <viz.data:MeasureDefinition name="Mittel" value="{sales>medium}"/>
+                            <viz.data:MeasureDefinition name="Niedrig" value="{sales>low}"/>
+                        </viz.data:measures>
+                    </viz.data:FlattenedDataset>
+                </viz:dataset>
+                <viz:feeds>
+                    <viz.feeds:FeedItem id="f6v" uid="valueAxis" type="Measure" values="Kritisch,Hoch,Mittel,Niedrig"/>
+                    <viz.feeds:FeedItem id="f6c" uid="categoryAxis" type="Dimension" values="Monat"/>
+                </viz:feeds>
+            </viz:VizFrame>
+        </VBox>
+
+        <!-- 7) Budget-Verteilung - Pie -->
+        <VBox class="chartCard">
+            <viz:VizFrame
+                id="chartPie"
+                vizType="pie"
+                height="280px"
+                width="100%"
+                uiConfig="{applicationSet:'fiori'}"
+                vizProperties="{
+                    title: { text: 'Budget-Verteilung' },
+                    plotArea: { dataLabel: { visible: true, type: 'value' }, colorPalette: ['#0070F2','#1B90FF','#5AAAFF','#107E3E','#F58B00','#999'] },
+                    legend: { visible: true }
+                }">
+                <viz:dataset>
+                    <viz.data:FlattenedDataset data="{sales>/budgetAllocation}">
+                        <viz.data:dimensions>
+                            <viz.data:DimensionDefinition name="Kategorie" value="{sales>category}"/>
+                        </viz.data:dimensions>
+                        <viz.data:measures>
+                            <viz.data:MeasureDefinition name="Betrag" value="{sales>amount}"/>
+                        </viz.data:measures>
+                    </viz.data:FlattenedDataset>
+                </viz:dataset>
+                <viz:feeds>
+                    <viz.feeds:FeedItem id="f7s" uid="size" type="Measure" values="Betrag"/>
+                    <viz.feeds:FeedItem id="f7c" uid="color" type="Dimension" values="Kategorie"/>
+                </viz:feeds>
+            </viz:VizFrame>
+        </VBox>
+
+        <!-- 8) Conversion Funnel - Bar - GROSS -->
+        <VBox class="chartCard chartWide">
+            <viz:VizFrame
+                id="chartFunnel"
+                vizType="bar"
+                height="300px"
+                width="100%"
+                uiConfig="{applicationSet:'fiori'}"
+                vizProperties="{
+                    title: { text: 'Conversion Funnel' },
+                    plotArea: { dataLabel: { visible: true }, colorPalette: ['#0070F2'] },
+                    categoryAxis: { title: { visible: false } },
+                    valueAxis: { title: { visible: false } }
+                }">
+                <viz:dataset>
+                    <viz.data:FlattenedDataset data="{sales>/conversionFunnel}">
+                        <viz.data:dimensions>
+                            <viz.data:DimensionDefinition name="Stufe" value="{sales>stage}"/>
+                        </viz.data:dimensions>
+                        <viz.data:measures>
+                            <viz.data:MeasureDefinition name="Anzahl" value="{sales>count}"/>
+                        </viz.data:measures>
+                    </viz.data:FlattenedDataset>
+                </viz:dataset>
+                <viz:feeds>
+                    <viz.feeds:FeedItem id="f8v" uid="valueAxis" type="Measure" values="Anzahl"/>
+                    <viz.feeds:FeedItem id="f8c" uid="categoryAxis" type="Dimension" values="Stufe"/>
+                </viz:feeds>
+            </viz:VizFrame>
+        </VBox>
+
+        <!-- 9) Bestellungen vs. Retouren - Combination -->
+        <VBox class="chartCard">
+            <viz:VizFrame
+                id="chartCombi"
+                vizType="combination"
+                height="280px"
+                width="100%"
+                uiConfig="{applicationSet:'fiori'}"
+                vizProperties="{
+                    title: { text: 'Bestellungen vs. Retouren' },
+                    plotArea: { dataLabel: { visible: false }, colorPalette: ['#0070F2','#BB0000'] },
+                    categoryAxis: { title: { visible: false } },
+                    valueAxis: { title: { visible: false } }
+                }">
+                <viz:dataset>
+                    <viz.data:FlattenedDataset data="{sales>/weeklyOrders}">
+                        <viz.data:dimensions>
+                            <viz.data:DimensionDefinition name="Woche" value="{sales>week}"/>
+                        </viz.data:dimensions>
+                        <viz.data:measures>
+                            <viz.data:MeasureDefinition name="Bestellungen" value="{sales>orders}"/>
+                            <viz.data:MeasureDefinition name="Retouren" value="{sales>returns}"/>
+                        </viz.data:measures>
+                    </viz.data:FlattenedDataset>
+                </viz:dataset>
+                <viz:feeds>
+                    <viz.feeds:FeedItem id="f9v" uid="valueAxis" type="Measure" values="Bestellungen,Retouren"/>
+                    <viz.feeds:FeedItem id="f9c" uid="categoryAxis" type="Dimension" values="Woche"/>
+                </viz:feeds>
+            </viz:VizFrame>
+        </VBox>
+
+        <!-- 10) Kundensegmente - Stacked Column -->
+        <VBox class="chartCard">
+            <viz:VizFrame
+                id="chartSegments"
+                vizType="stacked_column"
+                height="280px"
+                width="100%"
+                uiConfig="{applicationSet:'fiori'}"
+                vizProperties="{
+                    title: { text: 'Kundensegmente' },
+                    plotArea: { dataLabel: { visible: true }, colorPalette: ['#0070F2','#F58B00'] },
+                    categoryAxis: { title: { visible: false } },
+                    valueAxis: { title: { visible: false } }
+                }">
+                <viz:dataset>
+                    <viz.data:FlattenedDataset data="{sales>/customerSegments}">
+                        <viz.data:dimensions>
+                            <viz.data:DimensionDefinition name="Segment" value="{sales>segment}"/>
+                        </viz.data:dimensions>
+                        <viz.data:measures>
+                            <viz.data:MeasureDefinition name="Umsatz" value="{sales>revenue}"/>
+                            <viz.data:MeasureDefinition name="Kunden" value="{sales>customers}"/>
+                        </viz.data:measures>
+                    </viz.data:FlattenedDataset>
+                </viz:dataset>
+                <viz:feeds>
+                    <viz.feeds:FeedItem id="f10v" uid="valueAxis" type="Measure" values="Umsatz,Kunden"/>
+                    <viz.feeds:FeedItem id="f10c" uid="categoryAxis" type="Dimension" values="Segment"/>
+                </viz:feeds>
+            </viz:VizFrame>
+        </VBox>
+
+    </cssgrid:CSSGrid>
+
+</mvc:View>

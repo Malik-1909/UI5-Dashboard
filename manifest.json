@@ -1,0 +1,136 @@
+{
+	"_version": "1.59.0",
+	"sap.app": {
+		"id": "ui5.vizframe.app",
+		"type": "application",
+		"applicationVersion": {
+			"version": "1.0.0"
+		},
+		"title": "UI5 VizFrame App",
+		"description": "SAPUI5 App mit VizFrame Charts"
+	},
+	"sap.ui": {
+		"technology": "UI5",
+		"deviceTypes": {
+			"desktop": true,
+			"tablet": true,
+			"phone": true
+		}
+	},
+	"sap.ui5": {
+		"dependencies": {
+			"minUI5Version": "1.130.0",
+			"libs": {
+				"sap.m": {},
+				"sap.ui.core": {},
+				"sap.ui.layout": {},
+				"sap.viz": {}
+			}
+		},
+		"contentDensities": {
+			"compact": true,
+			"cozy": true
+		},
+		"models": {},
+		"rootView": {
+			"viewName": "ui5.vizframe.app.view.App",
+			"type": "XML",
+			"async": true,
+			"id": "appView"
+		},
+		"routing": {
+			"config": {
+				"routerClass": "sap.m.routing.Router",
+				"viewType": "XML",
+				"async": true,
+				"viewPath": "ui5.vizframe.app.view",
+				"controlAggregation": "pages",
+				"controlId": "app"
+			},
+			"routes": [
+				{
+					"name": "main",
+					"pattern": "",
+					"target": [
+						"main"
+					]
+				},
+				{
+					"name": "project",
+					"pattern": "project",
+					"target": [
+						"project"
+					]
+				},
+				{
+					"name": "o2c",
+					"pattern": "o2c",
+					"target": [
+						"o2c"
+					]
+				},
+				{
+					"name": "p2p",
+					"pattern": "p2p",
+					"target": [
+						"p2p"
+					]
+				},
+				{
+					"name": "r2r",
+					"pattern": "r2r",
+					"target": [
+						"r2r"
+					]
+				},
+				{
+					"name": "ptp",
+					"pattern": "ptp",
+					"target": [
+						"ptp"
+					]
+				}
+			],
+			"targets": {
+				"main": {
+					"viewType": "XML",
+					"viewId": "mainView",
+					"viewName": "Main"
+				},
+				"project": {
+					"viewType": "XML",
+					"viewId": "projectView",
+					"viewName": "Project"
+				},
+				"o2c": {
+					"viewType": "XML",
+					"viewId": "o2cView",
+					"viewName": "O2C"
+				},
+				"p2p": {
+					"viewType": "XML",
+					"viewId": "p2pView",
+					"viewName": "P2P"
+				},
+				"r2r": {
+					"viewType": "XML",
+					"viewId": "r2rView",
+					"viewName": "R2R"
+				},
+				"ptp": {
+					"viewType": "XML",
+					"viewId": "ptpView",
+					"viewName": "PtP"
+				}
+			}
+		},
+		"resources": {
+			"css": [
+				{
+					"uri": "css/style.css"
+				}
+			]
+		},
+		"flexBundle": false
+	}
+}

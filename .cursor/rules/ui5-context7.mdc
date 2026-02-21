@@ -1,0 +1,15 @@
+---
+description: Context7 für UI5/OpenUI5 Dokumentation nutzen
+globs: "**/*.{html,js,json,xml}"
+alwaysApply: false
+---
+
+# UI5 & OpenUI5 mit Context7
+
+Bei Fragen zu UI5, OpenUI5 oder SAPUI5:
+
+1. **Context7 nutzen** – z.B. "use context7 with SAP/openui5" oder "use context7 with ui5/webcomponents"
+2. **Library-IDs**:
+   - `SAP/openui5` – OpenUI5 Core (sap.m, sap.ui.layout, etc.)
+   - `ui5/webcomponents` – UI5 Web Components
+3. **Aktuelle Docs** – Keine veralteten Beispiele aus Trainingsdaten, immer über Context7 abrufen.

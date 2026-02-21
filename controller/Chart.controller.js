@@ -1,0 +1,2 @@
+sap.ui.define(["sap/ui/core/mvc/Controller","sap/viz/ui5/controls/Popover"],function(r,t){"use strict";return r.extend("ui5.vizframe.app.controller.Chart",{onAfterRendering:function(){var r=["chartBar","chartDonut","chartGroupedBar","chartLine","chartHBar","chartStacked","chartPie","chartFunnel","chartCombi","chartSegments"];var a=this;r.forEach(function(r){var e=a.byId(r);if(e){var n=new t({});n.connect(e.getVizUid())}})}})});
+//# sourceMappingURL=Chart.controller.js.map
