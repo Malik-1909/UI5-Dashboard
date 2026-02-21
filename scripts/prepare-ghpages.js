@@ -30,7 +30,7 @@ let html = fs.readFileSync(indexPath, "utf8");
 // UI5 von CDN laden
 html = html.replace(
   'src="resources/sap-ui-core.js"',
-  'src="https://ui5.sap.com/1.130.0/resources/sap-ui-core.js"'
+  'src="https://ui5.sap.com/1.132.1/resources/sap-ui-core.js"'
 );
 
 // base href und resourceroots für GitHub Pages
