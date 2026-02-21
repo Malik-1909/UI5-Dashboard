@@ -6,12 +6,14 @@
     <base href="/">
     <title>UI5 VizFrame App</title>
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect fill='%230070f2' width='32' height='32'/></svg>">
+    <script>window.__ui5LoadError = function(e) { window.__ui5Errors = (window.__ui5Errors || []).concat('UI5: ' + (e && e.message ? e.message : String(e))); };</script>
     <script id="sap-ui-bootstrap"
         src="resources/sap-ui-core.js"
         data-sap-ui-theme="sap_horizon"
         data-sap-ui-libs="sap.m,sap.ui.core,sap.ui.layout,sap.viz"
         data-sap-ui-async="true"
         data-sap-ui-onInit="module:sap/ui/core/ComponentSupport"
+        data-sap-ui-loadError="window.__ui5LoadError"
         data-sap-ui-compatVersion="edge"
         data-sap-ui-resourceroots='{ "ui5.vizframe.app": "/" }'>
     </script>
@@ -29,6 +31,12 @@
         (function() {
             var container = document.querySelector('[data-sap-ui-component]');
             var loading = document.getElementById('loading');
+            var errors = [];
+            window.onerror = function(msg, url, line, col, err) {
+                errors.push(msg + (url ? ' at ' + url : '') + (err && err.stack ? '\n' + err.stack : ''));
+                return false;
+            };
+            if (window.__ui5Errors) errors.push.apply(errors, window.__ui5Errors);
             var checkLoaded = function() {
                 if (container && container.querySelector && container.querySelector('.sapMApp')) {
                     if (loading) loading.style.display = 'none';
@@ -39,7 +47,13 @@
             var fallback = function() {
                 if (!checkLoaded()) {
                     if (loading) {
-                        loading.innerHTML = '<h2 style="color:#c00">App konnte nicht laden</h2><p>Öffne die Browser-Konsole (F12) für Fehlerdetails.</p><p>Typische Ursachen: 404 für Component.js, CORS oder blockiertes CDN.</p>';
+                        var errMsg = '<h2 style="color:#c00">App konnte nicht laden</h2>';
+                        if (errors.length) {
+                            errMsg += '<pre style="text-align:left;max-height:200px;overflow:auto;font-size:12px">' + errors.join('\n\n') + '</pre>';
+                        } else {
+                            errMsg += '<p>Öffne die Browser-Konsole (F12) für Fehlerdetails.</p><p>Typische Ursachen: 404 für Component.js, CORS oder blockiertes CDN.</p>';
+                        }
+                        loading.innerHTML = errMsg;
                     }
                     document.body.removeAttribute('unresolved');
                     document.body.style.opacity = '1';
