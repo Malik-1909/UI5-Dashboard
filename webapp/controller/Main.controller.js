@@ -18,16 +18,17 @@ sap.ui.define([
                     content: [
                         new List({
                             items: [
-                                new StandardListItem({ title: "O2C (Order-to-Cash)", type: "Navigation" }),
-                                new StandardListItem({ title: "P2P (Procure-to-Pay)", type: "Navigation" }),
-                                new StandardListItem({ title: "R2R (Record-to-Report)", type: "Navigation" }),
-                                new StandardListItem({ title: "PtP (Plan-to-Produce)", type: "Navigation" })
+                                new StandardListItem({ title: "Record to Report", type: "Navigation" }),
+                                new StandardListItem({ title: "Recruit to Retire", type: "Navigation" }),
+                                new StandardListItem({ title: "Source to Pay", type: "Navigation" }),
+                                new StandardListItem({ title: "Design to Operate", type: "Navigation" }),
+                                new StandardListItem({ title: "Lead to Cash", type: "Navigation" })
                             ],
                             itemPress: function (oEvent) {
                                 var oItem = oEvent.getParameter("listItem");
                                 var oList = oEvent.getSource();
                                 var iIndex = oList.indexOfItem(oItem);
-                                var aRoutes = ["o2c", "p2p", "r2r", "ptp"];
+                                var aRoutes = ["r2r", "rtr", "s2p", "d2o", "l2c"];
                                 if (that._oProzessePopover) { that._oProzessePopover.close(); }
                                 if (iIndex >= 0 && iIndex < aRoutes.length) {
                                     that.getOwnerComponent().getRouter().navTo(aRoutes[iIndex]);
@@ -55,21 +56,22 @@ sap.ui.define([
                     content: [
                         new List({
                             items: [
-                                new StandardListItem({ title: "O2C (Order-to-Cash)", type: "Navigation" }),
-                                new StandardListItem({ title: "P2P (Procure-to-Pay)", type: "Navigation" }),
-                                new StandardListItem({ title: "R2R (Record-to-Report)", type: "Navigation" }),
-                                new StandardListItem({ title: "PtP (Plan-to-Produce)", type: "Navigation" }),
+                                new StandardListItem({ title: "Record to Report", type: "Navigation" }),
+                                new StandardListItem({ title: "Recruit to Retire", type: "Navigation" }),
+                                new StandardListItem({ title: "Source to Pay", type: "Navigation" }),
+                                new StandardListItem({ title: "Design to Operate", type: "Navigation" }),
+                                new StandardListItem({ title: "Lead to Cash", type: "Navigation" }),
                                 new StandardListItem({ title: "Über dieses Projekt", type: "Navigation" })
                             ],
                             itemPress: function (oEvent) {
                                 var oItem = oEvent.getParameter("listItem");
                                 var sTitle = oItem.getTitle();
-                                var aRoutes = ["o2c", "p2p", "r2r", "ptp", "project"];
                                 var mRouteMap = {
-                                    "O2C (Order-to-Cash)": "o2c",
-                                    "P2P (Procure-to-Pay)": "p2p",
-                                    "R2R (Record-to-Report)": "r2r",
-                                    "PtP (Plan-to-Produce)": "ptp",
+                                    "Record to Report": "r2r",
+                                    "Recruit to Retire": "rtr",
+                                    "Source to Pay": "s2p",
+                                    "Design to Operate": "d2o",
+                                    "Lead to Cash": "l2c",
                                     "Über dieses Projekt": "project"
                                 };
                                 if (that._oBurgerPopover) { that._oBurgerPopover.close(); }
@@ -89,7 +91,7 @@ sap.ui.define([
         onTilePress: function (oEvent) {
             var oTile = oEvent.getSource();
             var sId = oTile.getId();
-            var mRouteMap = { "O2C": "o2c", "P2P": "p2p", "R2R": "r2r", "PtP": "ptp" };
+            var mRouteMap = { "tileR2R": "r2r", "tileRtR": "rtr", "tileS2P": "s2p", "tileD2O": "d2o", "tileL2C": "l2c" };
             for (var key in mRouteMap) {
                 if (sId.indexOf(key) >= 0) {
                     this.getOwnerComponent().getRouter().navTo(mRouteMap[key]);

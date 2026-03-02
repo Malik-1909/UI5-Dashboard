@@ -4,9 +4,9 @@ sap.ui.define([
 ], function (BaseController, VizPopover) {
     "use strict";
 
-    return BaseController.extend("ui5.vizframe.app.controller.PtP", {
+    return BaseController.extend("ui5.vizframe.app.controller.RtR", {
         onAfterRendering: function () {
-            var aChartIds = ["ptpFunnelChart", "ptpCapacityChart", "ptpOutputChart"];
+            var aChartIds = ["rtrFunnelChart", "rtrDepartmentChart", "rtrAttritionChart"];
             aChartIds.forEach(function (sId) {
                 var oVizFrame = this.byId(sId);
                 if (oVizFrame) {

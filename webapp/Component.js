@@ -91,20 +91,20 @@ sap.ui.define([
                     { segment: "SMB", revenue: 150, customers: 520 },
                     { segment: "Startup", revenue: 60, customers: 340 }
                 ],
-                o2cProcessFunnel: [
-                    { stage: "Auftrag", count: 1250 },
-                    { stage: "Kommissionierung", count: 1180 },
-                    { stage: "Lieferung", count: 1090 },
-                    { stage: "Rechnung", count: 1050 },
-                    { stage: "Zahlung", count: 980 }
+                l2cConversionFunnel: [
+                    { stage: "Lead", count: 3200 },
+                    { stage: "Opportunity", count: 1400 },
+                    { stage: "Quote", count: 680 },
+                    { stage: "Order", count: 420 },
+                    { stage: "Collection", count: 348 }
                 ],
-                o2cRevenueByStage: [
-                    { stage: "Auftrag", revenue: 420, target: 400 },
-                    { stage: "Lieferung", revenue: 385, target: 380 },
-                    { stage: "Rechnung", revenue: 372, target: 370 },
-                    { stage: "Zahlung", revenue: 348, target: 350 }
+                l2cRevenueByStage: [
+                    { stage: "Opportunity", revenue: 520, target: 500 },
+                    { stage: "Order", revenue: 385, target: 380 },
+                    { stage: "Invoice", revenue: 372, target: 370 },
+                    { stage: "Collection", revenue: 348, target: 350 }
                 ],
-                o2cDSO: [
+                l2cDSO: [
                     { month: "Jan", days: 42 },
                     { month: "Feb", days: 38 },
                     { month: "Mrz", days: 45 },
@@ -112,20 +112,20 @@ sap.ui.define([
                     { month: "Mai", days: 36 },
                     { month: "Jun", days: 35 }
                 ],
-                p2pProcessFunnel: [
+                s2pProcessFunnel: [
                     { stage: "Bedarfsmeldung", count: 890 },
                     { stage: "Bestellung", count: 820 },
                     { stage: "Wareneingang", count: 780 },
                     { stage: "Rechnungsprüfung", count: 745 },
                     { stage: "Zahlung", count: 710 }
                 ],
-                p2pSpendByCategory: [
+                s2pSpendByCategory: [
                     { category: "Rohstoffe", amount: 320, target: 300 },
                     { category: "Betriebsstoffe", amount: 95, target: 90 },
                     { category: "Dienstleistungen", amount: 180, target: 200 },
                     { category: "Investitionen", amount: 120, target: 110 }
                 ],
-                p2pInvoiceCycle: [
+                s2pInvoiceCycle: [
                     { month: "Jan", days: 18 },
                     { month: "Feb", days: 15 },
                     { month: "Mrz", days: 22 },
@@ -163,26 +163,73 @@ sap.ui.define([
                     { month: "Mai", days: 5 },
                     { month: "Jun", days: 6 }
                 ],
-                ptpProcessFunnel: [
-                    { stage: "Bedarfsplanung", count: 450 },
-                    { stage: "Produktionsplanung", count: 420 },
-                    { stage: "Materialbereitstellung", count: 395 },
-                    { stage: "Fertigung", count: 365 },
-                    { stage: "Qualitätsprüfung", count: 340 }
+                d2oProcessFunnel: [
+                    { stage: "Design", count: 180 },
+                    { stage: "Engineering", count: 165 },
+                    { stage: "Procure", count: 150 },
+                    { stage: "Manufacture", count: 135 },
+                    { stage: "Deploy", count: 120 },
+                    { stage: "Operate", count: 110 },
+                    { stage: "Service", count: 95 }
                 ],
-                ptpCapacityUtil: [
-                    { workcenter: "Montage 1", util: 85, target: 80 },
-                    { workcenter: "Montage 2", util: 72, target: 80 },
-                    { workcenter: "Lackierung", util: 90, target: 85 },
-                    { workcenter: "Verpackung", util: 78, target: 75 }
+                d2oCapacityUtil: [
+                    { workcenter: "Design", util: 82, target: 80 },
+                    { workcenter: "Fertigung", util: 88, target: 85 },
+                    { workcenter: "Service", util: 75, target: 80 }
                 ],
-                ptpOutput: [
+                d2oOutputTrend: [
                     { month: "Jan", output: 320 },
                     { month: "Feb", output: 285 },
                     { month: "Mrz", output: 350 },
                     { month: "Apr", output: 310 },
                     { month: "Mai", output: 365 },
                     { month: "Jun", output: 340 }
+                ],
+                rtrHeadcountFunnel: [
+                    { stage: "Recruiting", count: 45 },
+                    { stage: "Onboarding", count: 38 },
+                    { stage: "Active", count: 1250 },
+                    { stage: "Offboarding", count: 12 }
+                ],
+                rtrByDepartment: [
+                    { department: "Engineering", headcount: 420 },
+                    { department: "Sales", headcount: 280 },
+                    { department: "Operations", headcount: 195 },
+                    { department: "Support", headcount: 150 },
+                    { department: "HR", headcount: 85 }
+                ],
+                rtrAttritionTrend: [
+                    { month: "Jan", rate: 4.2 },
+                    { month: "Feb", rate: 3.8 },
+                    { month: "Mrz", rate: 5.1 },
+                    { month: "Apr", rate: 3.5 },
+                    { month: "Mai", rate: 4.0 },
+                    { month: "Jun", rate: 3.2 }
+                ],
+                r2rKpiTable: [
+                    { kpi: "Buchungen (Monat)", value: "7580", unit: "Stück" },
+                    { kpi: "Abschlusstage", value: "6", unit: "Tage" },
+                    { kpi: "Offene Konten", value: "124", unit: "Konten" }
+                ],
+                rtrKpiTable: [
+                    { kpi: "Time-to-Hire", value: "24", unit: "Tage" },
+                    { kpi: "Fluktuation", value: "3.9%", unit: "p.a." },
+                    { kpi: "Headcount", value: "1250", unit: "MA" }
+                ],
+                s2pKpiTable: [
+                    { kpi: "Offene Bestellungen", value: "145", unit: "Stück" },
+                    { kpi: "Lieferanten", value: "89", unit: "Aktiv" },
+                    { kpi: "Rechnungszyklus", value: "14", unit: "Tage" }
+                ],
+                d2oKpiTable: [
+                    { kpi: "First-Time-Right", value: "92%", unit: "" },
+                    { kpi: "Service Calls", value: "45", unit: "Monat" },
+                    { kpi: "Output", value: "340", unit: "Stück" }
+                ],
+                l2cKpiTable: [
+                    { kpi: "Pipeline Value", value: "2.4", unit: "M EUR" },
+                    { kpi: "Conversion Rate", value: "10.9%", unit: "" },
+                    { kpi: "DSO", value: "35", unit: "Tage" }
                 ]
             };
 

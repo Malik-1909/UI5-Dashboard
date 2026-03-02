@@ -1,5 +1,5 @@
 <mvc:View
-    controllerName="ui5.vizframe.app.controller.PtP"
+    controllerName="ui5.vizframe.app.controller.RtR"
     xmlns:mvc="sap.ui.core.mvc"
     xmlns="sap.m"
     xmlns:core="sap.ui.core"
@@ -8,12 +8,12 @@
     xmlns:viz.data="sap.viz.ui5.data"
     xmlns:viz.feeds="sap.viz.ui5.controls.common.feeds"
     displayBlock="true">
-    <Page id="ptpPage" enableScrolling="true" showHeader="true">
+    <Page id="rtrPage" enableScrolling="true" showHeader="true">
         <customHeader>
             <Bar>
                 <contentLeft>
                     <Button icon="sap-icon://nav-back" press=".onNavBack"/>
-                    <Title text="PtP (Plan-to-Produce)" level="H2"/>
+                    <Title text="Recruit to Retire" level="H2"/>
                 </contentLeft>
                 <contentMiddle/>
                 <contentRight>
@@ -23,39 +23,57 @@
         </customHeader>
         <content>
             <ScrollContainer height="100%" vertical="true" class="sapUiSmallMargin">
-                <l:VerticalLayout class="sapUiContentPadding" width="100%">
-                    <Title text="Plan-to-Produce Prozess" level="H3"/>
-                    <Text text="Plan-to-Produce (PtP) beschreibt den Produktionsprozess von der Planung bis zur Fertigstellung. Der Prozess verbindet Planung, Produktion und Logistik."
+                <l:VerticalLayout width="100%">
+                    <Title text="Recruit to Retire Prozess" level="H3"/>
+                    <Text text="Recruit to Retire (RtR) umfasst den gesamten Mitarbeiterlebenszyklus von der Rekrutierung bis zum Ruhestand. Der Prozess verbindet Personalbeschaffung, Entwicklung und Offboarding."
                         class="sapUiSmallMarginBottom"/>
                     <Title text="Prozessschritte" level="H4"/>
                     <List>
-                        <StandardListItem title="1. Bedarfsplanung" info="MRP und Bedarfsermittlung"/>
-                        <StandardListItem title="2. Produktionsplanung" info="Fertigungsaufträge und Kapazitätsplanung"/>
-                        <StandardListItem title="3. Materialbereitstellung" info="Kommissionierung und Bereitstellung"/>
-                        <StandardListItem title="4. Fertigung" info="Produktion und Durchlauf"/>
-                        <StandardListItem title="5. Qualitätsprüfung" info="Prüfung und Freigabe"/>
+                        <StandardListItem title="1. Recruiting" info="Stellenausschreibung und Kandidatensuche"/>
+                        <StandardListItem title="2. Onboarding" info="Einarbeitung und Integration neuer Mitarbeiter"/>
+                        <StandardListItem title="3. Performance" info="Leistungsbeurteilung und Zielvereinbarung"/>
+                        <StandardListItem title="4. Development" info="Weiterbildung und Karriereentwicklung"/>
+                        <StandardListItem title="5. Compensation" info="Vergütung und Benefits"/>
+                        <StandardListItem title="6. Offboarding" info="Austritt und Wissenstransfer"/>
                     </List>
-                    <Title text="Wichtige Diagramme für PtP" level="H3" class="sapUiSmallMarginTop"/>
-                    <Text text="Die folgenden Diagramme unterstützen die Steuerung der Produktion: Durchlaufmengen, Kapazitätsauslastung und Produktionsoutput."
+                    <Title text="KPI-Übersicht" level="H4" class="sapUiSmallMarginTop"/>
+                    <Table id="rtrKpiTable" items="{sales>/rtrKpiTable}" class="sapUiSmallMarginBottom">
+                        <columns>
+                            <Column width="50%"><Text text="KPI"/></Column>
+                            <Column><Text text="Wert"/></Column>
+                            <Column><Text text="Einheit"/></Column>
+                        </columns>
+                        <items>
+                            <ColumnListItem>
+                                <cells>
+                                    <Text text="{sales>kpi}"/>
+                                    <Text text="{sales>value}"/>
+                                    <Text text="{sales>unit}"/>
+                                </cells>
+                            </ColumnListItem>
+                        </items>
+                    </Table>
+                    <Title text="Wichtige Diagramme für RtR" level="H3" class="sapUiSmallMarginTop"/>
+                    <Text text="Die folgenden Diagramme unterstützen die Steuerung des HR-Prozesses: Headcount-Funnel, Verteilung nach Abteilung und Fluktuationstrend."
                         class="sapUiSmallMarginBottom"/>
-                    <Panel headerText="1. PtP-Prozess-Funnel" expandable="true" expanded="true" class="sapUiSmallMarginBottom">
+                    <Panel headerText="1. Headcount-Funnel" expandable="true" expanded="true" class="sapUiSmallMarginBottom">
                         <content>
-                            <Text text="Zeigt die Anzahl Fertigungsaufträge pro Stufe. Säulendiagramm für den Produktionsdurchlauf – wichtig zur Identifikation von Engpässen."
+                            <Text text="Zeigt die Anzahl Mitarbeiter pro Prozessstufe. Wichtig zur Identifikation von Engpässen im Recruiting und Onboarding."
                                 class="sapUiSmallMarginBottom"/>
                             <viz:VizFrame
-                                id="ptpFunnelChart"
+                                id="rtrFunnelChart"
                                 vizType="column"
                                 height="280px"
                                 width="100%"
                                 uiConfig="{applicationSet:'fiori'}"
                                 vizProperties="{
-                                    title: { text: 'Fertigungsaufträge pro Prozessstufe' },
+                                    title: { text: 'Mitarbeiter pro Stufe' },
                                     plotArea: { dataLabel: { visible: true }, colorPalette: ['#0070F2'] },
                                     categoryAxis: { title: { visible: false } },
                                     valueAxis: { title: { visible: false } }
                                 }">
                                 <viz:dataset>
-                                    <viz.data:FlattenedDataset data="{sales>/ptpProcessFunnel}">
+                                    <viz.data:FlattenedDataset data="{sales>/rtrHeadcountFunnel}">
                                         <viz.data:dimensions>
                                             <viz.data:DimensionDefinition name="Stufe" value="{sales>stage}"/>
                                         </viz.data:dimensions>
@@ -71,75 +89,73 @@
                             </viz:VizFrame>
                         </content>
                     </Panel>
-                    <Panel headerText="2. Kapazitätsauslastung (Ist vs. Ziel)" expandable="true" expanded="true" class="sapUiSmallMarginBottom">
+                    <Panel headerText="2. Headcount nach Abteilung" expandable="true" expanded="true" class="sapUiSmallMarginBottom">
                         <content>
-                            <Text text="Zeigt die Auslastung der Arbeitsplätze in Prozent. Säulendiagramm für den Vergleich Ist vs. Ziel je Arbeitsplatz."
+                            <Text text="Zeigt die Verteilung der Mitarbeiter auf Abteilungen. Wichtig für die Ressourcenplanung und Schwerpunktanalyse."
                                 class="sapUiSmallMarginBottom"/>
                             <viz:VizFrame
-                                id="ptpCapacityChart"
-                                vizType="column"
+                                id="rtrDepartmentChart"
+                                vizType="donut"
                                 height="280px"
                                 width="100%"
                                 uiConfig="{applicationSet:'fiori'}"
                                 vizProperties="{
-                                    title: { text: 'Auslastung (%) pro Arbeitsplatz' },
-                                    plotArea: { dataLabel: { visible: false }, colorPalette: ['#0070F2','#F58B00'] },
-                                    categoryAxis: { title: { visible: false } },
-                                    valueAxis: { title: { visible: false } }
+                                    title: { text: 'Mitarbeiter nach Abteilung' },
+                                    plotArea: { dataLabel: { visible: true, type: 'percentage' }, colorPalette: ['#0070F2','#1B90FF','#5AAAFF','#107E3E','#F58B00'] },
+                                    legend: { visible: true }
                                 }">
                                 <viz:dataset>
-                                    <viz.data:FlattenedDataset data="{sales>/ptpCapacityUtil}">
+                                    <viz.data:FlattenedDataset data="{sales>/rtrByDepartment}">
                                         <viz.data:dimensions>
-                                            <viz.data:DimensionDefinition name="Arbeitsplatz" value="{sales>workcenter}"/>
+                                            <viz.data:DimensionDefinition name="Abteilung" value="{sales>department}"/>
                                         </viz.data:dimensions>
                                         <viz.data:measures>
-                                            <viz.data:MeasureDefinition name="Ist" value="{sales>util}"/>
-                                            <viz.data:MeasureDefinition name="Ziel" value="{sales>target}"/>
+                                            <viz.data:MeasureDefinition name="Anzahl" value="{sales>headcount}"/>
                                         </viz.data:measures>
                                     </viz.data:FlattenedDataset>
                                 </viz:dataset>
                                 <viz:feeds>
-                                    <viz.feeds:FeedItem uid="valueAxis" type="Measure" values="Ist,Ziel"/>
-                                    <viz.feeds:FeedItem uid="categoryAxis" type="Dimension" values="Arbeitsplatz"/>
+                                    <viz.feeds:FeedItem uid="size" type="Measure" values="Anzahl"/>
+                                    <viz.feeds:FeedItem uid="color" type="Dimension" values="Abteilung"/>
                                 </viz:feeds>
                             </viz:VizFrame>
                         </content>
                     </Panel>
-                    <Panel headerText="3. Produktionsoutput" expandable="true" expanded="true" class="sapUiSmallMarginBottom">
+                    <Panel headerText="3. Fluktuationstrend (%)" expandable="true" expanded="true" class="sapUiSmallMarginBottom">
                         <content>
-                            <Text text="Zeigt die produzierte Menge je Monat. Wichtig für die Leistungssteuerung und Liefertreue."
+                            <Text text="Zeigt die monatliche Fluktuationsrate. Wichtig für die Mitarbeiterbindung und Retention-Strategien."
                                 class="sapUiSmallMarginBottom"/>
                             <viz:VizFrame
-                                id="ptpOutputChart"
+                                id="rtrAttritionChart"
                                 vizType="line"
                                 height="280px"
                                 width="100%"
                                 uiConfig="{applicationSet:'fiori'}"
                                 vizProperties="{
-                                    title: { text: 'Produktionsoutput (Stück)' },
+                                    title: { text: 'Fluktuation (%)' },
                                     plotArea: { dataLabel: { visible: true }, colorPalette: ['#107E3E'] },
                                     categoryAxis: { title: { visible: false } },
                                     valueAxis: { title: { visible: false } }
                                 }">
                                 <viz:dataset>
-                                    <viz.data:FlattenedDataset data="{sales>/ptpOutput}">
+                                    <viz.data:FlattenedDataset data="{sales>/rtrAttritionTrend}">
                                         <viz.data:dimensions>
                                             <viz.data:DimensionDefinition name="Monat" value="{sales>month}"/>
                                         </viz.data:dimensions>
                                         <viz.data:measures>
-                                            <viz.data:MeasureDefinition name="Output" value="{sales>output}"/>
+                                            <viz.data:MeasureDefinition name="Rate" value="{sales>rate}"/>
                                         </viz.data:measures>
                                     </viz.data:FlattenedDataset>
                                 </viz:dataset>
                                 <viz:feeds>
-                                    <viz.feeds:FeedItem uid="valueAxis" type="Measure" values="Output"/>
+                                    <viz.feeds:FeedItem uid="valueAxis" type="Measure" values="Rate"/>
                                     <viz.feeds:FeedItem uid="categoryAxis" type="Dimension" values="Monat"/>
                                 </viz:feeds>
                             </viz:VizFrame>
                         </content>
                     </Panel>
                     <Title text="Zusammenfassung" level="H4"/>
-                    <Text text="Für PtP sind Säulendiagramme (Produktionsdurchlauf, Kapazitätsauslastung) und Liniendiagramme (Output-Trend) relevant."
+                    <Text text="Für RtR sind Säulendiagramme (Headcount-Funnel), Donut-Diagramme (Abteilungsverteilung) und Liniendiagramme (Fluktuationstrend) relevant."
                         class="sapUiSmallMarginBottom"/>
                 </l:VerticalLayout>
             </ScrollContainer>

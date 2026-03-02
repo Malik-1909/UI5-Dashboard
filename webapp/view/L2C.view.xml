@@ -1,5 +1,5 @@
 <mvc:View
-    controllerName="ui5.vizframe.app.controller.P2P"
+    controllerName="ui5.vizframe.app.controller.L2C"
     xmlns:mvc="sap.ui.core.mvc"
     xmlns="sap.m"
     xmlns:core="sap.ui.core"
@@ -8,12 +8,12 @@
     xmlns:viz.data="sap.viz.ui5.data"
     xmlns:viz.feeds="sap.viz.ui5.controls.common.feeds"
     displayBlock="true">
-    <Page id="p2pPage" enableScrolling="true" showHeader="true">
+    <Page id="l2cPage" enableScrolling="true" showHeader="true">
         <customHeader>
             <Bar>
                 <contentLeft>
                     <Button icon="sap-icon://nav-back" press=".onNavBack"/>
-                    <Title text="P2P (Procure-to-Pay)" level="H2"/>
+                    <Title text="Lead to Cash" level="H2"/>
                 </contentLeft>
                 <contentMiddle/>
                 <contentRight>
@@ -23,39 +23,58 @@
         </customHeader>
         <content>
             <ScrollContainer height="100%" vertical="true" class="sapUiSmallMargin">
-                <l:VerticalLayout class="sapUiContentPadding" width="100%">
-                    <Title text="Procure-to-Pay Prozess" level="H3"/>
-                    <Text text="Procure-to-Pay (P2P) beschreibt den Beschaffungsprozess von der Bedarfsmeldung bis zur Zahlung an den Lieferanten. Der Prozess verbindet Einkauf, Logistik und Finanzen."
+                <l:VerticalLayout width="100%">
+                    <Title text="Lead to Cash Prozess" level="H3"/>
+                    <Text text="Lead to Cash (L2C) umfasst den gesamten Prozess vom Lead bis zum Zahlungseingang. Der Prozess verbindet Vertrieb, Logistik und Finanzen."
                         class="sapUiSmallMarginBottom"/>
                     <Title text="Prozessschritte" level="H4"/>
                     <List>
-                        <StandardListItem title="1. Bedarfsmeldung" info="Bedarfsanforderung wird erstellt und freigegeben"/>
-                        <StandardListItem title="2. Bestellung" info="Bestellung beim Lieferanten wird ausgelöst"/>
-                        <StandardListItem title="3. Wareneingang" info="Wareneingang und Prüfung"/>
-                        <StandardListItem title="4. Rechnungsprüfung" info="Dreiseitenabgleich und Rechnungsfreigabe"/>
-                        <StandardListItem title="5. Zahlung" info="Zahlungsabwicklung an den Lieferanten"/>
+                        <StandardListItem title="1. Lead" info="Interessent wird erfasst und qualifiziert"/>
+                        <StandardListItem title="2. Opportunity" info="Geschäftsmöglichkeit wird bewertet"/>
+                        <StandardListItem title="3. Quote" info="Angebot wird erstellt und versendet"/>
+                        <StandardListItem title="4. Order" info="Auftrag wird erfasst und freigegeben"/>
+                        <StandardListItem title="5. Delivery" info="Lieferung und Übergabe an den Kunden"/>
+                        <StandardListItem title="6. Invoice" info="Rechnungsstellung und Versand"/>
+                        <StandardListItem title="7. Collection" info="Zahlungseingang und Forderungsausgleich"/>
                     </List>
-                    <Title text="Wichtige Diagramme für P2P" level="H3" class="sapUiSmallMarginTop"/>
-                    <Text text="Die folgenden Diagramme unterstützen die Steuerung des Beschaffungsprozesses: Durchlaufmengen, Ausgaben nach Kategorie und Zahlungszyklus."
+                    <Title text="KPI-Übersicht" level="H4" class="sapUiSmallMarginTop"/>
+                    <Table id="l2cKpiTable" items="{sales>/l2cKpiTable}" class="sapUiSmallMarginBottom">
+                        <columns>
+                            <Column width="50%"><Text text="KPI"/></Column>
+                            <Column><Text text="Wert"/></Column>
+                            <Column><Text text="Einheit"/></Column>
+                        </columns>
+                        <items>
+                            <ColumnListItem>
+                                <cells>
+                                    <Text text="{sales>kpi}"/>
+                                    <Text text="{sales>value}"/>
+                                    <Text text="{sales>unit}"/>
+                                </cells>
+                            </ColumnListItem>
+                        </items>
+                    </Table>
+                    <Title text="Wichtige Diagramme für L2C" level="H3" class="sapUiSmallMarginTop"/>
+                    <Text text="Die folgenden Diagramme sind für die Steuerung und Überwachung des Lead-to-Cash-Prozesses zentral. Sie zeigen Engpässe, Durchlaufzeiten und den Umsatzfluss."
                         class="sapUiSmallMarginBottom"/>
-                    <Panel headerText="1. P2P-Prozess-Funnel" expandable="true" expanded="true" class="sapUiSmallMarginBottom">
+                    <Panel headerText="1. L2C-Conversion-Funnel" expandable="true" expanded="true" class="sapUiSmallMarginBottom">
                         <content>
-                            <Text text="Zeigt die Anzahl Bestellvorgänge pro Stufe. Wichtig zur Identifikation von Engpässen (z.B. viele offene Rechnungsprüfungen)."
+                            <Text text="Zeigt die Durchlaufmenge pro Prozessstufe. Säulendiagramm für den Conversion-Durchlauf – wichtig zur Identifikation von Abbrüchen und Engpässen."
                                 class="sapUiSmallMarginBottom"/>
                             <viz:VizFrame
-                                id="p2pFunnelChart"
-                                vizType="bar"
+                                id="l2cFunnelChart"
+                                vizType="column"
                                 height="280px"
                                 width="100%"
                                 uiConfig="{applicationSet:'fiori'}"
                                 vizProperties="{
-                                    title: { text: 'Bestellvorgänge pro Prozessstufe' },
+                                    title: { text: 'Pipeline pro Prozessstufe' },
                                     plotArea: { dataLabel: { visible: true }, colorPalette: ['#0070F2'] },
                                     categoryAxis: { title: { visible: false } },
                                     valueAxis: { title: { visible: false } }
                                 }">
                                 <viz:dataset>
-                                    <viz.data:FlattenedDataset data="{sales>/p2pProcessFunnel}">
+                                    <viz.data:FlattenedDataset data="{sales>/l2cConversionFunnel}">
                                         <viz.data:dimensions>
                                             <viz.data:DimensionDefinition name="Stufe" value="{sales>stage}"/>
                                         </viz.data:dimensions>
@@ -71,56 +90,58 @@
                             </viz:VizFrame>
                         </content>
                     </Panel>
-                    <Panel headerText="2. Verteilung der Ausgaben nach Kategorie" expandable="true" expanded="true" class="sapUiSmallMarginBottom">
+                    <Panel headerText="2. Umsatz pro Prozessstufe (Ist vs. Ziel)" expandable="true" expanded="true" class="sapUiSmallMarginBottom">
                         <content>
-                            <Text text="Zeigt die Anteile der Ausgaben je Kategorie. Wichtig für die Schwerpunktanalyse im Einkauf (wo fließt das Geld hin?)."
+                            <Text text="Vergleicht den tatsächlichen Umsatz mit dem Zielwert je Stufe. Wichtig für die Steuerung von Liefertreue und Forderungsmanagement."
                                 class="sapUiSmallMarginBottom"/>
                             <viz:VizFrame
-                                id="p2pSpendChart"
-                                vizType="donut"
+                                id="l2cRevenueChart"
+                                vizType="bar"
                                 height="280px"
                                 width="100%"
                                 uiConfig="{applicationSet:'fiori'}"
                                 vizProperties="{
-                                    title: { text: 'Ausgabenverteilung (%)' },
-                                    plotArea: { dataLabel: { visible: true, type: 'percentage' }, colorPalette: ['#0070F2','#1B90FF','#5AAAFF','#107E3E'] },
-                                    legend: { visible: true }
+                                    title: { text: 'Umsatz (T EUR) pro Stufe' },
+                                    plotArea: { dataLabel: { visible: false }, colorPalette: ['#0070F2','#F58B00'] },
+                                    categoryAxis: { title: { visible: false } },
+                                    valueAxis: { title: { visible: false } }
                                 }">
                                 <viz:dataset>
-                                    <viz.data:FlattenedDataset data="{sales>/p2pSpendByCategory}">
+                                    <viz.data:FlattenedDataset data="{sales>/l2cRevenueByStage}">
                                         <viz.data:dimensions>
-                                            <viz.data:DimensionDefinition name="Kategorie" value="{sales>category}"/>
+                                            <viz.data:DimensionDefinition name="Stufe" value="{sales>stage}"/>
                                         </viz.data:dimensions>
                                         <viz.data:measures>
-                                            <viz.data:MeasureDefinition name="Anteil" value="{sales>amount}"/>
+                                            <viz.data:MeasureDefinition name="Umsatz" value="{sales>revenue}"/>
+                                            <viz.data:MeasureDefinition name="Ziel" value="{sales>target}"/>
                                         </viz.data:measures>
                                     </viz.data:FlattenedDataset>
                                 </viz:dataset>
                                 <viz:feeds>
-                                    <viz.feeds:FeedItem uid="size" type="Measure" values="Anteil"/>
-                                    <viz.feeds:FeedItem uid="color" type="Dimension" values="Kategorie"/>
+                                    <viz.feeds:FeedItem uid="valueAxis" type="Measure" values="Umsatz,Ziel"/>
+                                    <viz.feeds:FeedItem uid="categoryAxis" type="Dimension" values="Stufe"/>
                                 </viz:feeds>
                             </viz:VizFrame>
                         </content>
                     </Panel>
-                    <Panel headerText="3. Rechnungsbearbeitungszeit (Tage)" expandable="true" expanded="true" class="sapUiSmallMarginBottom">
+                    <Panel headerText="3. DSO (Days Sales Outstanding)" expandable="true" expanded="true" class="sapUiSmallMarginBottom">
                         <content>
-                            <Text text="Zeigt die durchschnittliche Zeit von Rechnungseingang bis Zahlung. Wichtig für Lieferantenbeziehungen und Cashflow."
+                            <Text text="Zeigt die durchschnittliche Zahlungszielüberschreitung in Tagen. Wichtig für das Forderungsmanagement und die Liquiditätsplanung."
                                 class="sapUiSmallMarginBottom"/>
                             <viz:VizFrame
-                                id="p2pInvoiceChart"
+                                id="l2cDSOChart"
                                 vizType="line"
                                 height="280px"
                                 width="100%"
                                 uiConfig="{applicationSet:'fiori'}"
                                 vizProperties="{
-                                    title: { text: 'Rechnungsbearbeitung (Tage)' },
+                                    title: { text: 'Ausstehende Forderungen (Tage)' },
                                     plotArea: { dataLabel: { visible: true }, colorPalette: ['#107E3E'] },
                                     categoryAxis: { title: { visible: false } },
                                     valueAxis: { title: { visible: false } }
                                 }">
                                 <viz:dataset>
-                                    <viz.data:FlattenedDataset data="{sales>/p2pInvoiceCycle}">
+                                    <viz.data:FlattenedDataset data="{sales>/l2cDSO}">
                                         <viz.data:dimensions>
                                             <viz.data:DimensionDefinition name="Monat" value="{sales>month}"/>
                                         </viz.data:dimensions>
@@ -137,7 +158,7 @@
                         </content>
                     </Panel>
                     <Title text="Zusammenfassung" level="H4"/>
-                    <Text text="Für P2P sind Funnel-Diagramme (Bestelldurchlauf), Donut-Diagramme (Ausgabenverteilung) und Liniendiagramme (Zahlungszyklus) relevant."
+                    <Text text="Für L2C sind Säulen- und Balkendiagramme (Conversion-Durchlauf, Ist vs. Ziel) sowie Liniendiagramme (DSO-Trend) relevant. Sie ermöglichen die Überwachung von Durchsatz, Liefertreue und Zahlungsmoral."
                         class="sapUiSmallMarginBottom"/>
                 </l:VerticalLayout>
             </ScrollContainer>

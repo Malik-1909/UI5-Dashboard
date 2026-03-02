@@ -1,5 +1,5 @@
 <mvc:View
-    controllerName="ui5.vizframe.app.controller.R2R"
+    controllerName="ui5.vizframe.app.controller.S2P"
     xmlns:mvc="sap.ui.core.mvc"
     xmlns="sap.m"
     xmlns:core="sap.ui.core"
@@ -8,12 +8,12 @@
     xmlns:viz.data="sap.viz.ui5.data"
     xmlns:viz.feeds="sap.viz.ui5.controls.common.feeds"
     displayBlock="true">
-    <Page id="r2rPage" enableScrolling="true" showHeader="true">
+    <Page id="s2pPage" enableScrolling="true" showHeader="true">
         <customHeader>
             <Bar>
                 <contentLeft>
                     <Button icon="sap-icon://nav-back" press=".onNavBack"/>
-                    <Title text="Record to Report" level="H2"/>
+                    <Title text="Source to Pay" level="H2"/>
                 </contentLeft>
                 <contentMiddle/>
                 <contentRight>
@@ -24,19 +24,19 @@
         <content>
             <ScrollContainer height="100%" vertical="true" class="sapUiSmallMargin">
                 <l:VerticalLayout width="100%">
-                    <Title text="Record-to-Report Prozess" level="H3"/>
-                    <Text text="Record to Report (R2R) umfasst den Finanz- und Rechnungswesen-Prozess von der Buchung bis zum Abschluss. Der Prozess bildet die Grundlage für die Finanzberichterstattung."
+                    <Title text="Source to Pay Prozess" level="H3"/>
+                    <Text text="Source to Pay (S2P) beschreibt den Beschaffungsprozess von der Bedarfsmeldung bis zur Zahlung an den Lieferanten. Der Prozess verbindet Einkauf, Logistik und Finanzen."
                         class="sapUiSmallMarginBottom"/>
                     <Title text="Prozessschritte" level="H4"/>
                     <List>
-                        <StandardListItem title="1. Buchung" info="Transaktionserfassung und -validierung"/>
-                        <StandardListItem title="2. Kontenabstimmung" info="Bank- und Sachkontenabstimmung"/>
-                        <StandardListItem title="3. Periodenabschluss" info="Monats- und Jahresabschluss"/>
-                        <StandardListItem title="4. Konsolidierung" info="Konzernabschluss und Intercompany"/>
-                        <StandardListItem title="5. Reporting" info="Finanzberichte und Analysen"/>
+                        <StandardListItem title="1. Bedarfsmeldung" info="Bedarfsanforderung wird erstellt und freigegeben"/>
+                        <StandardListItem title="2. Bestellung" info="Bestellung beim Lieferanten wird ausgelöst"/>
+                        <StandardListItem title="3. Wareneingang" info="Wareneingang und Prüfung"/>
+                        <StandardListItem title="4. Rechnungsprüfung" info="Dreiseitenabgleich und Rechnungsfreigabe"/>
+                        <StandardListItem title="5. Zahlung" info="Zahlungsabwicklung an den Lieferanten"/>
                     </List>
                     <Title text="KPI-Übersicht" level="H4" class="sapUiSmallMarginTop"/>
-                    <Table id="r2rKpiTable" items="{sales>/r2rKpiTable}" class="sapUiSmallMarginBottom">
+                    <Table id="s2pKpiTable" items="{sales>/s2pKpiTable}" class="sapUiSmallMarginBottom">
                         <columns>
                             <Column width="50%"><Text text="KPI"/></Column>
                             <Column><Text text="Wert"/></Column>
@@ -52,92 +52,92 @@
                             </ColumnListItem>
                         </items>
                     </Table>
-                    <Title text="Wichtige Diagramme für Record to Report" level="H3" class="sapUiSmallMarginTop"/>
-                    <Text text="Die folgenden Diagramme unterstützen die Steuerung des Finanzprozesses: Buchungsvolumen, Abschlussaktivitäten und Close-Cycle-Zeit."
+                    <Title text="Wichtige Diagramme für S2P" level="H3" class="sapUiSmallMarginTop"/>
+                    <Text text="Die folgenden Diagramme unterstützen die Steuerung des Beschaffungsprozesses: Durchlaufmengen, Ausgaben nach Kategorie und Zahlungszyklus."
                         class="sapUiSmallMarginBottom"/>
-                    <Panel headerText="1. Buchungen nach Kontenklasse" expandable="true" expanded="true" class="sapUiSmallMarginBottom">
+                    <Panel headerText="1. S2P-Prozess-Funnel" expandable="true" expanded="true" class="sapUiSmallMarginBottom">
                         <content>
-                            <Text text="Zeigt die Verteilung der Buchungen auf Kontenklassen. Typisch für R2R – wo entstehen die meisten Buchungen?"
+                            <Text text="Zeigt die Anzahl Bestellvorgänge pro Stufe. Wichtig zur Identifikation von Engpässen (z.B. viele offene Rechnungsprüfungen)."
                                 class="sapUiSmallMarginBottom"/>
                             <viz:VizFrame
-                                id="r2rFunnelChart"
-                                vizType="pie"
+                                id="s2pFunnelChart"
+                                vizType="bar"
                                 height="280px"
                                 width="100%"
                                 uiConfig="{applicationSet:'fiori'}"
                                 vizProperties="{
-                                    title: { text: 'Buchungsverteilung nach Kontenklasse (%)' },
-                                    plotArea: { dataLabel: { visible: true, type: 'percentage' }, colorPalette: ['#0070F2','#1B90FF','#5AAAFF','#107E3E','#F58B00'] },
-                                    legend: { visible: true }
-                                }">
-                                <viz:dataset>
-                                    <viz.data:FlattenedDataset data="{sales>/r2rByAccountType}">
-                                        <viz.data:dimensions>
-                                            <viz.data:DimensionDefinition name="Kontenklasse" value="{sales>type}"/>
-                                        </viz.data:dimensions>
-                                        <viz.data:measures>
-                                            <viz.data:MeasureDefinition name="Anteil" value="{sales>share}"/>
-                                        </viz.data:measures>
-                                    </viz.data:FlattenedDataset>
-                                </viz:dataset>
-                                <viz:feeds>
-                                    <viz.feeds:FeedItem uid="size" type="Measure" values="Anteil"/>
-                                    <viz.feeds:FeedItem uid="color" type="Dimension" values="Kontenklasse"/>
-                                </viz:feeds>
-                            </viz:VizFrame>
-                        </content>
-                    </Panel>
-                    <Panel headerText="2. Buchungen pro Periode" expandable="true" expanded="true" class="sapUiSmallMarginBottom">
-                        <content>
-                            <Text text="Zeigt das Buchungsvolumen je Monat. Wichtig für die Ressourcenplanung und Spitzenerkennung."
-                                class="sapUiSmallMarginBottom"/>
-                            <viz:VizFrame
-                                id="r2rEntriesChart"
-                                vizType="column"
-                                height="280px"
-                                width="100%"
-                                uiConfig="{applicationSet:'fiori'}"
-                                vizProperties="{
-                                    title: { text: 'Buchungen pro Periode' },
+                                    title: { text: 'Bestellvorgänge pro Prozessstufe' },
                                     plotArea: { dataLabel: { visible: true }, colorPalette: ['#0070F2'] },
                                     categoryAxis: { title: { visible: false } },
                                     valueAxis: { title: { visible: false } }
                                 }">
                                 <viz:dataset>
-                                    <viz.data:FlattenedDataset data="{sales>/r2rJournalEntries}">
+                                    <viz.data:FlattenedDataset data="{sales>/s2pProcessFunnel}">
                                         <viz.data:dimensions>
-                                            <viz.data:DimensionDefinition name="Periode" value="{sales>period}"/>
+                                            <viz.data:DimensionDefinition name="Stufe" value="{sales>stage}"/>
                                         </viz.data:dimensions>
                                         <viz.data:measures>
-                                            <viz.data:MeasureDefinition name="Buchungen" value="{sales>entries}"/>
+                                            <viz.data:MeasureDefinition name="Anzahl" value="{sales>count}"/>
                                         </viz.data:measures>
                                     </viz.data:FlattenedDataset>
                                 </viz:dataset>
                                 <viz:feeds>
-                                    <viz.feeds:FeedItem uid="valueAxis" type="Measure" values="Buchungen"/>
-                                    <viz.feeds:FeedItem uid="categoryAxis" type="Dimension" values="Periode"/>
+                                    <viz.feeds:FeedItem uid="valueAxis" type="Measure" values="Anzahl"/>
+                                    <viz.feeds:FeedItem uid="categoryAxis" type="Dimension" values="Stufe"/>
                                 </viz:feeds>
                             </viz:VizFrame>
                         </content>
                     </Panel>
-                    <Panel headerText="3. Close-Cycle-Zeit (Tage)" expandable="true" expanded="true" class="sapUiSmallMarginBottom">
+                    <Panel headerText="2. Verteilung der Ausgaben nach Kategorie" expandable="true" expanded="true" class="sapUiSmallMarginBottom">
                         <content>
-                            <Text text="Zeigt die Dauer des Periodenabschlusses in Tagen. Wichtig für die rechtzeitige Berichterstattung."
+                            <Text text="Zeigt die Anteile der Ausgaben je Kategorie. Wichtig für die Schwerpunktanalyse im Einkauf (wo fließt das Geld hin?)."
                                 class="sapUiSmallMarginBottom"/>
                             <viz:VizFrame
-                                id="r2rCloseChart"
+                                id="s2pSpendChart"
+                                vizType="donut"
+                                height="280px"
+                                width="100%"
+                                uiConfig="{applicationSet:'fiori'}"
+                                vizProperties="{
+                                    title: { text: 'Ausgabenverteilung (%)' },
+                                    plotArea: { dataLabel: { visible: true, type: 'percentage' }, colorPalette: ['#0070F2','#1B90FF','#5AAAFF','#107E3E'] },
+                                    legend: { visible: true }
+                                }">
+                                <viz:dataset>
+                                    <viz.data:FlattenedDataset data="{sales>/s2pSpendByCategory}">
+                                        <viz.data:dimensions>
+                                            <viz.data:DimensionDefinition name="Kategorie" value="{sales>category}"/>
+                                        </viz.data:dimensions>
+                                        <viz.data:measures>
+                                            <viz.data:MeasureDefinition name="Anteil" value="{sales>amount}"/>
+                                        </viz.data:measures>
+                                    </viz.data:FlattenedDataset>
+                                </viz:dataset>
+                                <viz:feeds>
+                                    <viz.feeds:FeedItem uid="size" type="Measure" values="Anteil"/>
+                                    <viz.feeds:FeedItem uid="color" type="Dimension" values="Kategorie"/>
+                                </viz:feeds>
+                            </viz:VizFrame>
+                        </content>
+                    </Panel>
+                    <Panel headerText="3. Rechnungsbearbeitungszeit (Tage)" expandable="true" expanded="true" class="sapUiSmallMarginBottom">
+                        <content>
+                            <Text text="Zeigt die durchschnittliche Zeit von Rechnungseingang bis Zahlung. Wichtig für Lieferantenbeziehungen und Cashflow."
+                                class="sapUiSmallMarginBottom"/>
+                            <viz:VizFrame
+                                id="s2pInvoiceChart"
                                 vizType="line"
                                 height="280px"
                                 width="100%"
                                 uiConfig="{applicationSet:'fiori'}"
                                 vizProperties="{
-                                    title: { text: 'Abschlussdauer (Tage)' },
+                                    title: { text: 'Rechnungsbearbeitung (Tage)' },
                                     plotArea: { dataLabel: { visible: true }, colorPalette: ['#107E3E'] },
                                     categoryAxis: { title: { visible: false } },
                                     valueAxis: { title: { visible: false } }
                                 }">
                                 <viz:dataset>
-                                    <viz.data:FlattenedDataset data="{sales>/r2rCloseCycle}">
+                                    <viz.data:FlattenedDataset data="{sales>/s2pInvoiceCycle}">
                                         <viz.data:dimensions>
                                             <viz.data:DimensionDefinition name="Monat" value="{sales>month}"/>
                                         </viz.data:dimensions>
@@ -154,7 +154,7 @@
                         </content>
                     </Panel>
                     <Title text="Zusammenfassung" level="H4"/>
-                    <Text text="Für R2R sind Kreisdiagramme (Buchungsverteilung), Säulendiagramme (Buchungsvolumen pro Periode) und Liniendiagramme (Close-Cycle) relevant."
+                    <Text text="Für S2P sind Funnel-Diagramme (Bestelldurchlauf), Donut-Diagramme (Ausgabenverteilung) und Liniendiagramme (Zahlungszyklus) relevant."
                         class="sapUiSmallMarginBottom"/>
                 </l:VerticalLayout>
             </ScrollContainer>

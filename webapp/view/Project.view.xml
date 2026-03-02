@@ -20,32 +20,72 @@
         </customHeader>
         <content>
             <ScrollContainer height="100%" vertical="true" class="sapUiSmallMargin">
-                <l:VerticalLayout class="sapUiContentPadding" width="100%">
-                    <Title text="Technologie" level="H3" class="sapUiSmallMarginTop"/>
-                    <Text text="Dieses Projekt nutzt SAPUI5 (Version 1.130) – das offizielle UI-Framework von SAP. Im Gegensatz zu OpenUI5 enthält SAPUI5 zusätzliche kommerzielle Bibliotheken wie sap.viz für professionelle Chart-Visualisierungen."
+                <l:VerticalLayout width="100%">
+                    <Title text="KPI Dashboard – Geschäftsprozesse" level="H3"/>
+                    <Text text="Diese App visualisiert fünf zentrale End-to-End-Geschäftsprozesse mit KPIs, Diagrammen und Tabellen. Sie dient als Demo für SAPUI5 mit VizFrame-Charts und zeigt typische Steuerungskennzahlen pro Prozess."
                         class="sapUiSmallMarginBottom"/>
-                    <Title text="Verwendete Bibliotheken" level="H4"/>
+
+                    <Title text="Die fünf Geschäftsprozesse" level="H3" class="sapUiSmallMarginTop"/>
+                    <Table id="processOverviewTable" class="sapUiSmallMarginBottom">
+                        <columns>
+                            <Column width="25%"><Text text="Prozess"/></Column>
+                            <Column width="75%"><Text text="Beschreibung"/></Column>
+                        </columns>
+                        <items>
+                            <ColumnListItem>
+                                <cells>
+                                    <Text text="Record to Report" fontWeight="Bold"/>
+                                    <Text text="Buchung bis Abschluss – Finanz- und Rechnungswesen von der Transaktionserfassung bis zur Berichterstattung."/>
+                                </cells>
+                            </ColumnListItem>
+                            <ColumnListItem>
+                                <cells>
+                                    <Text text="Recruit to Retire" fontWeight="Bold"/>
+                                    <Text text="Rekrutierung bis Ruhestand – gesamter Mitarbeiterlebenszyklus von der Personalbeschaffung bis zum Offboarding."/>
+                                </cells>
+                            </ColumnListItem>
+                            <ColumnListItem>
+                                <cells>
+                                    <Text text="Source to Pay" fontWeight="Bold"/>
+                                    <Text text="Beschaffung bis Zahlung – Einkaufsprozess von der Bedarfsmeldung bis zur Zahlung an Lieferanten."/>
+                                </cells>
+                            </ColumnListItem>
+                            <ColumnListItem>
+                                <cells>
+                                    <Text text="Design to Operate" fontWeight="Bold"/>
+                                    <Text text="Design bis Betrieb – von der Produktentwicklung über Fertigung bis zu Service und Wartung."/>
+                                </cells>
+                            </ColumnListItem>
+                            <ColumnListItem>
+                                <cells>
+                                    <Text text="Lead to Cash" fontWeight="Bold"/>
+                                    <Text text="Lead bis Zahlungseingang – Vertriebsprozess von der Lead-Qualifizierung bis zum Forderungseingang."/>
+                                </cells>
+                            </ColumnListItem>
+                        </items>
+                    </Table>
+
+                    <Title text="Technologie" level="H3" class="sapUiSmallMarginTop"/>
+                    <Text text="Die App basiert auf SAPUI5 (Version 1.130) und nutzt sap.viz für professionelle Chart-Visualisierungen. Das Framework wird über UI5 Tooling geladen."
+                        class="sapUiSmallMarginBottom"/>
                     <List>
                         <StandardListItem title="sap.m" info="Mobile-first UI Controls"/>
                         <StandardListItem title="sap.ui.core" info="Kern-Framework"/>
-                        <StandardListItem title="sap.ui.layout" info="Layout-Controls (CSSGrid, etc.)"/>
+                        <StandardListItem title="sap.ui.layout" info="Layout-Controls (CSSGrid)"/>
                         <StandardListItem title="sap.viz" info="VizFrame Charts – Column, Bar, Line, Pie, Donut"/>
                         <StandardListItem title="themelib_sap_horizon" info="SAP Horizon Design Theme"/>
                     </List>
-                    <Title text="Umsetzung" level="H3" class="sapUiSmallMarginTop"/>
-                    <Text text="Die App wurde mit UI5 Tooling aufgebaut. Das Framework wird über den fiori-tools-proxy von ui5.sap.com geladen. Die Struktur folgt dem Standard: Component.js, manifest.json, XML-Views und Controller. Das Routing ermöglicht die Navigation zwischen Startseite, vier Geschäftsprozess-Detailseiten und dieser Projektseite."
-                        class="sapUiSmallMarginBottom"/>
-                    <Title text="Enthaltene Inhalte" level="H4"/>
+
+                    <Title text="Funktionen" level="H3" class="sapUiSmallMarginTop"/>
                     <List>
-                        <StandardListItem title="Header" info="SAP-Logo, Titel KPI Dashboard, Prozesse-Dropdown, Über dieses Projekt"/>
-                        <StandardListItem title="Startseite" info="4 große GenericTiles mit VizFrame-Charts (O2C, P2P, R2R, PtP) – je ein Chart pro Prozess als Übersicht"/>
-                        <StandardListItem title="4 Geschäftsprozesse" info="O2C (Order-to-Cash), P2P (Procure-to-Pay), R2R (Record-to-Report), PtP (Plan-to-Produce)"/>
-                        <StandardListItem title="Detailseiten" info="Jede Prozessseite hat 3 VizFrame-Charts mit Prozessbeschreibung und -schritten"/>
-                        <StandardListItem title="Responsives Grid-Layout" info="2x2 CSSGrid auf der Startseite, Padding und volle Breite"/>
-                        <StandardListItem title="Prozesse-Popover / Burger-Menü" info="Dropdown auf Desktop, Burger-Menü auf Mobile zur Navigation"/>
+                        <StandardListItem title="Startseite" info="5 KPI-Tiles mit VizFrame-Charts – je ein Chart pro Geschäftsprozess"/>
+                        <StandardListItem title="Detailseiten" info="Prozessbeschreibung, Schritte, KPI-Tabelle und 3 interaktive Diagramme pro Prozess"/>
+                        <StandardListItem title="Navigation" info="Prozesse-Dropdown (Desktop) und Burger-Menü (Mobile)"/>
+                        <StandardListItem title="Responsives Layout" info="3 Spalten (Desktop) → 2 (Tablet) → 1 (Mobile)"/>
                     </List>
+
                     <Title text="Deployment" level="H3" class="sapUiSmallMarginTop"/>
-                    <Text text="Die App kann mit ui5 build gebaut und auf SAP BTP Cloud Foundry (staticfile_buildpack) oder in den SAP Build Work Zone (Fiori Launchpad) deployt werden. Im Launchpad-Kontext stellt SAP die UI5-Ressourcen bereit – sap.viz funktioniert dort zuverlässig."
+                    <Text text="Build mit ui5 build. Deployment auf SAP BTP Cloud Foundry (staticfile_buildpack) oder SAP Build Work Zone (Fiori Launchpad) möglich."
                         class="sapUiSmallMarginBottom"/>
                 </l:VerticalLayout>
             </ScrollContainer>
