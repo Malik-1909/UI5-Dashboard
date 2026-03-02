@@ -1,0 +1,8 @@
+[
+  { "department": "Engineering", "score": 4.2 },
+  { "department": "Sales", "score": 3.8 },
+  { "department": "Marketing", "score": 4.5 },
+  { "department": "Support", "score": 3.6 },
+  { "department": "HR", "score": 4.1 },
+  { "department": "Finance", "score": 3.9 }
+]

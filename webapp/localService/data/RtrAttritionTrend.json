@@ -1,0 +1,8 @@
+[
+  { "month": "Jan", "rate": 4.2 },
+  { "month": "Feb", "rate": 3.8 },
+  { "month": "Mrz", "rate": 5.1 },
+  { "month": "Apr", "rate": 3.5 },
+  { "month": "Mai", "rate": 4.0 },
+  { "month": "Jun", "rate": 3.2 }
+]

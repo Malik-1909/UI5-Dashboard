@@ -66,7 +66,7 @@
                     </Table>
 
                     <Title text="Technologie" level="H3" class="sapUiSmallMarginTop"/>
-                    <Text text="Die App basiert auf SAPUI5 (Version 1.130) und nutzt sap.viz für professionelle Chart-Visualisierungen. Das Framework wird über UI5 Tooling geladen."
+                    <Text text="Die App basiert auf SAPUI5 (Version 1.120) und nutzt sap.viz für professionelle Chart-Visualisierungen. Das Framework wird über UI5 Tooling geladen."
                         class="sapUiSmallMarginBottom"/>
                     <List>
                         <StandardListItem title="sap.m" info="Mobile-first UI Controls"/>

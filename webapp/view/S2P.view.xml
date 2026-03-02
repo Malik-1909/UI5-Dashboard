@@ -36,7 +36,7 @@
                         <StandardListItem title="5. Zahlung" info="Zahlungsabwicklung an den Lieferanten"/>
                     </List>
                     <Title text="KPI-Übersicht" level="H4" class="sapUiSmallMarginTop"/>
-                    <Table id="s2pKpiTable" items="{sales>/s2pKpiTable}" class="sapUiSmallMarginBottom">
+                    <Table id="s2pKpiTable" items="{sales>/S2PKpiTable}" class="sapUiSmallMarginBottom">
                         <columns>
                             <Column width="50%"><Text text="KPI"/></Column>
                             <Column><Text text="Wert"/></Column>
@@ -72,7 +72,7 @@
                                     valueAxis: { title: { visible: false } }
                                 }">
                                 <viz:dataset>
-                                    <viz.data:FlattenedDataset data="{sales>/s2pProcessFunnel}">
+                                    <viz.data:FlattenedDataset data="{sales>/S2PProcessFunnel}">
                                         <viz.data:dimensions>
                                             <viz.data:DimensionDefinition name="Stufe" value="{sales>stage}"/>
                                         </viz.data:dimensions>
@@ -104,7 +104,7 @@
                                     legend: { visible: true }
                                 }">
                                 <viz:dataset>
-                                    <viz.data:FlattenedDataset data="{sales>/s2pSpendByCategory}">
+                                    <viz.data:FlattenedDataset data="{sales>/S2PSpendByCategory}">
                                         <viz.data:dimensions>
                                             <viz.data:DimensionDefinition name="Kategorie" value="{sales>category}"/>
                                         </viz.data:dimensions>
@@ -137,7 +137,7 @@
                                     valueAxis: { title: { visible: false } }
                                 }">
                                 <viz:dataset>
-                                    <viz.data:FlattenedDataset data="{sales>/s2pInvoiceCycle}">
+                                    <viz.data:FlattenedDataset data="{sales>/S2PInvoiceCycle}">
                                         <viz.data:dimensions>
                                             <viz.data:DimensionDefinition name="Monat" value="{sales>month}"/>
                                         </viz.data:dimensions>

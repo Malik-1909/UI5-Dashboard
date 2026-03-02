@@ -1,0 +1,9 @@
+{
+  "name": "ui5-middleware-csp-remove",
+  "version": "1.0.0",
+  "description": "Removes Content-Security-Policy header to fix local development",
+  "main": "index.js",
+  "ui5": {
+    "dependencies": []
+  }
+}

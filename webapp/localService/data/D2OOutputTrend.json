@@ -1,0 +1,8 @@
+[
+  { "month": "Jan", "output": 320 },
+  { "month": "Feb", "output": 285 },
+  { "month": "Mrz", "output": 350 },
+  { "month": "Apr", "output": 310 },
+  { "month": "Mai", "output": 365 },
+  { "month": "Jun", "output": 340 }
+]

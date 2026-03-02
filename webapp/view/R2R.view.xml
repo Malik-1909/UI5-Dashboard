@@ -36,7 +36,7 @@
                         <StandardListItem title="5. Reporting" info="Finanzberichte und Analysen"/>
                     </List>
                     <Title text="KPI-Übersicht" level="H4" class="sapUiSmallMarginTop"/>
-                    <Table id="r2rKpiTable" items="{sales>/r2rKpiTable}" class="sapUiSmallMarginBottom">
+                    <Table id="r2rKpiTable" items="{sales>/R2RKpiTable}" class="sapUiSmallMarginBottom">
                         <columns>
                             <Column width="50%"><Text text="KPI"/></Column>
                             <Column><Text text="Wert"/></Column>
@@ -71,7 +71,7 @@
                                     legend: { visible: true }
                                 }">
                                 <viz:dataset>
-                                    <viz.data:FlattenedDataset data="{sales>/r2rByAccountType}">
+                                    <viz.data:FlattenedDataset data="{sales>/R2RByAccountType}">
                                         <viz.data:dimensions>
                                             <viz.data:DimensionDefinition name="Kontenklasse" value="{sales>type}"/>
                                         </viz.data:dimensions>
@@ -104,7 +104,7 @@
                                     valueAxis: { title: { visible: false } }
                                 }">
                                 <viz:dataset>
-                                    <viz.data:FlattenedDataset data="{sales>/r2rJournalEntries}">
+                                    <viz.data:FlattenedDataset data="{sales>/R2RJournalEntries}">
                                         <viz.data:dimensions>
                                             <viz.data:DimensionDefinition name="Periode" value="{sales>period}"/>
                                         </viz.data:dimensions>
@@ -137,7 +137,7 @@
                                     valueAxis: { title: { visible: false } }
                                 }">
                                 <viz:dataset>
-                                    <viz.data:FlattenedDataset data="{sales>/r2rCloseCycle}">
+                                    <viz.data:FlattenedDataset data="{sales>/R2RCloseCycle}">
                                         <viz.data:dimensions>
                                             <viz.data:DimensionDefinition name="Monat" value="{sales>month}"/>
                                         </viz.data:dimensions>

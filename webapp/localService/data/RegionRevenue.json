@@ -1,0 +1,8 @@
+[
+  { "region": "DACH", "revenue": 240, "target": 220 },
+  { "region": "Nordics", "revenue": 185, "target": 200 },
+  { "region": "UK", "revenue": 160, "target": 150 },
+  { "region": "France", "revenue": 130, "target": 140 },
+  { "region": "Iberia", "revenue": 95, "target": 110 },
+  { "region": "Italy", "revenue": 115, "target": 105 }
+]

@@ -1,0 +1,9 @@
+[
+  { "stage": "Design", "count": 180 },
+  { "stage": "Engineering", "count": 165 },
+  { "stage": "Procure", "count": 150 },
+  { "stage": "Manufacture", "count": 135 },
+  { "stage": "Deploy", "count": 120 },
+  { "stage": "Operate", "count": 110 },
+  { "stage": "Service", "count": 95 }
+]

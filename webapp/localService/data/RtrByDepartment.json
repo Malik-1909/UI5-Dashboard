@@ -1,0 +1,7 @@
+[
+  { "department": "Engineering", "headcount": 420 },
+  { "department": "Sales", "headcount": 280 },
+  { "department": "Operations", "headcount": 195 },
+  { "department": "Support", "headcount": 150 },
+  { "department": "HR", "headcount": 85 }
+]

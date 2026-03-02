@@ -1,0 +1,7 @@
+[
+  { "stage": "Buchung", "count": 4500 },
+  { "stage": "Kontenabstimmung", "count": 4200 },
+  { "stage": "Periodenabschluss", "count": 6 },
+  { "stage": "Konsolidierung", "count": 4 },
+  { "stage": "Reporting", "count": 12 }
+]

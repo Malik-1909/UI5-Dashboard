@@ -38,7 +38,7 @@
                         <StandardListItem title="7. Service" info="Reparatur und Support"/>
                     </List>
                     <Title text="KPI-Übersicht" level="H4" class="sapUiSmallMarginTop"/>
-                    <Table id="d2oKpiTable" items="{sales>/d2oKpiTable}" class="sapUiSmallMarginBottom">
+                    <Table id="d2oKpiTable" items="{sales>/D2OKpiTable}" class="sapUiSmallMarginBottom">
                         <columns>
                             <Column width="50%"><Text text="KPI"/></Column>
                             <Column><Text text="Wert"/></Column>
@@ -74,7 +74,7 @@
                                     valueAxis: { title: { visible: false } }
                                 }">
                                 <viz:dataset>
-                                    <viz.data:FlattenedDataset data="{sales>/d2oProcessFunnel}">
+                                    <viz.data:FlattenedDataset data="{sales>/D2OProcessFunnel}">
                                         <viz.data:dimensions>
                                             <viz.data:DimensionDefinition name="Stufe" value="{sales>stage}"/>
                                         </viz.data:dimensions>
@@ -107,7 +107,7 @@
                                     valueAxis: { title: { visible: false } }
                                 }">
                                 <viz:dataset>
-                                    <viz.data:FlattenedDataset data="{sales>/d2oCapacityUtil}">
+                                    <viz.data:FlattenedDataset data="{sales>/D2OCapacityUtil}">
                                         <viz.data:dimensions>
                                             <viz.data:DimensionDefinition name="Bereich" value="{sales>workcenter}"/>
                                         </viz.data:dimensions>
@@ -141,7 +141,7 @@
                                     valueAxis: { title: { visible: false } }
                                 }">
                                 <viz:dataset>
-                                    <viz.data:FlattenedDataset data="{sales>/d2oOutputTrend}">
+                                    <viz.data:FlattenedDataset data="{sales>/D2OOutputTrend}">
                                         <viz.data:dimensions>
                                             <viz.data:DimensionDefinition name="Monat" value="{sales>month}"/>
                                         </viz.data:dimensions>

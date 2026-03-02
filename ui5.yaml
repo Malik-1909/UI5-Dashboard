@@ -4,7 +4,7 @@ metadata:
 type: application
 framework:
   name: SAPUI5
-  version: "1.130.0"
+  version: "1.120.0"
   libraries:
     - name: sap.m
     - name: sap.ui.core
@@ -13,6 +13,15 @@ framework:
     - name: themelib_sap_horizon
 server:
   customMiddleware:
+    - name: sap-fe-mockserver
+      mountPath: /
+      afterMiddleware: compression
+      configuration:
+        watch: false
+        services:
+          - urlPath: /sap/opu/odata/sap/KPI_SERVICE
+            metadataPath: ./webapp/localService/metadata.xml
+            mockdataPath: ./webapp/localService/data
     - name: fiori-tools-proxy
       afterMiddleware: compression
       configuration:
@@ -22,10 +31,4 @@ server:
             - /resources
             - /test-resources
           url: https://ui5.sap.com
-          version: "1.130.0"
-    - name: fiori-tools-appreload
-      afterMiddleware: compression
-      configuration:
-        port: 35729
-        path: webapp
-        delay: 300
+          version: "1.120.0"

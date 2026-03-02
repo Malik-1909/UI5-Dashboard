@@ -1,0 +1,7 @@
+[
+  { "type": "Debitoren", "share": 28 },
+  { "type": "Kreditoren", "share": 22 },
+  { "type": "Sachkonten", "share": 35 },
+  { "type": "Bank", "share": 12 },
+  { "type": "Anlagen", "share": 3 }
+]

@@ -29,7 +29,7 @@
                     valueAxis: { title: { visible: false } }
                 }">
                 <viz:dataset>
-                    <viz.data:FlattenedDataset data="{sales>/monthlyRevenue}">
+                    <viz.data:FlattenedDataset data="{sales>/MonthlyRevenue}">
                         <viz.data:dimensions>
                             <viz.data:DimensionDefinition name="Monat" value="{sales>month}"/>
                         </viz.data:dimensions>
@@ -59,7 +59,7 @@
                     legend: { visible: true }
                 }">
                 <viz:dataset>
-                    <viz.data:FlattenedDataset data="{sales>/productShare}">
+                    <viz.data:FlattenedDataset data="{sales>/ProductShare}">
                         <viz.data:dimensions>
                             <viz.data:DimensionDefinition name="Produkt" value="{sales>product}"/>
                         </viz.data:dimensions>
@@ -90,7 +90,7 @@
                     valueAxis: { title: { visible: false } }
                 }">
                 <viz:dataset>
-                    <viz.data:FlattenedDataset data="{sales>/regionRevenue}">
+                    <viz.data:FlattenedDataset data="{sales>/RegionRevenue}">
                         <viz.data:dimensions>
                             <viz.data:DimensionDefinition name="Region" value="{sales>region}"/>
                         </viz.data:dimensions>
@@ -122,7 +122,7 @@
                     valueAxis: { title: { visible: false } }
                 }">
                 <viz:dataset>
-                    <viz.data:FlattenedDataset data="{sales>/quarterlyProfit}">
+                    <viz.data:FlattenedDataset data="{sales>/QuarterlyProfit}">
                         <viz.data:dimensions>
                             <viz.data:DimensionDefinition name="Quartal" value="{sales>quarter}"/>
                         </viz.data:dimensions>
@@ -154,7 +154,7 @@
                     valueAxis: { title: { visible: false } }
                 }">
                 <viz:dataset>
-                    <viz.data:FlattenedDataset data="{sales>/employeeSatisfaction}">
+                    <viz.data:FlattenedDataset data="{sales>/EmployeeSatisfaction}">
                         <viz.data:dimensions>
                             <viz.data:DimensionDefinition name="Abteilung" value="{sales>department}"/>
                         </viz.data:dimensions>
@@ -185,7 +185,7 @@
                     valueAxis: { title: { visible: false } }
                 }">
                 <viz:dataset>
-                    <viz.data:FlattenedDataset data="{sales>/ticketVolume}">
+                    <viz.data:FlattenedDataset data="{sales>/TicketVolume}">
                         <viz.data:dimensions>
                             <viz.data:DimensionDefinition name="Monat" value="{sales>month}"/>
                         </viz.data:dimensions>
@@ -218,7 +218,7 @@
                     legend: { visible: true }
                 }">
                 <viz:dataset>
-                    <viz.data:FlattenedDataset data="{sales>/budgetAllocation}">
+                    <viz.data:FlattenedDataset data="{sales>/BudgetAllocation}">
                         <viz.data:dimensions>
                             <viz.data:DimensionDefinition name="Kategorie" value="{sales>category}"/>
                         </viz.data:dimensions>
@@ -249,7 +249,7 @@
                     valueAxis: { title: { visible: false } }
                 }">
                 <viz:dataset>
-                    <viz.data:FlattenedDataset data="{sales>/conversionFunnel}">
+                    <viz.data:FlattenedDataset data="{sales>/ConversionFunnel}">
                         <viz.data:dimensions>
                             <viz.data:DimensionDefinition name="Stufe" value="{sales>stage}"/>
                         </viz.data:dimensions>
@@ -280,7 +280,7 @@
                     valueAxis: { title: { visible: false } }
                 }">
                 <viz:dataset>
-                    <viz.data:FlattenedDataset data="{sales>/weeklyOrders}">
+                    <viz.data:FlattenedDataset data="{sales>/WeeklyOrders}">
                         <viz.data:dimensions>
                             <viz.data:DimensionDefinition name="Woche" value="{sales>week}"/>
                         </viz.data:dimensions>
@@ -312,7 +312,7 @@
                     valueAxis: { title: { visible: false } }
                 }">
                 <viz:dataset>
-                    <viz.data:FlattenedDataset data="{sales>/customerSegments}">
+                    <viz.data:FlattenedDataset data="{sales>/CustomerSegments}">
                         <viz.data:dimensions>
                             <viz.data:DimensionDefinition name="Segment" value="{sales>segment}"/>
                         </viz.data:dimensions>

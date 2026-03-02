@@ -38,7 +38,7 @@
                         <StandardListItem title="7. Collection" info="Zahlungseingang und Forderungsausgleich"/>
                     </List>
                     <Title text="KPI-Übersicht" level="H4" class="sapUiSmallMarginTop"/>
-                    <Table id="l2cKpiTable" items="{sales>/l2cKpiTable}" class="sapUiSmallMarginBottom">
+                    <Table id="l2cKpiTable" items="{sales>/L2CKpiTable}" class="sapUiSmallMarginBottom">
                         <columns>
                             <Column width="50%"><Text text="KPI"/></Column>
                             <Column><Text text="Wert"/></Column>
@@ -74,7 +74,7 @@
                                     valueAxis: { title: { visible: false } }
                                 }">
                                 <viz:dataset>
-                                    <viz.data:FlattenedDataset data="{sales>/l2cConversionFunnel}">
+                                    <viz.data:FlattenedDataset data="{sales>/L2CConversionFunnel}">
                                         <viz.data:dimensions>
                                             <viz.data:DimensionDefinition name="Stufe" value="{sales>stage}"/>
                                         </viz.data:dimensions>
@@ -107,7 +107,7 @@
                                     valueAxis: { title: { visible: false } }
                                 }">
                                 <viz:dataset>
-                                    <viz.data:FlattenedDataset data="{sales>/l2cRevenueByStage}">
+                                    <viz.data:FlattenedDataset data="{sales>/L2CRevenueByStage}">
                                         <viz.data:dimensions>
                                             <viz.data:DimensionDefinition name="Stufe" value="{sales>stage}"/>
                                         </viz.data:dimensions>
@@ -141,7 +141,7 @@
                                     valueAxis: { title: { visible: false } }
                                 }">
                                 <viz:dataset>
-                                    <viz.data:FlattenedDataset data="{sales>/l2cDSO}">
+                                    <viz.data:FlattenedDataset data="{sales>/L2CDSO}">
                                         <viz.data:dimensions>
                                             <viz.data:DimensionDefinition name="Monat" value="{sales>month}"/>
                                         </viz.data:dimensions>

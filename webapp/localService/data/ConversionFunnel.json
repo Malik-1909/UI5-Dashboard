@@ -1,0 +1,7 @@
+[
+  { "stage": "Besucher", "count": 10000 },
+  { "stage": "Leads", "count": 3200 },
+  { "stage": "Qualifiziert", "count": 1400 },
+  { "stage": "Angebot", "count": 680 },
+  { "stage": "Abschluss", "count": 320 }
+]

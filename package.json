@@ -3,17 +3,18 @@
   "version": "1.0.0",
   "description": "SAPUI5 App with VizFrame Charts",
   "scripts": {
-    "start": "ui5 serve --open webapp/index.html",
-    "start:full": "ui5 build --all --clean-dest && sed -i '' 's|src=\"resources/sap-ui-core.js\"|src=\"https://ui5.sap.com/1.130.0/resources/sap-ui-core.js\"|g' dist/index.html && npx --yes serve dist -l 8080",
+    "start": "ui5 serve --open index.html",
+    "start:full": "ui5 build --all --clean-dest && sed -i '' 's|src=\"resources/sap-ui-core.js\"|src=\"https://ui5.sap.com/1.120.0/resources/sap-ui-core.js\"|g' dist/index.html && npx --yes serve dist -l 8080",
     "build": "ui5 build --clean-dest",
     "deploy": "npm run build && node scripts/prepare-ghpages.js && npx gh-pages -d dist",
-    "deploy:zip": "npm run build && sed -i '' 's|src=\"resources/sap-ui-core.js\"|src=\"https://ui5.sap.com/1.130.0/resources/sap-ui-core.js\"|g' dist/index.html && echo pushstate: enabled > dist/Staticfile && rm -f ui5-vizframe-app.zip && cd dist && find . -path ./test-resources -prune -o -type f -print | zip -r ../ui5-vizframe-app.zip -@ && cd ..",
+    "deploy:zip": "npm run build && sed -i '' 's|src=\"resources/sap-ui-core.js\"|src=\"https://ui5.sap.com/1.120.0/resources/sap-ui-core.js\"|g' dist/index.html && echo pushstate: enabled > dist/Staticfile && rm -f ui5-vizframe-app.zip && cd dist && find . -path ./test-resources -prune -o -type f -print | zip -r ../ui5-vizframe-app.zip -@ && cd ..",
     "preview": "npm run deploy:zip && npx --yes http-server dist -p 8080 -o -c-1",
     "open": "open http://127.0.0.1:8080/index.html"
   },
   "devDependencies": {
-    "@ui5/cli": "^4.0.0",
+    "@sap-ux/ui5-middleware-fe-mockserver": "^2.4.10",
     "@sap/ux-ui5-tooling": "^1",
+    "@ui5/cli": "^4.0.0",
     "gh-pages": "^6.0.0"
   }
 }

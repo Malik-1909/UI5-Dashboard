@@ -53,7 +53,7 @@
                                         legend: { visible: false }
                                     }">
                                     <viz:dataset>
-                                        <viz.data:FlattenedDataset data="{sales>/r2rByAccountType}">
+                                        <viz.data:FlattenedDataset data="{sales>/R2RByAccountType}">
                                             <viz.data:dimensions>
                                                 <viz.data:DimensionDefinition name="Kontenklasse" value="{sales>type}"/>
                                             </viz.data:dimensions>
@@ -94,7 +94,7 @@
                                         valueAxis: { title: { visible: false } }
                                     }">
                                     <viz:dataset>
-                                        <viz.data:FlattenedDataset data="{sales>/rtrHeadcountFunnel}">
+                                        <viz.data:FlattenedDataset data="{sales>/RtrHeadcountFunnel}">
                                             <viz.data:dimensions>
                                                 <viz.data:DimensionDefinition name="Stufe" value="{sales>stage}"/>
                                             </viz.data:dimensions>
@@ -134,7 +134,7 @@
                                         legend: { visible: false }
                                     }">
                                     <viz:dataset>
-                                        <viz.data:FlattenedDataset data="{sales>/s2pSpendByCategory}">
+                                        <viz.data:FlattenedDataset data="{sales>/S2PSpendByCategory}">
                                             <viz.data:dimensions>
                                                 <viz.data:DimensionDefinition name="Kategorie" value="{sales>category}"/>
                                             </viz.data:dimensions>
@@ -175,7 +175,7 @@
                                         valueAxis: { title: { visible: false } }
                                     }">
                                     <viz:dataset>
-                                        <viz.data:FlattenedDataset data="{sales>/d2oOutputTrend}">
+                                        <viz.data:FlattenedDataset data="{sales>/D2OOutputTrend}">
                                             <viz.data:dimensions>
                                                 <viz.data:DimensionDefinition name="Monat" value="{sales>month}"/>
                                             </viz.data:dimensions>
@@ -216,7 +216,7 @@
                                         valueAxis: { title: { visible: false } }
                                     }">
                                     <viz:dataset>
-                                        <viz.data:FlattenedDataset data="{sales>/l2cConversionFunnel}">
+                                        <viz.data:FlattenedDataset data="{sales>/L2CConversionFunnel}">
                                             <viz.data:dimensions>
                                                 <viz.data:DimensionDefinition name="Stufe" value="{sales>stage}"/>
                                             </viz.data:dimensions>

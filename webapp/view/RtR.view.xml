@@ -37,7 +37,7 @@
                         <StandardListItem title="6. Offboarding" info="Austritt und Wissenstransfer"/>
                     </List>
                     <Title text="KPI-Übersicht" level="H4" class="sapUiSmallMarginTop"/>
-                    <Table id="rtrKpiTable" items="{sales>/rtrKpiTable}" class="sapUiSmallMarginBottom">
+                    <Table id="rtrKpiTable" items="{sales>/RtrKpiTable}" class="sapUiSmallMarginBottom">
                         <columns>
                             <Column width="50%"><Text text="KPI"/></Column>
                             <Column><Text text="Wert"/></Column>
@@ -73,7 +73,7 @@
                                     valueAxis: { title: { visible: false } }
                                 }">
                                 <viz:dataset>
-                                    <viz.data:FlattenedDataset data="{sales>/rtrHeadcountFunnel}">
+                                    <viz.data:FlattenedDataset data="{sales>/RtrHeadcountFunnel}">
                                         <viz.data:dimensions>
                                             <viz.data:DimensionDefinition name="Stufe" value="{sales>stage}"/>
                                         </viz.data:dimensions>
@@ -105,7 +105,7 @@
                                     legend: { visible: true }
                                 }">
                                 <viz:dataset>
-                                    <viz.data:FlattenedDataset data="{sales>/rtrByDepartment}">
+                                    <viz.data:FlattenedDataset data="{sales>/RtrByDepartment}">
                                         <viz.data:dimensions>
                                             <viz.data:DimensionDefinition name="Abteilung" value="{sales>department}"/>
                                         </viz.data:dimensions>
@@ -138,7 +138,7 @@
                                     valueAxis: { title: { visible: false } }
                                 }">
                                 <viz:dataset>
-                                    <viz.data:FlattenedDataset data="{sales>/rtrAttritionTrend}">
+                                    <viz.data:FlattenedDataset data="{sales>/RtrAttritionTrend}">
                                         <viz.data:dimensions>
                                             <viz.data:DimensionDefinition name="Monat" value="{sales>month}"/>
                                         </viz.data:dimensions>

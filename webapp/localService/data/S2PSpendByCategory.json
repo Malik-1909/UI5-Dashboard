@@ -1,0 +1,6 @@
+[
+  { "category": "Rohstoffe", "amount": 320, "target": 300 },
+  { "category": "Betriebsstoffe", "amount": 95, "target": 90 },
+  { "category": "Dienstleistungen", "amount": 180, "target": 200 },
+  { "category": "Investitionen", "amount": 120, "target": 110 }
+]

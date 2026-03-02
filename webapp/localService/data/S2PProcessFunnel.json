@@ -1,0 +1,7 @@
+[
+  { "stage": "Bedarfsmeldung", "count": 890 },
+  { "stage": "Bestellung", "count": 820 },
+  { "stage": "Wareneingang", "count": 780 },
+  { "stage": "Rechnungsprüfung", "count": 745 },
+  { "stage": "Zahlung", "count": 710 }
+]

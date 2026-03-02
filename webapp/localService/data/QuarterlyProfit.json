@@ -1,0 +1,8 @@
+[
+  { "quarter": "Q1 24", "profit": 12.4, "cost": 8.2 },
+  { "quarter": "Q2 24", "profit": 14.1, "cost": 9.0 },
+  { "quarter": "Q3 24", "profit": 11.8, "cost": 8.8 },
+  { "quarter": "Q4 24", "profit": 16.5, "cost": 10.1 },
+  { "quarter": "Q1 25", "profit": 15.2, "cost": 9.5 },
+  { "quarter": "Q2 25", "profit": 17.8, "cost": 10.8 }
+]

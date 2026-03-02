@@ -1,0 +1,6 @@
+[
+  { "stage": "Recruiting", "count": 45 },
+  { "stage": "Onboarding", "count": 38 },
+  { "stage": "Active", "count": 1250 },
+  { "stage": "Offboarding", "count": 12 }
+]

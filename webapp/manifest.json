@@ -7,7 +7,16 @@
       "version": "1.0.0"
     },
     "title": "UI5 VizFrame App",
-    "description": "SAPUI5 App mit VizFrame Charts"
+    "description": "SAPUI5 App mit VizFrame Charts",
+    "dataSources": {
+      "kpiService": {
+        "uri": "/sap/opu/odata/sap/KPI_SERVICE/",
+        "type": "OData",
+        "settings": {
+          "odataVersion": "2.0"
+        }
+      }
+    }
   },
   "sap.ui": {
     "technology": "UI5",
@@ -19,7 +28,7 @@
   },
   "sap.ui5": {
     "dependencies": {
-      "minUI5Version": "1.130.0",
+      "minUI5Version": "1.120.0",
       "libs": {
         "sap.m": {},
         "sap.ui.core": {},
@@ -31,7 +40,13 @@
       "compact": true,
       "cozy": true
     },
-"models": {},
+"models": {
+      "sales": {
+        "dataSource": "kpiService",
+        "preload": true,
+        "type": "sap.ui.model.odata.v2.ODataModel"
+      }
+    },
     "rootView": {
       "viewName": "ui5.vizframe.app.view.App",
       "type": "XML",
