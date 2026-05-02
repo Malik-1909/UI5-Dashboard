@@ -27,56 +27,17 @@
         <content>
             <cssgrid:CSSGrid
                 id="processTilesGrid"
-                gridTemplateColumns="1fr 1fr 1fr"
+                gridTemplateColumns="1fr 1fr 1fr 1fr 1fr 1fr"
                 gridGap="2rem"
-                gridTemplateRows="1fr 1fr"
+                gridTemplateRows="auto auto"
                 class="processTilesGrid">
-                <!-- Record to Report Tile -->
-                <GenericTile
-                    id="tileR2R"
-                    header="Record to Report"
-                    subheader="Buchung bis Abschluss"
-                    class="processTile"
-                    press=".onTilePress">
-                    <tileContent>
-                        <TileContent>
-                            <content>
-                                <viz:VizFrame
-                                    id="tileChartR2R"
-                                    vizType="pie"
-                                    height="100%"
-                                    width="100%"
-                                    uiConfig="{applicationSet:'fiori'}"
-                                    vizProperties="{
-                                        title: { visible: false },
-                                        plotArea: { dataLabel: { visible: false }, colorPalette: ['#0070F2','#1B90FF','#5AAAFF','#107E3E','#F58B00'], margin: { top: 15, right: 25, bottom: 25, left: 25 } },
-                                        legend: { visible: false }
-                                    }">
-                                    <viz:dataset>
-                                        <viz.data:FlattenedDataset data="{sales>/R2RByAccountType}">
-                                            <viz.data:dimensions>
-                                                <viz.data:DimensionDefinition name="Kontenklasse" value="{sales>type}"/>
-                                            </viz.data:dimensions>
-                                            <viz.data:measures>
-                                                <viz.data:MeasureDefinition name="Anteil" value="{sales>share}"/>
-                                            </viz.data:measures>
-                                        </viz.data:FlattenedDataset>
-                                    </viz:dataset>
-                                    <viz:feeds>
-                                        <viz.feeds:FeedItem uid="size" type="Measure" values="Anteil"/>
-                                        <viz.feeds:FeedItem uid="color" type="Dimension" values="Kontenklasse"/>
-                                    </viz:feeds>
-                                </viz:VizFrame>
-                            </content>
-                        </TileContent>
-                    </tileContent>
-                </GenericTile>
+                <!-- Zeile 1: 3 Kacheln (je 1/3) - RtR, R2R, S2P -->
                 <!-- Recruit to Retire Tile -->
                 <GenericTile
                     id="tileRtR"
                     header="Recruit to Retire"
                     subheader="Rekrutierung bis Ruhestand"
-                    class="processTile"
+                    class="processTile tileThird"
                     press=".onTilePress">
                     <tileContent>
                         <TileContent>
@@ -112,12 +73,52 @@
                         </TileContent>
                     </tileContent>
                 </GenericTile>
+                <!-- Record to Report Tile -->
+                <GenericTile
+                    id="tileR2R"
+                    header="Record to Report"
+                    subheader="Buchung bis Abschluss"
+                    class="processTile tileThird"
+                    press=".onTilePress">
+                    <tileContent>
+                        <TileContent>
+                            <content>
+                                <viz:VizFrame
+                                    id="tileChartR2R"
+                                    vizType="pie"
+                                    height="100%"
+                                    width="100%"
+                                    uiConfig="{applicationSet:'fiori'}"
+                                    vizProperties="{
+                                        title: { visible: false },
+                                        plotArea: { dataLabel: { visible: false }, colorPalette: ['#0070F2','#1B90FF','#5AAAFF','#107E3E','#F58B00'], margin: { top: 15, right: 25, bottom: 25, left: 25 } },
+                                        legend: { visible: false }
+                                    }">
+                                    <viz:dataset>
+                                        <viz.data:FlattenedDataset data="{sales>/R2RByAccountType}">
+                                            <viz.data:dimensions>
+                                                <viz.data:DimensionDefinition name="Kontenklasse" value="{sales>type}"/>
+                                            </viz.data:dimensions>
+                                            <viz.data:measures>
+                                                <viz.data:MeasureDefinition name="Anteil" value="{sales>share}"/>
+                                            </viz.data:measures>
+                                        </viz.data:FlattenedDataset>
+                                    </viz:dataset>
+                                    <viz:feeds>
+                                        <viz.feeds:FeedItem uid="size" type="Measure" values="Anteil"/>
+                                        <viz.feeds:FeedItem uid="color" type="Dimension" values="Kontenklasse"/>
+                                    </viz:feeds>
+                                </viz:VizFrame>
+                            </content>
+                        </TileContent>
+                    </tileContent>
+                </GenericTile>
                 <!-- Source to Pay Tile -->
                 <GenericTile
                     id="tileS2P"
                     header="Source to Pay"
                     subheader="Beschaffung bis Zahlung"
-                    class="processTile"
+                    class="processTile tileThird"
                     press=".onTilePress">
                     <tileContent>
                         <TileContent>
@@ -152,12 +153,13 @@
                         </TileContent>
                     </tileContent>
                 </GenericTile>
+                <!-- Zeile 2: 2 Kacheln (je 50%) - D2O, L2C -->
                 <!-- Design to Operate Tile -->
                 <GenericTile
                     id="tileD2O"
                     header="Design to Operate"
                     subheader="Design bis Betrieb"
-                    class="processTile"
+                    class="processTile tileHalf"
                     press=".onTilePress">
                     <tileContent>
                         <TileContent>
@@ -198,7 +200,7 @@
                     id="tileL2C"
                     header="Lead to Cash"
                     subheader="Lead bis Zahlungseingang"
-                    class="processTile"
+                    class="processTile tileHalf"
                     press=".onTilePress">
                     <tileContent>
                         <TileContent>
