@@ -23,7 +23,7 @@
             <ScrollContainer height="100%" vertical="true" class="sapUiSmallMargin">
                 <l:VerticalLayout width="100%">
                     <Title text="KPI Dashboard – Geschäftsprozesse" level="H3"/>
-                    <Text text="Diese App visualisiert fünf zentrale End-to-End-Geschäftsprozesse mit KPIs, Diagrammen und Tabellen. Sie dient als Demo für SAPUI5 mit VizFrame-Charts und zeigt typische Steuerungskennzahlen pro Prozess."
+                    <Text text="Diese App visualisiert fünf zentrale End-to-End-Geschäftsprozesse mit KPIs, Diagrammen und Tabellen. Ein integrierter KI-Assistent unterstützt bei Fragen zu Aufbau, Geschäftsprozessen und Kennzahlen und kann bei Bedarf direkt zur passenden Seite der Anwendung wechseln."
                         class="sapUiSmallMarginBottom"/>
 
                     <Title text="Die fünf Geschäftsprozesse" level="H3" class="sapUiSmallMarginTop"/>
@@ -67,26 +67,29 @@
                     </Table>
 
                     <Title text="Technologie" level="H3" class="sapUiSmallMarginTop"/>
-                    <Text text="Die App basiert auf SAPUI5 (Version 1.120) und nutzt sap.viz für professionelle Chart-Visualisierungen. Das Framework wird über UI5 Tooling geladen."
+                    <Text text="Die App basiert auf SAPUI5 (Version 1.120) und nutzt sap.viz für Chart-Visualisierungen. UI5 Tooling startet den lokalen Server inkl. OData-Mock und Chat-Middleware."
                         class="sapUiSmallMarginBottom"/>
                     <List>
                         <StandardListItem title="sap.m" info="Mobile-first UI Controls"/>
                         <StandardListItem title="sap.ui.core" info="Kern-Framework"/>
-                        <StandardListItem title="sap.ui.layout" info="Layout-Controls (CSSGrid)"/>
-                        <StandardListItem title="sap.viz" info="VizFrame Charts – Column, Bar, Line, Pie, Donut"/>
+                        <StandardListItem title="sap.ui.layout" info="Layout (u. a. CSSGrid für die Startkacheln)"/>
+                        <StandardListItem title="sap.viz" info="VizFrame – Column, Line, Pie, Donut u. a."/>
                         <StandardListItem title="themelib_sap_horizon" info="SAP Horizon Design Theme"/>
+                        <StandardListItem title="Custom Middleware" info="ui5-middleware-chat-proxy – POST /api/chat (Groq oder Mock)"/>
+                        <StandardListItem title="Fragment + App-Controller" info="Chat-Popover, FAB, Fragment.byId für zuverlässige Control-Zugriffe"/>
                     </List>
 
                     <Title text="Funktionen" level="H3" class="sapUiSmallMarginTop"/>
                     <List>
-                        <StandardListItem title="Startseite" info="5 KPI-Tiles mit VizFrame-Charts – je ein Chart pro Geschäftsprozess"/>
-                        <StandardListItem title="Detailseiten" info="Prozessbeschreibung, Schritte, KPI-Tabelle und 3 interaktive Diagramme pro Prozess"/>
-                        <StandardListItem title="Navigation" info="Prozesse-Dropdown (Desktop) und Burger-Menü (Mobile)"/>
+                        <StandardListItem title="Startseite" info="5 KPI-Kacheln in zwei Reihen – Mini-Charts pro Prozess, Klick öffnet Detailseite"/>
+                        <StandardListItem title="Detailseiten" info="Prozessbeschreibung, Schritte, KPI-Tabelle und mehrere Diagramme"/>
+                        <StandardListItem title="Navigation" info="Kacheln, Prozesse-Menü, Burger-Menü, Zurück-Button, KI in der Kopfzeile"/>
+                        <StandardListItem title="KI-Assistent" info="Chat unten rechts (FAB) oder über Menü „KI Assistent“ / Button „KI“ – Navigation und Kontext zur aktuellen Seite"/>
                         <StandardListItem title="Responsives Layout" info="3 Spalten (Desktop) → 2 (Tablet) → 1 (Mobile)"/>
                     </List>
 
                     <Title text="Deployment" level="H3" class="sapUiSmallMarginTop"/>
-                    <Text text="Build mit ui5 build. Deployment auf SAP BTP Cloud Foundry (staticfile_buildpack) oder SAP Build Work Zone (Fiori Launchpad) möglich."
+                    <Text text="Build mit ui5 build. Statisches Hosting (z. B. GitHub Pages aus dist/) liefert nur die UI – der KI-Chat benötigt für echte Antworten einen Server mit /api/chat (lokal: npm run start). Deployment auf SAP BTP oder Fiori Launchpad ist wie zuvor möglich."
                         class="sapUiSmallMarginBottom"/>
                 </l:VerticalLayout>
             </ScrollContainer>

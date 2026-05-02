@@ -1,86 +1,83 @@
 # UI5 VizFrame KPI Dashboard
 
-Dieses Projekt ist eine SAPUI5/OpenUI5 Web-App zur Visualisierung von KPI-Daten entlang zentraler End-to-End-Prozesse.  
-Die Anwendung stellt Kennzahlen als interaktive Diagramme dar und bietet eine einfache Navigation von der Startseite in die jeweiligen Prozess-Detailseiten.
+SAPUI5-Web-App zur Visualisierung von KPI-Daten entlang zentraler End-to-End-Geschäftsprozesse. Die Anwendung zeigt Kennzahlen als interaktive VizFrame-Diagramme und bietet einen **KI-Assistenten**, der Fragen zur App und zu den Prozessen beantwortet und bei Bedarf zur richtigen Seite navigiert.
 
-## Was das Projekt macht
+## Was die App macht
 
-- Zeigt KPI-Übersichten auf einer Dashboard-Startseite als Kacheln mit eingebetteten VizFrame-Charts.
-- Deckt mehrere Geschäftsprozesse ab:
+- **Dashboard-Startseite** mit fünf klickbaren Prozesskacheln und eingebetteten Mini-Charts.
+- **Fünf Geschäftsprozesse** mit jeweils eigener Detailseite:
   - Record to Report (R2R)
   - Recruit to Retire (RtR)
   - Source to Pay (S2P)
   - Design to Operate (D2O)
   - Lead to Cash (L2C)
-- Ermöglicht Navigation über:
-  - klickbare Kacheln
-  - Desktop-Menü ("Prozesse")
-  - Burger-Menü für kleinere Viewports
-- Verwendet OData V2 als Datenmodell und lokale Mock-Daten für Entwicklung/Tests.
+- **Navigation**: Kacheln, Desktop-Menü „Prozesse“, Burger-Menü (Mobile), Seite **Über dieses Projekt**.
+- **KI-Assistent** (Chat):
+  - Schwebender Button unten rechts; zusätzlich **KI** in der Kopfzeile und Eintrag **KI Assistent** im Burger-Menü.
+  - Antworten über eine **UI5-Server-Middleware** (`POST /api/chat`) – API-Keys bleiben auf dem Server, nicht im Browser.
+  - Standardmäßig **Groq** (OpenAI-kompatibles API, kostenloser Tier) mit Modell `llama-3.3-70b-versatile`. Optional **Demo-Modus** ohne API (`MOCK_MODE=true`).
+- **OData V2** als Datenmodell; **lokale Mock-Daten** unter `webapp/localService/` für Entwicklung und Tests.
 
 ## Technologie-Stack
 
-- OpenUI5 / SAPUI5 (min. Version `1.120.0`)
-- UI5 Tooling (`@ui5/cli`)
-- VizFrame (`sap.viz`) für Diagramme
-- OData V2 Modell (`sap.ui.model.odata.v2.ODataModel`)
-- Entwicklungs- und Deploy-Skripte über npm
+- SAPUI5 **1.120** (Freestyle, XML-Views, JavaScript-Controller)
+- **sap.viz** (VizFrame) für Diagramme
+- **sap.ui.layout** (u. a. CSSGrid für die Startkacheln)
+- **OData V2** (`sap.ui.model.odata.v2.ODataModel`)
+- **UI5 Tooling** (`@ui5/cli`), Mock-Server (`@sap-ux/ui5-middleware-fe-mockserver`), Fiori-Tools-Proxy für UI5-Ressourcen
+- **Custom Middleware** `middleware/chat-proxy`: Chat-Backend für lokales `ui5 serve`
+- Theming: **themelib_sap_horizon**
 
-## Projektstruktur (Kurzüberblick)
+## Projektstruktur (Auszug)
 
-- `webapp/manifest.json` – App-Metadaten, Routing, Models, Libraries
-- `webapp/view/` – XML-Views (Startseite + Prozessseiten)
-- `webapp/controller/` – Controller-Logik und Navigation
-- `webapp/localService/` – Mock-Service, Metadaten und JSON-Datenquellen
-- `webapp/css/style.css` – eigenes Styling
+| Pfad | Inhalt |
+|------|--------|
+| `webapp/manifest.json` | App-ID, Routing, OData-Modell, Libraries |
+| `webapp/view/` | XML-Views (Startseite, Prozesse, Projekt) |
+| `webapp/controller/` | Controller inkl. `App.controller.js` (Chat, FAB), `BaseController`, `ChatHelper` |
+| `webapp/fragment/Chatbot.fragment.xml` | Chat-Popover (Nachrichten, Composer) |
+| `middleware/chat-proxy/` | npm-Paket für UI5 Custom Middleware (Groq / Mock) |
+| `webapp/localService/` | OData-Metadaten und Mock-Daten |
+| `webapp/css/style.css` | Layout, Responsivität, Chat-Styling |
+| `.env` / `.env.example` | Lokale Konfiguration (nicht committen: `.env` in `.gitignore`) |
 
 ## Lokale Entwicklung
 
-Voraussetzungen:
-
-- Node.js + npm
-
-Installation:
+**Voraussetzungen:** Node.js (empfohlen: aktuelle LTS) und npm.
 
 ```bash
 npm install
-```
-
-Entwicklungsserver starten:
-
-```bash
 npm run start
 ```
 
-Die App wird über UI5 Tooling bereitgestellt und startet standardmäßig mit `index.html`.
+Die App öffnet sich mit `index.html`; der Dev-Server stellt Mock-OData und die Chat-API bereit.
+
+### KI-Chat konfigurieren
+
+1. Kopiere `.env.example` nach `.env` (liegt in `.gitignore`).
+2. Für echte KI-Antworten: API-Key von [Groq Console](https://console.groq.com) erstellen und setzen:
+   ```bash
+   GROQ_API_KEY=gsk_...
+   ```
+3. Nur simulierte Antworten (ohne Key oder bewusst offline):
+   ```bash
+   MOCK_MODE=true
+   ```
+4. Server nach Änderungen an `.env` neu starten (`Ctrl+C`, dann `npm run start`).
+
+Die Middleware liest `.env` aus dem Projektstamm automatisch ein.
 
 ## Build und Deployment
 
-Produktions-Build:
-
 ```bash
-npm run build
+npm run build          # Produktions-Build nach dist/
+npm run start:full     # Build + Preview mit gehosteter UI5-URL
+npm run deploy         # GitHub Pages (siehe Skripte)
+npm run deploy:zip     # ZIP-Artefakt
 ```
 
-Vollständiger Build mit Hosted-UI5-Core und lokalem Preview-Server:
+**Hinweis:** Der KI-Chat (`/api/chat`) läuft nur im **UI5 Tooling Dev-Server** (Middleware). Für ein reines Static-Hosting (z. B. nur `dist/` auf GitHub Pages) ist kein Chat-Backend dabei – dafür bräuchte man einen separaten API-Endpunkt.
 
-```bash
-npm run start:full
-```
+## Datenquellen
 
-Deployment (GitHub Pages):
-
-```bash
-npm run deploy
-```
-
-ZIP-Artefakt erzeugen:
-
-```bash
-npm run deploy:zip
-```
-
-## Hinweis zu Datenquellen
-
-Im Manifest ist ein OData-Service (`/sap/opu/odata/sap/KPI_SERVICE/`) konfiguriert.  
-Für lokale Entwicklung stehen zusätzlich Mock-Daten unter `webapp/localService/data/` zur Verfügung.
+Im Manifest ist OData unter `/sap/opu/odata/sap/KPI_SERVICE/` konfiguriert. Lokal greift der **FE Mock Server** auf `webapp/localService/metadata.xml` und die JSON-Daten unter `webapp/localService/data/` zu.
