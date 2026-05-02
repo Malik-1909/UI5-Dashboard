@@ -17,7 +17,7 @@
                 </contentLeft>
                 <contentMiddle/>
                 <contentRight>
-                    <Button text="KI" icon="sap-icon://message-popup" type="Transparent" press=".onOpenChatbot" tooltip="KI Assistent" class="headerDesktopActions"/>
+                    <core:Fragment fragmentName="ui5.vizframe.app.fragment.HeaderKiButton" type="XML"/>
                     <Button id="burgerButton" icon="sap-icon://menu2" press=".onBurgerPress" class="headerBurgerButton"/>
                 </contentRight>
             </Bar>
