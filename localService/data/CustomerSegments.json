@@ -1,0 +1,6 @@
+[
+  { "segment": "Enterprise", "revenue": 380, "customers": 45 },
+  { "segment": "Mid-Market", "revenue": 260, "customers": 180 },
+  { "segment": "SMB", "revenue": 150, "customers": 520 },
+  { "segment": "Startup", "revenue": 60, "customers": 340 }
+]

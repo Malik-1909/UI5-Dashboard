@@ -1,0 +1,5 @@
+[
+  { "kpi": "Time-to-Hire", "value": "24", "unit": "Tage" },
+  { "kpi": "Fluktuation", "value": "3.9%", "unit": "p.a." },
+  { "kpi": "Headcount", "value": "1250", "unit": "MA" }
+]

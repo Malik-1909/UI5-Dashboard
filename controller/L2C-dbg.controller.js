@@ -4,9 +4,9 @@ sap.ui.define([
 ], function (BaseController, VizPopover) {
     "use strict";
 
-    return BaseController.extend("ui5.vizframe.app.controller.P2P", {
+    return BaseController.extend("ui5.vizframe.app.controller.L2C", {
         onAfterRendering: function () {
-            var aChartIds = ["p2pFunnelChart", "p2pSpendChart", "p2pInvoiceChart"];
+            var aChartIds = ["l2cFunnelChart", "l2cRevenueChart", "l2cDSOChart"];
             aChartIds.forEach(function (sId) {
                 var oVizFrame = this.byId(sId);
                 if (oVizFrame) {

@@ -1,0 +1,217 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<edmx:Edmx xmlns:edmx="http://schemas.microsoft.com/ado/2007/06/edmx" Version="1.0">
+  <edmx:DataServices m:DataServiceVersion="1.0" xmlns:m="http://schemas.microsoft.com/ado/2007/08/dataservices/metadata">
+    <Schema Namespace="KPI" xmlns="http://schemas.microsoft.com/ado/2008/09/edm">
+      <!-- R2R -->
+      <EntityType Name="R2RByAccountType">
+        <Key><PropertyRef Name="type"/></Key>
+        <Property Name="type" Type="Edm.String" Nullable="false"/>
+        <Property Name="share" Type="Edm.Int32"/>
+      </EntityType>
+      <EntityType Name="R2RKpiTable">
+        <Key><PropertyRef Name="kpi"/></Key>
+        <Property Name="kpi" Type="Edm.String" Nullable="false"/>
+        <Property Name="value" Type="Edm.String"/>
+        <Property Name="unit" Type="Edm.String"/>
+      </EntityType>
+      <EntityType Name="R2RJournalEntries">
+        <Key><PropertyRef Name="period"/></Key>
+        <Property Name="period" Type="Edm.String" Nullable="false"/>
+        <Property Name="entries" Type="Edm.Int32"/>
+      </EntityType>
+      <EntityType Name="R2RCloseCycle">
+        <Key><PropertyRef Name="month"/></Key>
+        <Property Name="month" Type="Edm.String" Nullable="false"/>
+        <Property Name="days" Type="Edm.Int32"/>
+      </EntityType>
+      <EntityType Name="R2RProcessFunnel">
+        <Key><PropertyRef Name="stage"/></Key>
+        <Property Name="stage" Type="Edm.String" Nullable="false"/>
+        <Property Name="count" Type="Edm.Int32"/>
+      </EntityType>
+      <!-- RtR -->
+      <EntityType Name="RtrHeadcountFunnel">
+        <Key><PropertyRef Name="stage"/></Key>
+        <Property Name="stage" Type="Edm.String" Nullable="false"/>
+        <Property Name="count" Type="Edm.Int32"/>
+      </EntityType>
+      <EntityType Name="RtrByDepartment">
+        <Key><PropertyRef Name="department"/></Key>
+        <Property Name="department" Type="Edm.String" Nullable="false"/>
+        <Property Name="headcount" Type="Edm.Int32"/>
+      </EntityType>
+      <EntityType Name="RtrAttritionTrend">
+        <Key><PropertyRef Name="month"/></Key>
+        <Property Name="month" Type="Edm.String" Nullable="false"/>
+        <Property Name="rate" Type="Edm.Decimal" Precision="4" Scale="1"/>
+      </EntityType>
+      <EntityType Name="RtrKpiTable">
+        <Key><PropertyRef Name="kpi"/></Key>
+        <Property Name="kpi" Type="Edm.String" Nullable="false"/>
+        <Property Name="value" Type="Edm.String"/>
+        <Property Name="unit" Type="Edm.String"/>
+      </EntityType>
+      <!-- S2P -->
+      <EntityType Name="S2PProcessFunnel">
+        <Key><PropertyRef Name="stage"/></Key>
+        <Property Name="stage" Type="Edm.String" Nullable="false"/>
+        <Property Name="count" Type="Edm.Int32"/>
+      </EntityType>
+      <EntityType Name="S2PSpendByCategory">
+        <Key><PropertyRef Name="category"/></Key>
+        <Property Name="category" Type="Edm.String" Nullable="false"/>
+        <Property Name="amount" Type="Edm.Int32"/>
+        <Property Name="target" Type="Edm.Int32"/>
+      </EntityType>
+      <EntityType Name="S2PInvoiceCycle">
+        <Key><PropertyRef Name="month"/></Key>
+        <Property Name="month" Type="Edm.String" Nullable="false"/>
+        <Property Name="days" Type="Edm.Int32"/>
+      </EntityType>
+      <EntityType Name="S2PKpiTable">
+        <Key><PropertyRef Name="kpi"/></Key>
+        <Property Name="kpi" Type="Edm.String" Nullable="false"/>
+        <Property Name="value" Type="Edm.String"/>
+        <Property Name="unit" Type="Edm.String"/>
+      </EntityType>
+      <!-- D2O -->
+      <EntityType Name="D2OProcessFunnel">
+        <Key><PropertyRef Name="stage"/></Key>
+        <Property Name="stage" Type="Edm.String" Nullable="false"/>
+        <Property Name="count" Type="Edm.Int32"/>
+      </EntityType>
+      <EntityType Name="D2OCapacityUtil">
+        <Key><PropertyRef Name="workcenter"/></Key>
+        <Property Name="workcenter" Type="Edm.String" Nullable="false"/>
+        <Property Name="util" Type="Edm.Int32"/>
+        <Property Name="target" Type="Edm.Int32"/>
+      </EntityType>
+      <EntityType Name="D2OOutputTrend">
+        <Key><PropertyRef Name="month"/></Key>
+        <Property Name="month" Type="Edm.String" Nullable="false"/>
+        <Property Name="output" Type="Edm.Int32"/>
+      </EntityType>
+      <EntityType Name="D2OKpiTable">
+        <Key><PropertyRef Name="kpi"/></Key>
+        <Property Name="kpi" Type="Edm.String" Nullable="false"/>
+        <Property Name="value" Type="Edm.String"/>
+        <Property Name="unit" Type="Edm.String"/>
+      </EntityType>
+      <!-- L2C -->
+      <EntityType Name="L2CConversionFunnel">
+        <Key><PropertyRef Name="stage"/></Key>
+        <Property Name="stage" Type="Edm.String" Nullable="false"/>
+        <Property Name="count" Type="Edm.Int32"/>
+      </EntityType>
+      <EntityType Name="L2CRevenueByStage">
+        <Key><PropertyRef Name="stage"/></Key>
+        <Property Name="stage" Type="Edm.String" Nullable="false"/>
+        <Property Name="revenue" Type="Edm.Int32"/>
+        <Property Name="target" Type="Edm.Int32"/>
+      </EntityType>
+      <EntityType Name="L2CDSO">
+        <Key><PropertyRef Name="month"/></Key>
+        <Property Name="month" Type="Edm.String" Nullable="false"/>
+        <Property Name="days" Type="Edm.Int32"/>
+      </EntityType>
+      <EntityType Name="L2CKpiTable">
+        <Key><PropertyRef Name="kpi"/></Key>
+        <Property Name="kpi" Type="Edm.String" Nullable="false"/>
+        <Property Name="value" Type="Edm.String"/>
+        <Property Name="unit" Type="Edm.String"/>
+      </EntityType>
+      <!-- Chart.view -->
+      <EntityType Name="MonthlyRevenue">
+        <Key><PropertyRef Name="month"/></Key>
+        <Property Name="month" Type="Edm.String" Nullable="false"/>
+        <Property Name="revenue" Type="Edm.Int32"/>
+      </EntityType>
+      <EntityType Name="RegionRevenue">
+        <Key><PropertyRef Name="region"/></Key>
+        <Property Name="region" Type="Edm.String" Nullable="false"/>
+        <Property Name="revenue" Type="Edm.Int32"/>
+        <Property Name="target" Type="Edm.Int32"/>
+      </EntityType>
+      <EntityType Name="ProductShare">
+        <Key><PropertyRef Name="product"/></Key>
+        <Property Name="product" Type="Edm.String" Nullable="false"/>
+        <Property Name="share" Type="Edm.Int32"/>
+      </EntityType>
+      <EntityType Name="QuarterlyProfit">
+        <Key><PropertyRef Name="quarter"/></Key>
+        <Property Name="quarter" Type="Edm.String" Nullable="false"/>
+        <Property Name="profit" Type="Edm.Decimal" Precision="4" Scale="1"/>
+        <Property Name="cost" Type="Edm.Decimal" Precision="4" Scale="1"/>
+      </EntityType>
+      <EntityType Name="EmployeeSatisfaction">
+        <Key><PropertyRef Name="department"/></Key>
+        <Property Name="department" Type="Edm.String" Nullable="false"/>
+        <Property Name="score" Type="Edm.Decimal" Precision="2" Scale="1"/>
+      </EntityType>
+      <EntityType Name="TicketVolume">
+        <Key><PropertyRef Name="month"/></Key>
+        <Property Name="month" Type="Edm.String" Nullable="false"/>
+        <Property Name="critical" Type="Edm.Int32"/>
+        <Property Name="high" Type="Edm.Int32"/>
+        <Property Name="medium" Type="Edm.Int32"/>
+        <Property Name="low" Type="Edm.Int32"/>
+      </EntityType>
+      <EntityType Name="BudgetAllocation">
+        <Key><PropertyRef Name="category"/></Key>
+        <Property Name="category" Type="Edm.String" Nullable="false"/>
+        <Property Name="amount" Type="Edm.Int32"/>
+      </EntityType>
+      <EntityType Name="ConversionFunnel">
+        <Key><PropertyRef Name="stage"/></Key>
+        <Property Name="stage" Type="Edm.String" Nullable="false"/>
+        <Property Name="count" Type="Edm.Int32"/>
+      </EntityType>
+      <EntityType Name="WeeklyOrders">
+        <Key><PropertyRef Name="week"/></Key>
+        <Property Name="week" Type="Edm.String" Nullable="false"/>
+        <Property Name="orders" Type="Edm.Int32"/>
+        <Property Name="returns" Type="Edm.Int32"/>
+      </EntityType>
+      <EntityType Name="CustomerSegments">
+        <Key><PropertyRef Name="segment"/></Key>
+        <Property Name="segment" Type="Edm.String" Nullable="false"/>
+        <Property Name="revenue" Type="Edm.Int32"/>
+        <Property Name="customers" Type="Edm.Int32"/>
+      </EntityType>
+      <!-- EntityContainer -->
+      <EntityContainer Name="KPIContainer" m:IsDefaultEntityContainer="true">
+        <EntitySet Name="R2RByAccountType" EntityType="KPI.R2RByAccountType"/>
+        <EntitySet Name="R2RKpiTable" EntityType="KPI.R2RKpiTable"/>
+        <EntitySet Name="R2RJournalEntries" EntityType="KPI.R2RJournalEntries"/>
+        <EntitySet Name="R2RCloseCycle" EntityType="KPI.R2RCloseCycle"/>
+        <EntitySet Name="R2RProcessFunnel" EntityType="KPI.R2RProcessFunnel"/>
+        <EntitySet Name="RtrHeadcountFunnel" EntityType="KPI.RtrHeadcountFunnel"/>
+        <EntitySet Name="RtrByDepartment" EntityType="KPI.RtrByDepartment"/>
+        <EntitySet Name="RtrAttritionTrend" EntityType="KPI.RtrAttritionTrend"/>
+        <EntitySet Name="RtrKpiTable" EntityType="KPI.RtrKpiTable"/>
+        <EntitySet Name="S2PProcessFunnel" EntityType="KPI.S2PProcessFunnel"/>
+        <EntitySet Name="S2PSpendByCategory" EntityType="KPI.S2PSpendByCategory"/>
+        <EntitySet Name="S2PInvoiceCycle" EntityType="KPI.S2PInvoiceCycle"/>
+        <EntitySet Name="S2PKpiTable" EntityType="KPI.S2PKpiTable"/>
+        <EntitySet Name="D2OProcessFunnel" EntityType="KPI.D2OProcessFunnel"/>
+        <EntitySet Name="D2OCapacityUtil" EntityType="KPI.D2OCapacityUtil"/>
+        <EntitySet Name="D2OOutputTrend" EntityType="KPI.D2OOutputTrend"/>
+        <EntitySet Name="D2OKpiTable" EntityType="KPI.D2OKpiTable"/>
+        <EntitySet Name="L2CConversionFunnel" EntityType="KPI.L2CConversionFunnel"/>
+        <EntitySet Name="L2CRevenueByStage" EntityType="KPI.L2CRevenueByStage"/>
+        <EntitySet Name="L2CDSO" EntityType="KPI.L2CDSO"/>
+        <EntitySet Name="L2CKpiTable" EntityType="KPI.L2CKpiTable"/>
+        <EntitySet Name="MonthlyRevenue" EntityType="KPI.MonthlyRevenue"/>
+        <EntitySet Name="RegionRevenue" EntityType="KPI.RegionRevenue"/>
+        <EntitySet Name="ProductShare" EntityType="KPI.ProductShare"/>
+        <EntitySet Name="QuarterlyProfit" EntityType="KPI.QuarterlyProfit"/>
+        <EntitySet Name="EmployeeSatisfaction" EntityType="KPI.EmployeeSatisfaction"/>
+        <EntitySet Name="TicketVolume" EntityType="KPI.TicketVolume"/>
+        <EntitySet Name="BudgetAllocation" EntityType="KPI.BudgetAllocation"/>
+        <EntitySet Name="ConversionFunnel" EntityType="KPI.ConversionFunnel"/>
+        <EntitySet Name="WeeklyOrders" EntityType="KPI.WeeklyOrders"/>
+        <EntitySet Name="CustomerSegments" EntityType="KPI.CustomerSegments"/>
+      </EntityContainer>
+    </Schema>
+  </edmx:DataServices>
+</edmx:Edmx>

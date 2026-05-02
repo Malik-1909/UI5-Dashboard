@@ -1,0 +1,8 @@
+[
+  { "month": "Jan", "critical": 12, "high": 34, "medium": 67, "low": 89 },
+  { "month": "Feb", "critical": 8, "high": 28, "medium": 54, "low": 78 },
+  { "month": "Mrz", "critical": 15, "high": 41, "medium": 72, "low": 95 },
+  { "month": "Apr", "critical": 6, "high": 22, "medium": 48, "low": 65 },
+  { "month": "Mai", "critical": 10, "high": 30, "medium": 58, "low": 82 },
+  { "month": "Jun", "critical": 4, "high": 18, "medium": 42, "low": 60 }
+]

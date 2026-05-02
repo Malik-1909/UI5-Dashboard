@@ -19,10 +19,11 @@ sap.ui.define([
                         new List({
                             items: [
                                 new StandardListItem({ title: "Startseite", type: "Navigation" }),
-                                new StandardListItem({ title: "O2C (Order-to-Cash)", type: "Navigation" }),
-                                new StandardListItem({ title: "P2P (Procure-to-Pay)", type: "Navigation" }),
-                                new StandardListItem({ title: "R2R (Record-to-Report)", type: "Navigation" }),
-                                new StandardListItem({ title: "PtP (Plan-to-Produce)", type: "Navigation" }),
+                                new StandardListItem({ title: "Record to Report", type: "Navigation" }),
+                                new StandardListItem({ title: "Recruit to Retire", type: "Navigation" }),
+                                new StandardListItem({ title: "Source to Pay", type: "Navigation" }),
+                                new StandardListItem({ title: "Design to Operate", type: "Navigation" }),
+                                new StandardListItem({ title: "Lead to Cash", type: "Navigation" }),
                                 new StandardListItem({ title: "Über dieses Projekt", type: "Navigation" })
                             ],
                             itemPress: function (oEvent) {
@@ -30,10 +31,11 @@ sap.ui.define([
                                 var sTitle = oItem.getTitle();
                                 var mRouteMap = {
                                     "Startseite": "main",
-                                    "O2C (Order-to-Cash)": "o2c",
-                                    "P2P (Procure-to-Pay)": "p2p",
-                                    "R2R (Record-to-Report)": "r2r",
-                                    "PtP (Plan-to-Produce)": "ptp",
+                                    "Record to Report": "r2r",
+                                    "Recruit to Retire": "rtr",
+                                    "Source to Pay": "s2p",
+                                    "Design to Operate": "d2o",
+                                    "Lead to Cash": "l2c",
                                     "Über dieses Projekt": "project"
                                 };
                                 if (that._oBurgerPopover) { that._oBurgerPopover.close(); }

@@ -7,7 +7,16 @@
 			"version": "1.0.0"
 		},
 		"title": "UI5 VizFrame App",
-		"description": "SAPUI5 App mit VizFrame Charts"
+		"description": "SAPUI5 App mit VizFrame Charts",
+		"dataSources": {
+			"kpiService": {
+				"uri": "/sap/opu/odata/sap/KPI_SERVICE/",
+				"type": "OData",
+				"settings": {
+					"odataVersion": "2.0"
+				}
+			}
+		}
 	},
 	"sap.ui": {
 		"technology": "UI5",
@@ -19,7 +28,7 @@
 	},
 	"sap.ui5": {
 		"dependencies": {
-			"minUI5Version": "1.130.0",
+			"minUI5Version": "1.120.0",
 			"libs": {
 				"sap.m": {},
 				"sap.ui.core": {},
@@ -31,7 +40,13 @@
 			"compact": true,
 			"cozy": true
 		},
-		"models": {},
+		"models": {
+			"sales": {
+				"dataSource": "kpiService",
+				"preload": true,
+				"type": "sap.ui.model.odata.v2.ODataModel"
+			}
+		},
 		"rootView": {
 			"viewName": "ui5.vizframe.app.view.App",
 			"type": "XML",
@@ -63,20 +78,6 @@
 					]
 				},
 				{
-					"name": "o2c",
-					"pattern": "o2c",
-					"target": [
-						"o2c"
-					]
-				},
-				{
-					"name": "p2p",
-					"pattern": "p2p",
-					"target": [
-						"p2p"
-					]
-				},
-				{
 					"name": "r2r",
 					"pattern": "r2r",
 					"target": [
@@ -84,10 +85,31 @@
 					]
 				},
 				{
-					"name": "ptp",
-					"pattern": "ptp",
+					"name": "rtr",
+					"pattern": "rtr",
 					"target": [
-						"ptp"
+						"rtr"
+					]
+				},
+				{
+					"name": "s2p",
+					"pattern": "s2p",
+					"target": [
+						"s2p"
+					]
+				},
+				{
+					"name": "d2o",
+					"pattern": "d2o",
+					"target": [
+						"d2o"
+					]
+				},
+				{
+					"name": "l2c",
+					"pattern": "l2c",
+					"target": [
+						"l2c"
 					]
 				}
 			],
@@ -102,25 +124,30 @@
 					"viewId": "projectView",
 					"viewName": "Project"
 				},
-				"o2c": {
-					"viewType": "XML",
-					"viewId": "o2cView",
-					"viewName": "O2C"
-				},
-				"p2p": {
-					"viewType": "XML",
-					"viewId": "p2pView",
-					"viewName": "P2P"
-				},
 				"r2r": {
 					"viewType": "XML",
 					"viewId": "r2rView",
 					"viewName": "R2R"
 				},
-				"ptp": {
+				"rtr": {
 					"viewType": "XML",
-					"viewId": "ptpView",
-					"viewName": "PtP"
+					"viewId": "rtrView",
+					"viewName": "RtR"
+				},
+				"s2p": {
+					"viewType": "XML",
+					"viewId": "s2pView",
+					"viewName": "S2P"
+				},
+				"d2o": {
+					"viewType": "XML",
+					"viewId": "d2oView",
+					"viewName": "D2O"
+				},
+				"l2c": {
+					"viewType": "XML",
+					"viewId": "l2cView",
+					"viewName": "L2C"
 				}
 			}
 		},

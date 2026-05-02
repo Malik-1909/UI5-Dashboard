@@ -1,0 +1,5 @@
+[
+  { "kpi": "Offene Bestellungen", "value": "145", "unit": "Stück" },
+  { "kpi": "Lieferanten", "value": "89", "unit": "Aktiv" },
+  { "kpi": "Rechnungszyklus", "value": "14", "unit": "Tage" }
+]

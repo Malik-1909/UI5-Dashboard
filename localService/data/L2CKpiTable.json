@@ -1,0 +1,5 @@
+[
+  { "kpi": "Pipeline Value", "value": "2.4", "unit": "M EUR" },
+  { "kpi": "Conversion Rate", "value": "10.9%", "unit": "" },
+  { "kpi": "DSO", "value": "35", "unit": "Tage" }
+]

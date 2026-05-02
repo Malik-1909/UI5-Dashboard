@@ -1,0 +1,10 @@
+[
+  { "week": "KW 1", "orders": 142, "returns": 8 },
+  { "week": "KW 2", "orders": 158, "returns": 12 },
+  { "week": "KW 3", "orders": 135, "returns": 6 },
+  { "week": "KW 4", "orders": 172, "returns": 15 },
+  { "week": "KW 5", "orders": 189, "returns": 10 },
+  { "week": "KW 6", "orders": 164, "returns": 9 },
+  { "week": "KW 7", "orders": 198, "returns": 14 },
+  { "week": "KW 8", "orders": 210, "returns": 11 }
+]

@@ -1,0 +1,2 @@
+sap.ui.define(["ui5/vizframe/app/controller/BaseController","sap/viz/ui5/controls/Popover"],function(n,e){"use strict";return n.extend("ui5.vizframe.app.controller.L2C",{onAfterRendering:function(){var n=["l2cFunnelChart","l2cRevenueChart","l2cDSOChart"];n.forEach(function(n){var t=this.byId(n);if(t){var r=new e({});r.connect(t.getVizUid())}}.bind(this))},onNavBack:function(){this.getOwnerComponent().getRouter().navTo("main")}})});
+//# sourceMappingURL=L2C.controller.js.map

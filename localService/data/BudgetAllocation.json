@@ -1,0 +1,8 @@
+[
+  { "category": "Personal", "amount": 420 },
+  { "category": "Infrastruktur", "amount": 180 },
+  { "category": "Marketing", "amount": 95 },
+  { "category": "F&E", "amount": 250 },
+  { "category": "Vertrieb", "amount": 140 },
+  { "category": "Sonstiges", "amount": 65 }
+]

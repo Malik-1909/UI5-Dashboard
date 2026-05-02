@@ -1,0 +1,7 @@
+[
+  { "stage": "Lead", "count": 3200 },
+  { "stage": "Opportunity", "count": 1400 },
+  { "stage": "Quote", "count": 680 },
+  { "stage": "Order", "count": 420 },
+  { "stage": "Collection", "count": 348 }
+]

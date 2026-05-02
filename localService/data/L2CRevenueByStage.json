@@ -1,0 +1,6 @@
+[
+  { "stage": "Opportunity", "revenue": 520, "target": 500 },
+  { "stage": "Order", "revenue": 385, "target": 380 },
+  { "stage": "Invoice", "revenue": 372, "target": 370 },
+  { "stage": "Collection", "revenue": 348, "target": 350 }
+]

@@ -27,22 +27,23 @@
         <content>
             <cssgrid:CSSGrid
                 id="processTilesGrid"
-                gridTemplateColumns="1fr 1fr"
+                gridTemplateColumns="1fr 1fr 1fr 1fr 1fr 1fr"
                 gridGap="2rem"
-                gridTemplateRows="1fr 1fr"
+                gridTemplateRows="auto auto"
                 class="processTilesGrid">
-                <!-- O2C Tile -->
+                <!-- Zeile 1: 3 Kacheln (je 1/3) - RtR, R2R, S2P -->
+                <!-- Recruit to Retire Tile -->
                 <GenericTile
-                    id="tileO2C"
-                    header="O2C (Order-to-Cash)"
-                    subheader="Auftrag bis Zahlung"
-                    class="processTile"
+                    id="tileRtR"
+                    header="Recruit to Retire"
+                    subheader="Rekrutierung bis Ruhestand"
+                    class="processTile tileThird"
                     press=".onTilePress">
                     <tileContent>
                         <TileContent>
                             <content>
                                 <viz:VizFrame
-                                    id="tileChartO2C"
+                                    id="tileChartRtR"
                                     vizType="column"
                                     height="100%"
                                     width="100%"
@@ -54,7 +55,7 @@
                                         valueAxis: { title: { visible: false } }
                                     }">
                                     <viz:dataset>
-                                        <viz.data:FlattenedDataset data="{sales>/o2cProcessFunnel}">
+                                        <viz.data:FlattenedDataset data="{sales>/RtrHeadcountFunnel}">
                                             <viz.data:dimensions>
                                                 <viz.data:DimensionDefinition name="Stufe" value="{sales>stage}"/>
                                             </viz.data:dimensions>
@@ -72,52 +73,12 @@
                         </TileContent>
                     </tileContent>
                 </GenericTile>
-                <!-- P2P Tile -->
-                <GenericTile
-                    id="tileP2P"
-                    header="P2P (Procure-to-Pay)"
-                    subheader="Beschaffung bis Zahlung"
-                    class="processTile"
-                    press=".onTilePress">
-                    <tileContent>
-                        <TileContent>
-                            <content>
-                                <viz:VizFrame
-                                    id="tileChartP2P"
-                                    vizType="donut"
-                                    height="100%"
-                                    width="100%"
-                                    uiConfig="{applicationSet:'fiori'}"
-                                    vizProperties="{
-                                        title: { visible: false },
-                                        plotArea: { dataLabel: { visible: false }, colorPalette: ['#0070F2','#1B90FF','#5AAAFF','#107E3E'], margin: { top: 15, right: 25, bottom: 25, left: 25 } },
-                                        legend: { visible: false }
-                                    }">
-                                    <viz:dataset>
-                                        <viz.data:FlattenedDataset data="{sales>/p2pSpendByCategory}">
-                                            <viz.data:dimensions>
-                                                <viz.data:DimensionDefinition name="Kategorie" value="{sales>category}"/>
-                                            </viz.data:dimensions>
-                                            <viz.data:measures>
-                                                <viz.data:MeasureDefinition name="Anteil" value="{sales>amount}"/>
-                                            </viz.data:measures>
-                                        </viz.data:FlattenedDataset>
-                                    </viz:dataset>
-                                    <viz:feeds>
-                                        <viz.feeds:FeedItem uid="size" type="Measure" values="Anteil"/>
-                                        <viz.feeds:FeedItem uid="color" type="Dimension" values="Kategorie"/>
-                                    </viz:feeds>
-                                </viz:VizFrame>
-                            </content>
-                        </TileContent>
-                    </tileContent>
-                </GenericTile>
-                <!-- R2R Tile -->
+                <!-- Record to Report Tile -->
                 <GenericTile
                     id="tileR2R"
-                    header="R2R (Record-to-Report)"
+                    header="Record to Report"
                     subheader="Buchung bis Abschluss"
-                    class="processTile"
+                    class="processTile tileThird"
                     press=".onTilePress">
                     <tileContent>
                         <TileContent>
@@ -134,7 +95,7 @@
                                         legend: { visible: false }
                                     }">
                                     <viz:dataset>
-                                        <viz.data:FlattenedDataset data="{sales>/r2rByAccountType}">
+                                        <viz.data:FlattenedDataset data="{sales>/R2RByAccountType}">
                                             <viz.data:dimensions>
                                                 <viz.data:DimensionDefinition name="Kontenklasse" value="{sales>type}"/>
                                             </viz.data:dimensions>
@@ -152,18 +113,59 @@
                         </TileContent>
                     </tileContent>
                 </GenericTile>
-                <!-- PtP Tile -->
+                <!-- Source to Pay Tile -->
                 <GenericTile
-                    id="tilePtP"
-                    header="PtP (Plan-to-Produce)"
-                    subheader="Planung bis Fertigung"
-                    class="processTile"
+                    id="tileS2P"
+                    header="Source to Pay"
+                    subheader="Beschaffung bis Zahlung"
+                    class="processTile tileThird"
                     press=".onTilePress">
                     <tileContent>
                         <TileContent>
                             <content>
                                 <viz:VizFrame
-                                    id="tileChartPtP"
+                                    id="tileChartS2P"
+                                    vizType="donut"
+                                    height="100%"
+                                    width="100%"
+                                    uiConfig="{applicationSet:'fiori'}"
+                                    vizProperties="{
+                                        title: { visible: false },
+                                        plotArea: { dataLabel: { visible: false }, colorPalette: ['#0070F2','#1B90FF','#5AAAFF','#107E3E'], margin: { top: 15, right: 25, bottom: 25, left: 25 } },
+                                        legend: { visible: false }
+                                    }">
+                                    <viz:dataset>
+                                        <viz.data:FlattenedDataset data="{sales>/S2PSpendByCategory}">
+                                            <viz.data:dimensions>
+                                                <viz.data:DimensionDefinition name="Kategorie" value="{sales>category}"/>
+                                            </viz.data:dimensions>
+                                            <viz.data:measures>
+                                                <viz.data:MeasureDefinition name="Anteil" value="{sales>amount}"/>
+                                            </viz.data:measures>
+                                        </viz.data:FlattenedDataset>
+                                    </viz:dataset>
+                                    <viz:feeds>
+                                        <viz.feeds:FeedItem uid="size" type="Measure" values="Anteil"/>
+                                        <viz.feeds:FeedItem uid="color" type="Dimension" values="Kategorie"/>
+                                    </viz:feeds>
+                                </viz:VizFrame>
+                            </content>
+                        </TileContent>
+                    </tileContent>
+                </GenericTile>
+                <!-- Zeile 2: 2 Kacheln (je 50%) - D2O, L2C -->
+                <!-- Design to Operate Tile -->
+                <GenericTile
+                    id="tileD2O"
+                    header="Design to Operate"
+                    subheader="Design bis Betrieb"
+                    class="processTile tileHalf"
+                    press=".onTilePress">
+                    <tileContent>
+                        <TileContent>
+                            <content>
+                                <viz:VizFrame
+                                    id="tileChartD2O"
                                     vizType="line"
                                     height="100%"
                                     width="100%"
@@ -175,7 +177,7 @@
                                         valueAxis: { title: { visible: false } }
                                     }">
                                     <viz:dataset>
-                                        <viz.data:FlattenedDataset data="{sales>/ptpOutput}">
+                                        <viz.data:FlattenedDataset data="{sales>/D2OOutputTrend}">
                                             <viz.data:dimensions>
                                                 <viz.data:DimensionDefinition name="Monat" value="{sales>month}"/>
                                             </viz.data:dimensions>
@@ -187,6 +189,47 @@
                                     <viz:feeds>
                                         <viz.feeds:FeedItem uid="valueAxis" type="Measure" values="Output"/>
                                         <viz.feeds:FeedItem uid="categoryAxis" type="Dimension" values="Monat"/>
+                                    </viz:feeds>
+                                </viz:VizFrame>
+                            </content>
+                        </TileContent>
+                    </tileContent>
+                </GenericTile>
+                <!-- Lead to Cash Tile -->
+                <GenericTile
+                    id="tileL2C"
+                    header="Lead to Cash"
+                    subheader="Lead bis Zahlungseingang"
+                    class="processTile tileHalf"
+                    press=".onTilePress">
+                    <tileContent>
+                        <TileContent>
+                            <content>
+                                <viz:VizFrame
+                                    id="tileChartL2C"
+                                    vizType="column"
+                                    height="100%"
+                                    width="100%"
+                                    uiConfig="{applicationSet:'fiori'}"
+                                    vizProperties="{
+                                        title: { visible: false },
+                                        plotArea: { dataLabel: { visible: false }, colorPalette: ['#0070F2'], margin: { top: 15, right: 25, bottom: 35, left: 45 } },
+                                        categoryAxis: { title: { visible: false } },
+                                        valueAxis: { title: { visible: false } }
+                                    }">
+                                    <viz:dataset>
+                                        <viz.data:FlattenedDataset data="{sales>/L2CConversionFunnel}">
+                                            <viz.data:dimensions>
+                                                <viz.data:DimensionDefinition name="Stufe" value="{sales>stage}"/>
+                                            </viz.data:dimensions>
+                                            <viz.data:measures>
+                                                <viz.data:MeasureDefinition name="Anzahl" value="{sales>count}"/>
+                                            </viz.data:measures>
+                                        </viz.data:FlattenedDataset>
+                                    </viz:dataset>
+                                    <viz:feeds>
+                                        <viz.feeds:FeedItem uid="valueAxis" type="Measure" values="Anzahl"/>
+                                        <viz.feeds:FeedItem uid="categoryAxis" type="Dimension" values="Stufe"/>
                                     </viz:feeds>
                                 </viz:VizFrame>
                             </content>

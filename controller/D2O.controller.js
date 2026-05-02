@@ -1,0 +1,2 @@
+sap.ui.define(["ui5/vizframe/app/controller/BaseController","sap/viz/ui5/controls/Popover"],function(n,t){"use strict";return n.extend("ui5.vizframe.app.controller.D2O",{onAfterRendering:function(){var n=["d2oFunnelChart","d2oCapacityChart","d2oOutputChart"];n.forEach(function(n){var e=this.byId(n);if(e){var o=new t({});o.connect(e.getVizUid())}}.bind(this))},onNavBack:function(){this.getOwnerComponent().getRouter().navTo("main")}})});
+//# sourceMappingURL=D2O.controller.js.map
