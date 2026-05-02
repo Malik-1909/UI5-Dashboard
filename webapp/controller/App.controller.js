@@ -3,9 +3,8 @@ sap.ui.define([
     "sap/ui/core/Fragment",
     "sap/m/Button",
     "sap/m/HBox",
-    "sap/m/FormattedText",
-    "sap/m/MessageToast"
-], function (Controller, Fragment, Button, HBox, FormattedText, MessageToast) {
+    "sap/m/FormattedText"
+], function (Controller, Fragment, Button, HBox, FormattedText) {
     "use strict";
 
     return Controller.extend("ui5.vizframe.app.controller.App", {
@@ -14,13 +13,23 @@ sap.ui.define([
 
         onInit: function () {
             this._chatHistory  = [];   // { role: "user"|"bot", text: "..." }
-            this._fabMounted   = false;
             this._pPopover     = null;
             this._oChatPopover = null;
+            this._oFabBtn      = null;
         },
 
         onAfterRendering: function () {
             this._mountFab();
+        },
+
+        /**
+         * Controls aus Fragment.byId laden (this.byId findet Fragment-Kinder oft nicht).
+         */
+        _chatById: function (sId) {
+            var oView = this.getView();
+            if (!oView) { return null; }
+            var oCtrl = Fragment.byId(oView.getId(), sId);
+            return oCtrl || this.byId(sId);
         },
 
         /**
@@ -34,7 +43,7 @@ sap.ui.define([
                     oPopover.openBy(that._oFabBtn);
                 }
                 setTimeout(function () {
-                    var oInput = that.byId("chatInput");
+                    var oInput = that._chatById("chatInput");
                     if (oInput) { oInput.focus(); }
                 }, 350);
             });
@@ -43,12 +52,21 @@ sap.ui.define([
         // ── Floating Action Button ───────────────────────────────────────────
 
         _mountFab: function () {
-            if (this._fabMounted) { return; }
-            this._fabMounted = true;
+            var oHost = document.getElementById("chatFabHost");
+            if (!oHost) {
+                oHost = document.createElement("div");
+                oHost.id = "chatFabHost";
+                document.body.appendChild(oHost);
+            }
 
-            var oHost = document.createElement("div");
-            oHost.id = "chatFabHost";
-            document.body.appendChild(oHost);
+            if (this._oFabBtn && !this._oFabBtn.bIsDestroyed) {
+                return;
+            }
+
+            if (this._oFabBtn) {
+                this._oFabBtn.destroy();
+                this._oFabBtn = null;
+            }
 
             this._oFabBtn = new Button({
                 icon:    "sap-icon://message-popup",
@@ -57,10 +75,15 @@ sap.ui.define([
                 press:   this._onFabPress.bind(this)
             });
             this._oFabBtn.addStyleClass("chatFabBtn chatFabAi");
-            this._oFabBtn.placeAt("chatFabHost");
+            this._oFabBtn.placeAt(oHost);
         },
 
         _ensureChatPopover: function () {
+            if (this._oChatPopover && this._oChatPopover.bIsDestroyed) {
+                this._oChatPopover = null;
+                this._pPopover = null;
+            }
+
             if (this._pPopover) { return this._pPopover; }
 
             var that  = this;
@@ -74,10 +97,16 @@ sap.ui.define([
                 oView.addDependent(oPopover);
                 that._oChatPopover = oPopover;
 
-                that.byId("chatInput").attachBrowserEvent("keydown", function (oEv) {
-                    if (oEv.key === "Enter") { that._sendMessage(); }
-                });
-                that.byId("chatSendBtn").attachPress(that._sendMessage.bind(that));
+                var oInput = that._chatById("chatInput");
+                var oSend  = that._chatById("chatSendBtn");
+                if (oInput) {
+                    oInput.attachBrowserEvent("keydown", function (oEv) {
+                        if (oEv.key === "Enter") { that._sendMessage(); }
+                    });
+                }
+                if (oSend) {
+                    oSend.attachPress(that._sendMessage.bind(that));
+                }
 
                 that._addBotMsg(
                     "Hallo! Ich bin dein KI-Assistent 👋<br>" +
@@ -100,7 +129,7 @@ sap.ui.define([
                 } else {
                     oPopover.openBy(that._oFabBtn);
                     setTimeout(function () {
-                        var oInput = that.byId("chatInput");
+                        var oInput = that._chatById("chatInput");
                         if (oInput) { oInput.focus(); }
                     }, 300);
                 }
@@ -110,8 +139,11 @@ sap.ui.define([
         // ── Messaging ────────────────────────────────────────────────────────
 
         _sendMessage: function () {
-            var oInput = this.byId("chatInput");
-            var sText  = (oInput.getValue() || "").trim();
+            var oInput = this._chatById("chatInput");
+            if (!oInput || oInput.bIsDestroyed) {
+                return;
+            }
+            var sText = (oInput.getValue() || "").trim();
             if (!sText) { return; }
 
             oInput.setValue("");
@@ -193,8 +225,8 @@ sap.ui.define([
         // ── Message Rendering ────────────────────────────────────────────────
 
         _addUserMsg: function (sText) {
-            var oChatMessages = this.byId("chatMessages");
-            if (!oChatMessages) { return; }
+            var oChatMessages = this._chatById("chatMessages");
+            if (!oChatMessages || oChatMessages.bIsDestroyed) { return; }
 
             var oRow = new HBox({ justifyContent: "End" }).addStyleClass("chatRow");
             var oBubble = new FormattedText({
@@ -206,8 +238,8 @@ sap.ui.define([
         },
 
         _addBotMsg: function (sHtml) {
-            var oChatMessages = this.byId("chatMessages");
-            if (!oChatMessages) { return; }
+            var oChatMessages = this._chatById("chatMessages");
+            if (!oChatMessages || oChatMessages.bIsDestroyed) { return; }
 
             var oRow = new HBox({ justifyContent: "Start" }).addStyleClass("chatRow");
             var oBubble = new FormattedText({ htmlText: sHtml }).addStyleClass("chatBubble chatBubbleBot");
@@ -217,8 +249,8 @@ sap.ui.define([
         },
 
         _showTyping: function () {
-            var oChatMessages = this.byId("chatMessages");
-            if (!oChatMessages) { return; }
+            var oChatMessages = this._chatById("chatMessages");
+            if (!oChatMessages || oChatMessages.bIsDestroyed) { return; }
 
             var oRow = new HBox({ justifyContent: "Start" }).addStyleClass("chatRow chatTypingRow");
             var oBubble = new FormattedText({ htmlText: "<span class='chatDots'><span></span></span>" })
@@ -229,8 +261,8 @@ sap.ui.define([
         },
 
         _hideTyping: function () {
-            var oChatMessages = this.byId("chatMessages");
-            if (!oChatMessages) { return; }
+            var oChatMessages = this._chatById("chatMessages");
+            if (!oChatMessages || oChatMessages.bIsDestroyed) { return; }
             var aItems = oChatMessages.getItems();
             for (var i = aItems.length - 1; i >= 0; i--) {
                 if (aItems[i].hasStyleClass("chatTypingRow")) {
@@ -244,8 +276,8 @@ sap.ui.define([
         _scrollToBottom: function () {
             var that = this;
             setTimeout(function () {
-                var oScroll = that.byId("chatScroll");
-                if (oScroll) { oScroll.scrollTo(0, 99999, 150); }
+                var oScroll = that._chatById("chatScroll");
+                if (oScroll && !oScroll.bIsDestroyed) { oScroll.scrollTo(0, 99999, 150); }
             }, 60);
         },
 
