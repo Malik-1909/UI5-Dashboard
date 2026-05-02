@@ -12,6 +12,7 @@
     "open": "open http://127.0.0.1:8080/index.html"
   },
   "devDependencies": {
+    "ui5-middleware-chat-proxy": "file:./middleware/chat-proxy",
     "@sap-ux/ui5-middleware-fe-mockserver": "^2.4.10",
     "@sap/ux-ui5-tooling": "^1",
     "@ui5/cli": "^4.0.0",

@@ -1,0 +1,48 @@
+<core:FragmentDefinition
+    xmlns:core="sap.ui.core"
+    xmlns="sap.m"
+    xmlns:l="sap.ui.layout">
+
+    <Popover
+        id="chatPopover"
+        title="KI Assistent"
+        placement="Left"
+        contentWidth="340px"
+        contentHeight="420px"
+        verticalScrolling="false"
+        horizontalScrolling="false">
+
+        <content>
+            <VBox class="chatBody">
+                <ScrollContainer
+                    id="chatScroll"
+                    height="330px"
+                    vertical="true"
+                    horizontal="false"
+                    focusable="false">
+                    <VBox id="chatMessages" class="chatMessages" />
+                </ScrollContainer>
+            </VBox>
+        </content>
+
+        <footer>
+            <Bar>
+                <contentMiddle>
+                    <Input
+                        id="chatInput"
+                        placeholder="Nachricht eingeben ..."
+                        width="100%" />
+                </contentMiddle>
+                <contentRight>
+                    <Button
+                        id="chatSendBtn"
+                        icon="sap-icon://paper-plane"
+                        type="Emphasized"
+                        tooltip="Senden" />
+                </contentRight>
+            </Bar>
+        </footer>
+
+    </Popover>
+
+</core:FragmentDefinition>

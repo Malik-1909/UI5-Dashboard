@@ -1,0 +1,6 @@
+{
+  "name": "ui5-middleware-chat-proxy",
+  "version": "1.0.0",
+  "description": "Proxies /api/chat requests to Google Gemini API for the UI5 dashboard chatbot",
+  "main": "index.js"
+}
