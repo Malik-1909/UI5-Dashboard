@@ -2,8 +2,9 @@ sap.ui.define([
     "sap/ui/core/mvc/Controller",
     "sap/m/Popover",
     "sap/m/List",
-    "sap/m/StandardListItem"
-], function (Controller, Popover, List, StandardListItem) {
+    "sap/m/StandardListItem",
+    "ui5/vizframe/app/controller/ChatHelper"
+], function (Controller, Popover, List, StandardListItem, ChatHelper) {
     "use strict";
 
     return Controller.extend("ui5.vizframe.app.controller.Main", {
@@ -45,6 +46,10 @@ sap.ui.define([
             this.getOwnerComponent().getRouter().navTo("project");
         },
 
+        onOpenChatbot: function () {
+            ChatHelper.openFrom(this);
+        },
+
         onBurgerPress: function (oEvent) {
             var oButton = oEvent.getSource();
             if (!this._oBurgerPopover) {
@@ -56,6 +61,7 @@ sap.ui.define([
                     content: [
                         new List({
                             items: [
+                                new StandardListItem({ title: "KI Assistent", icon: "sap-icon://message-popup", type: "Navigation" }),
                                 new StandardListItem({ title: "Record to Report", type: "Navigation" }),
                                 new StandardListItem({ title: "Recruit to Retire", type: "Navigation" }),
                                 new StandardListItem({ title: "Source to Pay", type: "Navigation" }),
@@ -66,6 +72,11 @@ sap.ui.define([
                             itemPress: function (oEvent) {
                                 var oItem = oEvent.getParameter("listItem");
                                 var sTitle = oItem.getTitle();
+                                if (sTitle === "KI Assistent") {
+                                    if (that._oBurgerPopover) { that._oBurgerPopover.close(); }
+                                    ChatHelper.openFrom(that);
+                                    return;
+                                }
                                 var mRouteMap = {
                                     "Record to Report": "r2r",
                                     "Recruit to Retire": "rtr",

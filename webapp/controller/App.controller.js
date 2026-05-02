@@ -23,63 +23,82 @@ sap.ui.define([
             this._mountFab();
         },
 
+        /**
+         * Von Header / Burger-Menü: Chat öffnen (anker unten rechts, Popover nach oben).
+         */
+        openChatFromNavigation: function () {
+            if (!this._oFabBtn) { this._mountFab(); }
+            var that = this;
+            this._ensureChatPopover().then(function (oPopover) {
+                if (!oPopover.isOpen()) {
+                    oPopover.openBy(that._oFabBtn);
+                }
+                setTimeout(function () {
+                    var oInput = that.byId("chatInput");
+                    if (oInput) { oInput.focus(); }
+                }, 350);
+            });
+        },
+
         // ── Floating Action Button ───────────────────────────────────────────
 
         _mountFab: function () {
             if (this._fabMounted) { return; }
             this._fabMounted = true;
 
-            // Create a fixed-position host div outside the UI5 render tree
             var oHost = document.createElement("div");
             oHost.id = "chatFabHost";
             document.body.appendChild(oHost);
 
             this._oFabBtn = new Button({
-                icon:    "sap-icon://discussion",
+                icon:    "sap-icon://message-popup",
                 type:    "Emphasized",
                 tooltip: "KI Assistent",
                 press:   this._onFabPress.bind(this)
             });
-            this._oFabBtn.addStyleClass("chatFabBtn");
+            this._oFabBtn.addStyleClass("chatFabBtn chatFabAi");
             this._oFabBtn.placeAt("chatFabHost");
         },
 
-        _onFabPress: function () {
+        _ensureChatPopover: function () {
+            if (this._pPopover) { return this._pPopover; }
+
             var that  = this;
             var oView = this.getView();
 
-            if (!this._pPopover) {
-                this._pPopover = Fragment.load({
-                    id:         oView.getId(),
-                    name:       "ui5.vizframe.app.fragment.Chatbot",
-                    controller: this
-                }).then(function (oPopover) {
-                    oView.addDependent(oPopover);
-                    that._oChatPopover = oPopover;
+            this._pPopover = Fragment.load({
+                id:         oView.getId(),
+                name:       "ui5.vizframe.app.fragment.Chatbot",
+                controller: this
+            }).then(function (oPopover) {
+                oView.addDependent(oPopover);
+                that._oChatPopover = oPopover;
 
-                    // Wire input "Enter" key + send button
-                    that.byId("chatInput").attachBrowserEvent("keydown", function (oEv) {
-                        if (oEv.key === "Enter") { that._sendMessage(); }
-                    });
-                    that.byId("chatSendBtn").attachPress(that._sendMessage.bind(that));
-
-                    // Initial greeting
-                    that._addBotMsg(
-                        "Hallo! Ich bin dein KI-Assistent 👋<br>" +
-                        "Ich beantworte KPI-Fragen und navigiere dich durch die App.<br>" +
-                        "Zum Beispiel: <em>\"Zeige R2R\"</em> oder <em>\"Was ist Lead to Cash?\"</em>"
-                    );
-
-                    return oPopover;
+                that.byId("chatInput").attachBrowserEvent("keydown", function (oEv) {
+                    if (oEv.key === "Enter") { that._sendMessage(); }
                 });
-            }
+                that.byId("chatSendBtn").attachPress(that._sendMessage.bind(that));
 
-            this._pPopover.then(function (oPopover) {
+                that._addBotMsg(
+                    "Hallo! Ich bin dein KI-Assistent 👋<br>" +
+                    "Ich beantworte KPI-Fragen und navigiere dich durch die App.<br>" +
+                    "Zum Beispiel: <em>\"Zeige R2R\"</em> oder <em>\"Was ist Lead to Cash?\"</em>"
+                );
+
+                return oPopover;
+            });
+
+            return this._pPopover;
+        },
+
+        _onFabPress: function () {
+            var that = this;
+            if (!this._oFabBtn) { this._mountFab(); }
+            this._ensureChatPopover().then(function (oPopover) {
                 if (oPopover.isOpen()) {
                     oPopover.close();
                 } else {
                     oPopover.openBy(that._oFabBtn);
-                    // Focus input after open
                     setTimeout(function () {
                         var oInput = that.byId("chatInput");
                         if (oInput) { oInput.focus(); }

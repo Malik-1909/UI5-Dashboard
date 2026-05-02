@@ -14,6 +14,7 @@
                 </contentLeft>
                 <contentMiddle/>
                 <contentRight>
+                    <Button text="KI" icon="sap-icon://message-popup" type="Transparent" press=".onOpenChatbot" tooltip="KI Assistent" class="headerDesktopActions"/>
                     <Button id="burgerButton" icon="sap-icon://menu2" press=".onBurgerPress" class="headerBurgerButton"/>
                 </contentRight>
             </Bar>

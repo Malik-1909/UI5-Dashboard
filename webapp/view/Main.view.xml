@@ -18,6 +18,7 @@
                 </contentLeft>
                 <contentMiddle/>
                 <contentRight>
+                    <Button text="KI" icon="sap-icon://message-popup" type="Transparent" press=".onOpenChatbot" tooltip="KI Assistent" class="headerDesktopActions"/>
                     <Button id="burgerButton" icon="sap-icon://menu2" press=".onBurgerPress" class="headerBurgerButton"/>
                     <Button text="Über dieses Projekt" press=".onNavToProject" class="headerDesktopActions"/>
                     <Button id="prozesseButton" text="Prozesse ▾" press=".onProzessePress" class="headerDesktopActions"/>

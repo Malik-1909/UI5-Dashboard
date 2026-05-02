@@ -1,46 +1,53 @@
 <core:FragmentDefinition
     xmlns:core="sap.ui.core"
-    xmlns="sap.m"
-    xmlns:l="sap.ui.layout">
+    xmlns="sap.m">
 
     <Popover
         id="chatPopover"
         title="KI Assistent"
-        placement="Left"
+        placement="Top"
         contentWidth="340px"
         contentHeight="420px"
         verticalScrolling="false"
         horizontalScrolling="false">
 
         <content>
-            <VBox class="chatBody">
+            <VBox class="chatBody" fitContainer="true">
                 <ScrollContainer
                     id="chatScroll"
-                    height="330px"
+                    height="100%"
                     vertical="true"
                     horizontal="false"
-                    focusable="false">
+                    focusable="false"
+                    class="chatScrollArea">
                     <VBox id="chatMessages" class="chatMessages" />
                 </ScrollContainer>
             </VBox>
         </content>
 
         <footer>
-            <Bar>
-                <contentMiddle>
+            <VBox class="chatComposerOuter" width="100%">
+                <HBox
+                    class="chatComposer"
+                    alignItems="Center"
+                    justifyContent="Start"
+                    width="100%">
                     <Input
                         id="chatInput"
-                        placeholder="Nachricht eingeben ..."
-                        width="100%" />
-                </contentMiddle>
-                <contentRight>
+                        class="chatComposerInput"
+                        placeholder="Nachricht eingeben …">
+                        <layoutData>
+                            <FlexItemData growFactor="1" shrinkFactor="1" baseSize="0"/>
+                        </layoutData>
+                    </Input>
                     <Button
                         id="chatSendBtn"
+                        class="chatComposerSendBtn"
                         icon="sap-icon://paper-plane"
                         type="Emphasized"
                         tooltip="Senden" />
-                </contentRight>
-            </Bar>
+                </HBox>
+            </VBox>
         </footer>
 
     </Popover>
