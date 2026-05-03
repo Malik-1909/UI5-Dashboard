@@ -3,8 +3,9 @@ sap.ui.define([
     "sap/ui/core/Fragment",
     "sap/m/Button",
     "sap/m/HBox",
-    "sap/m/FormattedText"
-], function (Controller, Fragment, Button, HBox, FormattedText) {
+    "sap/m/FormattedText",
+    "ui5/vizframe/app/utils/StaticChatMock"
+], function (Controller, Fragment, Button, HBox, FormattedText, StaticChatMock) {
     "use strict";
 
     return Controller.extend("ui5.vizframe.app.controller.App", {
@@ -108,8 +109,13 @@ sap.ui.define([
                     oSend.attachPress(that._sendMessage.bind(that));
                 }
 
+                var oComp = that.getOwnerComponent();
+                var sGh = oComp && oComp.isRunningOnGitHubPages && oComp.isRunningOnGitHubPages()
+                    ? "Auf GitHub Pages nutze ich Demo-Daten und eine <strong>Offline-Simulation</strong> (kein API-Key). Lokal mit <code>npm run start</code> ist die echte KI aktiv.<br><br>"
+                    : "";
                 that._addBotMsg(
                     "Hallo! Ich bin dein KI-Assistent 👋<br>" +
+                    sGh +
                     "Ich beantworte KPI-Fragen und navigiere dich durch die App.<br>" +
                     "Zum Beispiel: <em>\"Zeige R2R\"</em> oder <em>\"Was ist Lead to Cash?\"</em>"
                 );
@@ -155,6 +161,12 @@ sap.ui.define([
 
         _callApi: function (sText) {
             var that = this;
+            var oComp = this.getOwnerComponent();
+            if (oComp && oComp.isRunningOnGitHubPages && oComp.isRunningOnGitHubPages()) {
+                that._hideTyping();
+                that._handleReply(StaticChatMock.getReply(sText));
+                return;
+            }
             fetch("/api/chat", {
                 method:  "POST",
                 headers: { "Content-Type": "application/json" },

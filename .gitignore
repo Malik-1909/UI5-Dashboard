@@ -1,6 +1,7 @@
 node_modules
 dist/
 *.zip
+webapp/localService/static-mock-bundle.json
 
 # API keys – never commit this file
 .env
