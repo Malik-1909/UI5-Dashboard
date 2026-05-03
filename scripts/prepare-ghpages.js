@@ -40,6 +40,12 @@ html = html.replace(
   'data-sap-ui-resourceroots=\'{ "ui5.vizframe.app": "' + basePath.slice(0, -1) + '" }\''
 );
 
+// Webapp: xxComponentPreload=off (siehe index.html). Auf GH Pages wieder echtes Component-preload.js nutzen:
+html = html.replace(
+  /\r?\n\s*<!-- UI5 dev: Component-preload\.js nur nach ui5 build; BaseConfig-Key ist xxComponentPreload \(Großbuchstabe P\)\. prepare-ghpages entfernt diesen Block\. -->\r?\n\s*<script>\r?\n\s*window\["sap-ui-config"\] = window\["sap-ui-config"\] \|\| \{\};\r?\n\s*window\["sap-ui-config"\]\.xxComponentPreload = "off";\r?\n\s*<\/script>/,
+  ""
+);
+
 fs.writeFileSync(indexPath, html);
 
 // 404.html für SPA-Routing (Routen wie /project, /o2c)

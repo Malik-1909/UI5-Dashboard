@@ -2,8 +2,9 @@ sap.ui.define([
     "sap/ui/core/UIComponent",
     "sap/ui/model/json/JSONModel",
     "sap/m/MessageToast",
+    "sap/ui/core/BusyIndicator",
     "ui5/vizframe/app/utils/SapDataLoader"
-], function (UIComponent, JSONModel, MessageToast, SapDataLoader) {
+], function (UIComponent, JSONModel, MessageToast, BusyIndicator, SapDataLoader) {
     "use strict";
 
     return UIComponent.extend("ui5.vizframe.app.Component", {
@@ -13,8 +14,15 @@ sap.ui.define([
 
         init: function () {
             UIComponent.prototype.init.apply(this, arguments);
-            this._initSalesModel();
-            this.getRouter().initialize();
+            if (this._isGitHubPagesHost()) {
+                this._initSalesModelStaticHost();
+                this.getRouter().initialize();
+            } else {
+                var oThis = this;
+                this._initSalesModelAfterSandbox().then(function () {
+                    oThis.getRouter().initialize();
+                });
+            }
         },
 
         _isGitHubPagesHost: function () {
@@ -27,26 +35,29 @@ sap.ui.define([
         },
 
         /**
-         * Ersetzt das OData-Modell aus dem Manifest durch ein JSONModel:
-         *  1. Sofort mit Mock-Bundle-Daten (UI funktioniert direkt)
-         *  2. Async: echte SAP Sandbox-Daten obendrauf laden
-         *     → nur die Entity Sets, für die Daten ankommen, werden überschrieben
-         *     → alles andere bleibt Mock-Fallback
+         * GitHub Pages: nur statisches Mock-Bundle, kein SAP-Proxy – Modell sofort, Router direkt.
          */
-        _initSalesModel: function () {
+        _initSalesModelStaticHost: function () {
+            var sBundleUrl = sap.ui.require.toUrl("ui5/vizframe/app/localService/static-mock-bundle.json");
+            var oModel = new JSONModel();
+            oModel.loadData(sBundleUrl, null, false);
+            this.setModel(oModel, "sales");
+        },
+
+        /**
+         * Lokal: erst Sandbox-Daten (parallel zum Lesen des Mock-Bundles), dann einmalig
+         * setModel + Router – vermeidet Mock-zuerst und anschließendes setData (Layout-Sprung).
+         */
+        _initSalesModelAfterSandbox: function () {
             var oThis = this;
             var sBundleUrl = sap.ui.require.toUrl("ui5/vizframe/app/localService/static-mock-bundle.json");
-
             var oModel = new JSONModel();
             oModel.loadData(sBundleUrl, null, false);
             var oBaseData = oModel.getData() || {};
-            oThis.setModel(oModel, "sales");
 
-            if (oThis._isGitHubPagesHost()) {
-                return;
-            }
+            BusyIndicator.show(0);
 
-            SapDataLoader.loadAll()
+            return SapDataLoader.loadAll()
                 .then(function (result) {
                     var nLoaded = Object.keys(result.sources).reduce(function (s, k) { return s + result.sources[k]; }, 0);
                     if (!nLoaded) {
@@ -60,8 +71,7 @@ sap.ui.define([
                         }
                         return;
                     }
-                    var oMerged = Object.assign({}, oBaseData, result.data);
-                    oModel.setData(oMerged);
+                    oModel.setData(Object.assign({}, oBaseData, result.data));
                     console.info("[SapDataLoader] Echte SAP-Daten geladen:", JSON.stringify(result.sources));
                 })
                 .catch(function (err) {
@@ -70,6 +80,10 @@ sap.ui.define([
                         "Live-Daten konnten nicht geladen werden. Demo-Daten bleiben aktiv.",
                         { duration: 5000 }
                     );
+                })
+                .finally(function () {
+                    oThis.setModel(oModel, "sales");
+                    BusyIndicator.hide();
                 });
         }
     });

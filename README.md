@@ -7,7 +7,7 @@ SAPUI5-Web-App zur Visualisierung von Kennzahlen und Diagrammen entlang von **f�
 - **Startseite** mit fünf Prozesskacheln und Mini-Charts.
 - **Detailseiten** je Prozess: Beschreibung, KPI-Tabelle, mehrere **sap.viz**-Diagramme.
 - **Datenmodell `sales`** (überall `JSONModel`):
-  - **Lokal** (`npm run start`): Zuerst werden gebündelte Demo-Daten aus `static-mock-bundle.json` geladen; anschließend lädt `SapDataLoader` parallel **echte Sandbox-Daten** der SAP Business Accelerator Hub APIs (über den Proxy `/api/sap/*`) und **merged** sie ins Modell. Schlägt eine API fehl oder liefert sie nichts, bleibt der Mock-Fallback für diesen Teil aktiv.
+  - **Lokal** (`npm run start`): Das Mock-Bundle wird gelesen, `SapDataLoader` holt die Sandbox-Daten; **erst danach** wird `sales` gesetzt und der Router gestartet (Busy auf der Component), damit Tabellen und Charts nicht erst Demo- und dann Live-Daten rendern (kein Layout-Sprung). Schlägt eine API fehl oder liefert sie nichts, bleibt der Mock-Fallback für diesen Teil aktiv.
   - **GitHub Pages** (`*.github.io`): Es wird **nur** das statische Bundle geladen; **kein** Aufruf von SAP oder Chat-Backend (siehe unten).
 - **Hinweise in der UI**: MessageStrip und Panel-Überschriften zeigen, ob Daten von der **SAP API** oder vom **Mock** stammen (lokal nach erfolgreichem Merge).
 - **KI-Chat**:
@@ -38,7 +38,7 @@ Proxy und Keys: siehe `middleware/chat-proxy` – Routen `/api/chat` und `/api/s
 
 | Pfad | Inhalt |
 |------|--------|
-| `webapp/Component.js` | `sales` als JSONModel; Merge mit SAP-Daten außerhalb `*.github.io`; Hinweis per MessageToast bei Fehlern |
+| `webapp/Component.js` | `sales` als JSONModel; lokal: SAP-Merge vor erstem `setModel` + Router; auf `*.github.io` sofort Mock; MessageToasts bei Fehlern |
 | `webapp/utils/BurgerMenuHelper.js` | Gemeinsames Burger-Menü (Navigation + KI) für Main und Unterseiten |
 | `webapp/controller/BaseController.js` | Burger-Menü, Chat öffnen; Main erbt davon |
 | `webapp/utils/SapDataLoader.js` | Laden und Aggregieren der SAP-Sandbox-Daten |
