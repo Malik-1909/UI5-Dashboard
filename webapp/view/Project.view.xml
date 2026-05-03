@@ -23,7 +23,7 @@
             <ScrollContainer height="100%" vertical="true" class="sapUiSmallMargin">
                 <l:VerticalLayout width="100%">
                     <Title text="KPI Dashboard – Geschäftsprozesse" level="H3"/>
-                    <Text text="Diese App visualisiert fünf zentrale End-to-End-Geschäftsprozesse mit KPIs, Diagrammen und Tabellen. Ein integrierter KI-Assistent unterstützt bei Fragen zu Aufbau, Geschäftsprozessen und Kennzahlen und kann bei Bedarf direkt zur passenden Seite wechseln. Lokal spricht der Assistent mit einer Server-Middleware (Groq oder Mock); auf GitHub Pages läuft eine Offline-Simulation mit denselben Demo-Daten wie im OData-Mock."
+                    <Text text="Die App zeigt fünf End-to-End-Prozesse mit KPI-Tabellen und VizFrame-Diagrammen. Daten kommen lokal zuerst aus einem gebündelten JSON-Mock; danach werden – sofern ein SAP API Key in der .env liegt – echte Lesedaten aus der SAP Business Accelerator Hub Sandbox nachgeladen und ins Modell gemischt. Auf den Prozessseiten siehst du per MessageStrip und Panel-Titel, ob gerade SAP-API- oder Demo-Daten angezeigt werden. Ein KI-Assistent beantwortet Fragen zur App und navigiert bei Bedarf; lokal über Groq (Middleware), auf GitHub Pages nur als Offline-Regeln."
                         class="sapUiSmallMarginBottom"/>
 
                     <Title text="Die fünf Geschäftsprozesse" level="H3" class="sapUiSmallMarginTop"/>
@@ -54,7 +54,7 @@
                             <ColumnListItem>
                                 <cells>
                                     <Text text="Design to Operate" fontWeight="Bold"/>
-                                    <Text text="Design bis Betrieb – von der Produktentwicklung über Fertigung bis zu Service und Wartung."/>
+                                    <Text text="Design bis Betrieb – in der Sandbox werden hier u. a. Warenbewegungen und Lagerbestände genutzt (statt Produktionsaufträge, API oft nicht freigegeben)."/>
                                 </cells>
                             </ColumnListItem>
                             <ColumnListItem>
@@ -67,30 +67,44 @@
                     </Table>
 
                     <Title text="Technologie" level="H3" class="sapUiSmallMarginTop"/>
-                    <Text text="Die App basiert auf SAPUI5 (Version 1.120) und nutzt sap.viz für Chart-Visualisierungen. UI5 Tooling startet den lokalen Server inkl. OData-Mock und Chat-Middleware. Für statisches Hosting (z. B. GitHub Pages) bündelt ein Build-Skript die Mock-JSON-Dateien; die Component lädt sie auf *.github.io als JSONModel unter dem Namen sales."
+                    <Text text="SAPUI5 1.120, sap.viz, sap.ui.layout, Horizon-Theming. Das zentrale Modell sales ist ein JSONModel: Component lädt static-mock-bundle.json und merged bei Bedarf SapDataLoader-Ergebnisse. Custom Middleware (chat-proxy) stellt POST /api/chat und GET /api/sap/* für die Sandbox bereit – API-Keys bleiben serverseitig in der .env."
                         class="sapUiSmallMarginBottom"/>
                     <List>
                         <StandardListItem title="sap.m" info="Mobile-first UI Controls"/>
                         <StandardListItem title="sap.ui.core" info="Kern-Framework"/>
                         <StandardListItem title="sap.ui.layout" info="Layout (u. a. CSSGrid für die Startkacheln)"/>
-                        <StandardListItem title="sap.viz" info="VizFrame – Column, Line, Pie, Donut u. a."/>
+                        <StandardListItem title="sap.viz" info="VizFrame – Balken, Säulen, Kreis, Donut, Linie"/>
                         <StandardListItem title="themelib_sap_horizon" info="SAP Horizon Design Theme"/>
-                        <StandardListItem title="Custom Middleware" info="ui5-middleware-chat-proxy – POST /api/chat (Groq oder Mock, nur lokal)"/>
-                        <StandardListItem title="StaticChatMock" info="Offline-Chat auf GitHub Pages (Navigation + FAQ per Regeln)"/>
-                        <StandardListItem title="Fragment + App-Controller" info="Chat-Popover, FAB, Header-KI-Button, Fragment.byId"/>
+                        <StandardListItem title="SapDataLoader.js" info="Fetch und Aggregation der SAP-Sandbox-APIs unter /api/sap"/>
+                        <StandardListItem title="Custom Middleware" info="Groq-Chat, optional MOCK_MODE; Proxy sandbox.api.sap.com"/>
+                        <StandardListItem title="StaticChatMock" info="Offline-Chat nur auf GitHub Pages"/>
+                        <StandardListItem title="bundle-static-mock.js" info="Vor Build/Start: data/*.json → static-mock-bundle.json"/>
                     </List>
+
+                    <Title text="Datenquellen (lokal mit SAP_API_KEY)" level="H3" class="sapUiSmallMarginTop"/>
+                    <List>
+                        <StandardListItem title="Lead to Cash" info="API_SALES_ORDER_SRV – Vertriebsaufträge"/>
+                        <StandardListItem title="Source to Pay" info="API_PURCHASEORDER_PROCESS_SRV – Belege; Beträge oft nicht im Header → u. a. Beleganzahl je Einkaufsorganisation"/>
+                        <StandardListItem title="Record to Report" info="API_JOURNALENTRYITEMBASIC_SRV, gefiltert auf CompanyCode 1010"/>
+                        <StandardListItem title="Recruit to Retire" info="SuccessFactors OData v2 User"/>
+                        <StandardListItem title="Design to Operate" info="API_MATERIAL_DOCUMENT_SRV + API_MATERIAL_STOCK_SRV"/>
+                    </List>
+
+                    <Title text="Hosting" level="H3" class="sapUiSmallMarginTop"/>
+                    <Text text="Lokal: volle Funktion mit Middleware. GitHub Pages: nur statisches Bundle und StaticChatMock – keine Live-SAP-Daten und keine Groq-Anbindung. Für SAP Business Technology Platform / Launchpad wären Destinations und ein geschützter Chat-Backend-Service die übliche nächste Stufe."
+                        class="sapUiSmallMarginBottom"/>
 
                     <Title text="Funktionen" level="H3" class="sapUiSmallMarginTop"/>
                     <List>
-                        <StandardListItem title="Startseite" info="5 KPI-Kacheln in zwei Reihen – Mini-Charts pro Prozess, Klick öffnet Detailseite"/>
-                        <StandardListItem title="Detailseiten" info="Prozessbeschreibung, Schritte, KPI-Tabelle und mehrere Diagramme"/>
-                        <StandardListItem title="Navigation" info="Kacheln, Prozesse-Menü, Burger-Menü, Zurück-Button, KI in der Kopfzeile"/>
-                        <StandardListItem title="KI-Assistent" info="FAB unten rechts, Burger-Menü oder Kopfzeile – lokal echte KI/Mock-API, auf GitHub Pages Offline-Simulation"/>
+                        <StandardListItem title="Startseite" info="Fünf Prozesskacheln mit Mini-Charts, Klick öffnet Detailseite"/>
+                        <StandardListItem title="Detailseiten" info="Beschreibung, Schritte, KPI-Tabelle, mehrere Diagramme, Datenquellen-Badge"/>
+                        <StandardListItem title="Navigation" info="Kacheln, Prozesse-Menü, Burger-Menü, Zurück, KI-Button in der Kopfzeile"/>
+                        <StandardListItem title="KI-Assistent" info="Lokal Groq oder MOCK_MODE; auf GitHub Pages nur StaticChatMock"/>
                         <StandardListItem title="Responsives Layout" info="3 Spalten (Desktop) → 2 (Tablet) → 1 (Mobile)"/>
                     </List>
 
                     <Title text="Deployment" level="H3" class="sapUiSmallMarginTop"/>
-                    <Text text="npm run build erzeugt zuerst static-mock-bundle.json, danach den UI5-Build nach dist/. prepare-ghpages.js richtet index.html für GitHub Pages ein (CDN 1.120, base href aus Repo-Name, SPA-404, .nojekyll). Optional: GitHub Actions (workflow_dispatch) deployt das Artefakt. Für echte KI weiterhin ui5 serve mit Middleware oder ein eigenes Backend; SAP BTP / Launchpad bleiben mögliche Ziele."
+                    <Text text="npm run build: zuerst bundle-static-mock.js, dann ui5 build nach dist/. npm run deploy: prepare-ghpages.js (UI5-CDN 1.120, base href, SPA-404.html, .nojekyll) und gh-pages. Optional GitHub Actions workflow_dispatch. README im Repository enthält Details zu .env, APIs und BTP-Hinweisen."
                         class="sapUiSmallMarginBottom"/>
                 </l:VerticalLayout>
             </ScrollContainer>

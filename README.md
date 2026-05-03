@@ -1,96 +1,87 @@
 # UI5 VizFrame KPI Dashboard
 
-SAPUI5-Web-App zur Visualisierung von KPI-Daten entlang zentraler End-to-End-Geschäftsprozesse. Die Anwendung zeigt Kennzahlen als interaktive VizFrame-Diagramme und bietet einen **KI-Assistenten**, der Fragen zur App und zu den Prozessen beantwortet und bei Bedarf zur richtigen Seite navigiert.
+SAPUI5-Web-App zur Visualisierung von Kennzahlen und Diagrammen entlang von **fünf End-to-End-Geschäftsprozessen** (L2C, S2P, R2R, RtR, D2O). Zusätzlich gibt es einen **KI-Assistenten** (Navigation, FAQ zu Prozessen und App).
 
 ## Was die App macht
 
-- **Dashboard-Startseite** mit fünf klickbaren Prozesskacheln und eingebetteten Mini-Charts.
-- **Fünf Geschäftsprozesse** mit jeweils eigener Detailseite:
-  - Record to Report (R2R)
-  - Recruit to Retire (RtR)
-  - Source to Pay (S2P)
-  - Design to Operate (D2O)
-  - Lead to Cash (L2C)
-- **Navigation**: Kacheln, Desktop-Menü „Prozesse“, Burger-Menü (Mobile), Seite **Über dieses Projekt**.
-- **KI-Assistent** (Chat):
-  - Schwebender Button unten rechts; **KI Assistent** in der Kopfzeile (Desktop-Fragment) und Eintrag im Burger-Menü.
-  - **Lokal** (`npm run start`): Antworten über **UI5 Custom Middleware** `POST /api/chat` – API-Keys bleiben auf dem Server, nicht im Browser.
-  - Standardmäßig **Groq** (OpenAI-kompatibles API, kostenloser Tier) mit Modell `llama-3.3-70b-versatile`. Optional **Demo-Modus** ohne API (`MOCK_MODE=true` in `.env`).
-  - **GitHub Pages** (`*.github.io`): kein Backend – KPIs aus gebündelten Demo-JSONs; der Chat nutzt eine **Offline-Simulation** (`StaticChatMock`, gleiche Navigations-Regex-Idee wie im Server-Mock).
-- **OData V2** als Datenmodell **lokal**; **Mock-Daten** unter `webapp/localService/`. Für statische Builds wird vor `ui5 build` ein **Bundle** `webapp/localService/static-mock-bundle.json` erzeugt und auf GitHub Pages als `JSONModel` unter dem Namen `sales` geladen.
+- **Startseite** mit fünf Prozesskacheln und Mini-Charts.
+- **Detailseiten** je Prozess: Beschreibung, KPI-Tabelle, mehrere **sap.viz**-Diagramme.
+- **Datenmodell `sales`** (überall `JSONModel`):
+  - **Lokal** (`npm run start`): Zuerst werden gebündelte Demo-Daten aus `static-mock-bundle.json` geladen; anschließend lädt `SapDataLoader` parallel **echte Sandbox-Daten** der SAP Business Accelerator Hub APIs (über den Proxy `/api/sap/*`) und **merged** sie ins Modell. Schlägt eine API fehl oder liefert sie nichts, bleibt der Mock-Fallback für diesen Teil aktiv.
+  - **GitHub Pages** (`*.github.io`): Es wird **nur** das statische Bundle geladen; **kein** Aufruf von SAP oder Chat-Backend (siehe unten).
+- **Hinweise in der UI**: MessageStrip und Panel-Überschriften zeigen, ob Daten von der **SAP API** oder vom **Mock** stammen (lokal nach erfolgreichem Merge).
+- **KI-Chat**:
+  - **Lokal**: `POST /api/chat` über Custom Middleware (**Groq**, Key in `.env`). Optional `MOCK_MODE=true` ohne externe KI.
+  - **GitHub Pages**: **StaticChatMock** – regelbasierte Offline-Antworten, keine Groq-Anbindung.
+
+## Datenquellen (lokal, mit `SAP_API_KEY`)
+
+| Prozess | API / Quelle (Kurz) |
+|--------|----------------------|
+| **L2C** | S/4 OData `API_SALES_ORDER_SRV` – Vertrieb / Aufträge |
+| **S2P** | `API_PURCHASEORDER_PROCESS_SRV` – Einkauf; im Sandbox-Header **keine Nettobeträge** → Diagramme/KPIs nutzen u. a. **Beleganzahl** je Organisation |
+| **R2R** | `API_JOURNALENTRYITEMBASIC_SRV` mit Filter `CompanyCode eq '1010'`; Felder z. B. `LedgerFiscalYear`, Betrag, Soll/Haben-Logik |
+| **RtR** | SuccessFactors OData v2 `User` |
+| **D2O** | `API_MATERIAL_DOCUMENT_SRV` + `API_MATERIAL_STOCK_SRV` (Produktionsaufträge sind in der Sandbox oft **403**) |
+
+Proxy und Keys: siehe `middleware/chat-proxy` – Routen `/api/chat` und `/api/sap/*` → u. a. `sandbox.api.sap.com` mit Header `APIKey`.
 
 ## Technologie-Stack
 
-- SAPUI5 **1.120** (Freestyle, XML-Views, JavaScript-Controller) – `ui5.yaml` / Fiori-Tools-Proxy auf dieselbe Version
-- **sap.viz** (VizFrame) für Diagramme
-- **sap.ui.layout** (u. a. CSSGrid für die Startkacheln)
-- **OData V2** (`sap.ui.model.odata.v2.ODataModel`) lokal; **JSONModel** aus Bundle nur auf GitHub Pages
-- **UI5 Tooling** (`@ui5/cli`), Mock-Server (`@sap-ux/ui5-middleware-fe-mockserver`), Fiori-Tools-Proxy für UI5-Ressourcen
-- **Custom Middleware** `middleware/chat-proxy` (Paketname `ui5-middleware-chat-proxy`): Chat-Backend für lokales `ui5 serve`
-- Theming: **themelib_sap_horizon**
+- SAPUI5 **1.120** (XML-Views, JS-Controller), **sap.viz**, **sap.ui.layout**, **themelib_sap_horizon**
+- **`JSONModel` `sales`** – gesetzt in `webapp/Component.js` (Manifest-OData-Eintrag wird zur Laufzeit überschrieben)
+- **`webapp/utils/SapDataLoader.js`** – fetch der Sandbox-URLs unter `/api/sap/...`, Transformation in die bestehenden Entity-Set-Strukturen der Mock-JSONs
+- **UI5 Tooling**, Fiori-Tools-Proxy, optional **FE Mock Server** (`@sap-ux/ui5-middleware-fe-mockserver`) für historisches OData unter `/sap/opu/odata/sap/KPI_SERVICE/` (Startkacheln können davon abhängen – das zentrale Prozessmodell ist aber das JSON-Bundle + Live-Merge)
+- **Custom Middleware** `middleware/chat-proxy` (Paket `ui5-middleware-chat-proxy`): Chat + SAP-Proxy
 
 ## Projektstruktur (Auszug)
 
 | Pfad | Inhalt |
 |------|--------|
-| `webapp/manifest.json` | App-ID, Routing, OData-Modell, Libraries |
-| `webapp/Component.js` | Router; auf `*.github.io` Austausch des `sales`-Modells gegen JSON aus dem statischen Bundle |
-| `webapp/view/` | XML-Views (Startseite, Prozesse, Projekt) |
-| `webapp/controller/` | Controller inkl. `App.controller.js` (Chat, FAB), `BaseController`, `ChatHelper` |
-| `webapp/fragment/Chatbot.fragment.xml` | Chat-Popover (Nachrichten, Composer) |
-| `webapp/fragment/HeaderKiButton.fragment.xml` | Desktop-Button „KI Assistent“ in der Kopfzeile |
-| `webapp/utils/StaticChatMock.js` | Offline-Antworten für den Chat auf GitHub Pages |
-| `middleware/chat-proxy/` | npm-Paket für UI5 Custom Middleware (Groq / Mock) |
-| `webapp/localService/` | OData-Metadaten, Mock-JSON unter `data/`, Build-Artefakt `static-mock-bundle.json` |
-| `scripts/bundle-static-mock.js` | Bündelt `data/*.json` zu `static-mock-bundle.json` (wird von `npm run build` aufgerufen) |
-| `scripts/prepare-ghpages.js` | Passt `dist/index.html` für GitHub Pages an (CDN, `base`, `resourceroots`, `404.html`, `.nojekyll`) |
-| `webapp/css/style.css` | Layout, Responsivität, Chat-Styling |
-| `.github/workflows/deploy.yml` | Optional: manueller Deploy zu GitHub Pages (Build + Artifact) |
-| `.env` / `.env.example` | Lokale Konfiguration (nicht committen: `.env` in `.gitignore`) |
+| `webapp/Component.js` | `sales` als JSONModel; Merge mit SAP-Daten außerhalb `*.github.io` |
+| `webapp/utils/SapDataLoader.js` | Laden und Aggregieren der SAP-Sandbox-Daten |
+| `webapp/utils/StaticChatMock.js` | Offline-Chat auf GitHub Pages |
+| `middleware/chat-proxy/` | Groq, Mock-Modus, **SAP-Sandbox-Proxy** |
+| `webapp/localService/data/` | Demo-JSON pro Entity-Set |
+| `webapp/localService/static-mock-bundle.json` | Build-Artefakt (per `bundle-static-mock.js`, steht in `.gitignore`) |
+| `scripts/bundle-static-mock.js` | Bündelt `data/*.json` vor `ui5 build` / `start` |
+| `scripts/prepare-ghpages.js` | `dist/index.html` für GitHub Pages (CDN 1.120, `base`, SPA-404) |
+| `.env` / `.env.example` | `GROQ_API_KEY`, `SAP_API_KEY`, optional `MOCK_MODE` |
 
 ## Lokale Entwicklung
 
-**Voraussetzungen:** Node.js (empfohlen: aktuelle LTS) und npm.
+**Voraussetzungen:** Node.js (LTS) und npm.
 
 ```bash
 npm install
 npm run start
 ```
 
-Die App öffnet sich mit `index.html`; der Dev-Server stellt Mock-OData und die Chat-API bereit.
+Vor dem Start wird `static-mock-bundle.json` erzeugt (falls noch nicht vorhanden). Die App nutzt den Dev-Server inkl. Middleware.
 
-### KI-Chat konfigurieren
+### Umgebungsvariablen (`.env`)
 
-1. Kopiere `.env.example` nach `.env` (liegt in `.gitignore`).
-2. Für echte KI-Antworten: API-Key von [Groq Console](https://console.groq.com) erstellen und setzen:
-   ```bash
-   GROQ_API_KEY=gsk_...
-   ```
-3. Nur simulierte Antworten lokal (ohne Key oder bewusst offline):
-   ```bash
-   MOCK_MODE=true
-   ```
-4. Server nach Änderungen an `.env` neu starten (`Ctrl+C`, dann `npm run start`).
+1. `.env.example` nach `.env` kopieren (`.env` nicht committen).
+2. **Groq** (optional, für KI): `GROQ_API_KEY` von [Groq Console](https://console.groq.com).
+3. **SAP Sandbox** (optional, für Live-Daten): `SAP_API_KEY` von [SAP API Business Hub](https://api.sap.com) → Settings → Show API Key.
+4. Nur simulierte Chat-Antworten lokal: `MOCK_MODE=true`.
+5. Nach Änderungen an `.env` den Server neu starten.
 
-Die Middleware liest `.env` aus dem Projektstamm automatisch ein.
+Ohne `SAP_API_KEY` bleiben die Prozessseiten bei den Demo-Daten aus dem Bundle (weiterhin funktionsfähige Diagramme).
 
 ## Build und Deployment
 
 ```bash
 npm run build          # bundle-static-mock + ui5 build → dist/
-npm run start:full     # Build + Preview mit gehosteter UI5-URL
-npm run deploy         # Build + prepare-ghpages + gh-pages (Branch `gh-pages`)
+npm run start:full     # Build + statische Preview mit UI5-CDN
+npm run deploy         # Build + prepare-ghpages + gh-pages
 npm run deploy:zip     # ZIP-Artefakt
 ```
 
-**Build:** `npm run build` führt zuerst `scripts/bundle-static-mock.js` aus (alle `webapp/localService/data/*.json` → `static-mock-bundle.json`), danach `ui5 build --clean-dest`.
+**GitHub Pages:** Statisches Hosting – **keine** SAP-Live-Daten, **kein** Groq; Bundle + StaticChatMock. Für Produktion mit echten Systemen: **SAP BTP** (HTML5 App Repo, Destinations) und ein **Backend** für den Chat (Keys serverseitig).
 
-**GitHub Pages (`scripts/prepare-ghpages.js`):** UI5 wird von `https://ui5.sap.com/1.120.0/` geladen; `base href` und `resourceroots` richten sich nach dem **Git-Remote** (Repo-Name, z. B. `/UI5/`). Es werden `404.html` (SPA-Fallback) und `.nojekyll` geschrieben.
+**CI:** `.github/workflows/deploy.yml` mit `workflow_dispatch` (Pages-Environment im Repo konfigurieren).
 
-**Chat und Daten auf statischem Hosting:** Ohne Node-Server gibt es **kein** `/api/chat`. Auf `*.github.io` ersetzt die `Component` das OData-`sales`-Modell durch das **JSON-Bundle**; der Chat antwortet über **StaticChatMock**. Für echte KI weiterhin lokal deployen oder einen eigenen API-Endpunkt anbinden.
+## Roadmap / BTP
 
-**CI:** In `.github/workflows/deploy.yml` ist ein manueller Workflow (**workflow_dispatch**) definiert: Build, `prepare-ghpages.js`, Upload zu GitHub Pages (benötigt eingerichtetes Pages-Environment im Repository).
-
-## Datenquellen
-
-Im Manifest ist OData unter `/sap/opu/odata/sap/KPI_SERVICE/` konfiguriert. Lokal greift der **FE Mock Server** auf `webapp/localService/metadata.xml` und die JSON-Daten unter `webapp/localService/data/` zu. Im Produktions-Build liegen dieselben Demo-Daten zusätzlich in `static-mock-bundle.json` für reines Static-Hosting.
+Für **SAP Build Work Zone / Fiori Launchpad / BTP** ersetzt man typischerweise `/api/sap/*` durch **Destinations** und OData- oder HTTP-Clients mit BTP-Auth; den Chat bindet man an einen **geschützten** Endpunkt (z. B. kleine CAP- oder Node-App). Die UI5-Oberfläche kann größtenteils unverändert bleiben, die **Datenanbindung** wird angepasst.
