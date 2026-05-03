@@ -9,19 +9,19 @@
     xmlns:viz.data="sap.viz.ui5.data"
     xmlns:viz.feeds="sap.viz.ui5.controls.common.feeds"
     displayBlock="true">
-    <Page id="mainPage" enableScrolling="true" showHeader="true">
+    <Page id="mainPage" title="KPI Dashboard" enableScrolling="true" showHeader="true">
         <customHeader>
             <Bar>
                 <contentLeft>
-                    <core:Icon src="sap-icon://sap-logo" size="1.5rem"/>
+                    <core:Icon src="sap-icon://sap-logo" size="1.5rem" decorative="true"/>
                     <Title text="KPI Dashboard" level="H2"/>
                 </contentLeft>
                 <contentMiddle/>
                 <contentRight>
                     <core:Fragment fragmentName="ui5.vizframe.app.fragment.HeaderKiButton" type="XML"/>
-                    <Button id="burgerButton" icon="sap-icon://menu2" press=".onBurgerPress" class="headerBurgerButton"/>
-                    <Button text="Über dieses Projekt" press=".onNavToProject" class="headerDesktopActions"/>
-                    <Button id="prozesseButton" text="Prozesse ▾" press=".onProzessePress" class="headerDesktopActions"/>
+                    <Button id="burgerButton" icon="sap-icon://menu2" tooltip="Menü" accessibleName="Hauptmenü öffnen" press=".onBurgerPress" class="headerBurgerButton"/>
+                    <Button text="Über dieses Projekt" tooltip="Zur Projektseite" accessibleName="Über dieses Projekt" press=".onNavToProject" class="headerDesktopActions"/>
+                    <Button id="prozesseButton" text="Prozesse ▾" tooltip="Prozesse" accessibleName="Prozesse, Untermenü öffnen" press=".onProzessePress" class="headerDesktopActions"/>
                 </contentRight>
             </Bar>
         </customHeader>
@@ -38,6 +38,7 @@
                     id="tileRtR"
                     header="Recruit to Retire"
                     subheader="Rekrutierung bis Ruhestand"
+                    tooltip="Recruit to Retire: Detailseite öffnen"
                     class="processTile tileThird"
                     press=".onTilePress">
                     <tileContent>
@@ -79,6 +80,7 @@
                     id="tileR2R"
                     header="Record to Report"
                     subheader="Buchung bis Abschluss"
+                    tooltip="Record to Report: Detailseite öffnen"
                     class="processTile tileThird"
                     press=".onTilePress">
                     <tileContent>
@@ -119,6 +121,7 @@
                     id="tileS2P"
                     header="Source to Pay"
                     subheader="Beschaffung bis Zahlung"
+                    tooltip="Source to Pay: Detailseite öffnen"
                     class="processTile tileThird"
                     press=".onTilePress">
                     <tileContent>
@@ -160,6 +163,7 @@
                     id="tileD2O"
                     header="Design to Operate"
                     subheader="Design bis Betrieb"
+                    tooltip="Design to Operate: Detailseite öffnen"
                     class="processTile tileHalf"
                     press=".onTilePress">
                     <tileContent>
@@ -201,6 +205,7 @@
                     id="tileL2C"
                     header="Lead to Cash"
                     subheader="Lead bis Zahlungseingang"
+                    tooltip="Lead to Cash: Detailseite öffnen"
                     class="processTile tileHalf"
                     press=".onTilePress">
                     <tileContent>

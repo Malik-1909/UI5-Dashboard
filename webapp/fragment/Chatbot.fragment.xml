@@ -18,7 +18,7 @@
                     height="100%"
                     vertical="true"
                     horizontal="false"
-                    focusable="false"
+                    focusable="true"
                     class="chatScrollArea">
                     <VBox id="chatMessages" class="chatMessages" />
                 </ScrollContainer>
@@ -35,7 +35,8 @@
                     <Input
                         id="chatInput"
                         class="chatComposerInput"
-                        placeholder="Nachricht eingeben …">
+                        placeholder="Nachricht eingeben …"
+                        accessibleName="Nachricht an den KI-Assistenten">
                         <layoutData>
                             <FlexItemData growFactor="1" shrinkFactor="1" baseSize="0"/>
                         </layoutData>
@@ -45,7 +46,8 @@
                         class="chatComposerSendBtn"
                         icon="sap-icon://paper-plane"
                         type="Emphasized"
-                        tooltip="Senden" />
+                        tooltip="Senden"
+                        accessibleName="Nachricht senden" />
                 </HBox>
             </VBox>
         </footer>

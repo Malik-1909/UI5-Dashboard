@@ -6,8 +6,8 @@
     "applicationVersion": {
       "version": "1.0.0"
     },
-    "title": "UI5 VizFrame App",
-    "description": "SAPUI5 App mit VizFrame Charts",
+    "title": "KPI Dashboard – Geschäftsprozesse",
+    "description": "SAPUI5 KPI-Dashboard mit Diagrammen, SAP-Sandbox-Daten (lokal) und KI-Assistent",
     "dataSources": {
       "kpiService": {
         "uri": "/sap/opu/odata/sap/KPI_SERVICE/",

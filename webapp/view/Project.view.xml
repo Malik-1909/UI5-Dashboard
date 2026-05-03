@@ -5,17 +5,17 @@
     xmlns:core="sap.ui.core"
     xmlns:l="sap.ui.layout"
     displayBlock="true">
-    <Page id="projectPage" enableScrolling="true" showHeader="true">
+    <Page id="projectPage" title="Über dieses Projekt" enableScrolling="true" showHeader="true">
         <customHeader>
             <Bar>
                 <contentLeft>
-                    <Button icon="sap-icon://nav-back" press=".onNavBack"/>
+                    <Button icon="sap-icon://nav-back" tooltip="Zurück" accessibleName="Zurück zur Startseite" press=".onNavBack"/>
                     <Title text="Über dieses Projekt" level="H2"/>
                 </contentLeft>
                 <contentMiddle/>
                 <contentRight>
                     <core:Fragment fragmentName="ui5.vizframe.app.fragment.HeaderKiButton" type="XML"/>
-                    <Button id="burgerButton" icon="sap-icon://menu2" press=".onBurgerPress" class="headerBurgerButton"/>
+                    <Button id="burgerButton" icon="sap-icon://menu2" tooltip="Menü" accessibleName="Hauptmenü öffnen" press=".onBurgerPress" class="headerBurgerButton"/>
                 </contentRight>
             </Bar>
         </customHeader>

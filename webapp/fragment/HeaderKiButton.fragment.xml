@@ -1,5 +1,5 @@
 <core:FragmentDefinition
     xmlns="sap.m"
     xmlns:core="sap.ui.core">
-    <Button text="KI Assistent" icon="sap-icon://message-popup" type="Transparent" press=".onOpenChatbot" tooltip="KI Assistent" class="headerDesktopActions"/>
+    <Button text="KI Assistent" icon="sap-icon://message-popup" type="Transparent" press=".onOpenChatbot" tooltip="KI Assistent öffnen" accessibleName="KI Assistent öffnen" class="headerDesktopActions"/>
 </core:FragmentDefinition>

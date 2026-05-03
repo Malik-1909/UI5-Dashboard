@@ -8,17 +8,17 @@
     xmlns:viz.data="sap.viz.ui5.data"
     xmlns:viz.feeds="sap.viz.ui5.controls.common.feeds"
     displayBlock="true">
-    <Page id="r2rPage" enableScrolling="true" showHeader="true">
+    <Page id="r2rPage" title="Record to Report" enableScrolling="true" showHeader="true">
         <customHeader>
             <Bar>
                 <contentLeft>
-                    <Button icon="sap-icon://nav-back" press=".onNavBack"/>
+                    <Button icon="sap-icon://nav-back" tooltip="Zurück" accessibleName="Zurück zur Startseite" press=".onNavBack"/>
                     <Title text="Record to Report" level="H2"/>
                 </contentLeft>
                 <contentMiddle/>
                 <contentRight>
                     <core:Fragment fragmentName="ui5.vizframe.app.fragment.HeaderKiButton" type="XML"/>
-                    <Button id="burgerButton" icon="sap-icon://menu2" press=".onBurgerPress" class="headerBurgerButton"/>
+                    <Button id="burgerButton" icon="sap-icon://menu2" tooltip="Menü" accessibleName="Hauptmenü öffnen" press=".onBurgerPress" class="headerBurgerButton"/>
                 </contentRight>
             </Bar>
         </customHeader>

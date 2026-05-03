@@ -18,9 +18,11 @@ sap.ui.define([
             if (!this._oBurgerPopover) {
                 var that = this;
                 this._oBurgerPopover = new Popover({
-                    title: "Menü",
-                    placement: "Bottom",
+                    title:         "Menü",
+                    placement:     "Bottom",
                     contentMinWidth: "220px",
+                    horizontalScrolling: false,
+                    verticalScrolling: true,
                     content: [
                         new List({
                             items: [

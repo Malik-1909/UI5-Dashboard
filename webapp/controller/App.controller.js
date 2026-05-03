@@ -70,10 +70,11 @@ sap.ui.define([
             }
 
             this._oFabBtn = new Button({
-                icon:    "sap-icon://message-popup",
-                type:    "Emphasized",
-                tooltip: "KI Assistent",
-                press:   this._onFabPress.bind(this)
+                icon:           "sap-icon://message-popup",
+                type:           "Emphasized",
+                tooltip:        "KI Assistent",
+                accessibleName: "KI Assistent: Chat öffnen oder schließen",
+                press:          this._onFabPress.bind(this)
             });
             this._oFabBtn.addStyleClass("chatFabBtn chatFabAi");
             this._oFabBtn.placeAt(oHost);
@@ -114,7 +115,7 @@ sap.ui.define([
                     ? "Auf GitHub Pages nutze ich Demo-Daten und eine <strong>Offline-Simulation</strong> (kein API-Key). Lokal mit <code>npm run start</code> ist die echte KI aktiv.<br><br>"
                     : "";
                 that._addBotMsg(
-                    "Hallo! Ich bin dein KI-Assistent 👋<br>" +
+                    "Hallo! Ich bin dein KI-Assistent.<br>" +
                     sGh +
                     "Ich beantworte KPI-Fragen und navigiere dich durch die App.<br>" +
                     "Zum Beispiel: <em>\"Zeige R2R\"</em> oder <em>\"Was ist Lead to Cash?\"</em>"
@@ -180,14 +181,14 @@ sap.ui.define([
                 that._hideTyping();
                 if (data.error) {
                     // escape so FormattedText renders it correctly
-                    that._addBotMsg("⚠️ " + that._escapeHtml(String(data.error)));
+                    that._addBotMsg("<strong>Hinweis:</strong> " + that._escapeHtml(String(data.error)));
                     return;
                 }
                 that._handleReply(data.reply || "");
             })
             .catch(function (err) {
                 that._hideTyping();
-                that._addBotMsg("⚠️ Verbindungsfehler: " + that._escapeHtml(err.message));
+                that._addBotMsg("<strong>Verbindungsfehler:</strong> " + that._escapeHtml(err.message));
             });
         },
 
