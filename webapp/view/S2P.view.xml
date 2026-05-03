@@ -101,9 +101,9 @@
                             </viz:VizFrame>
                         </content>
                     </Panel>
-                    <Panel headerText="{= '2. Ausgaben nach Einkaufsorganisation' + (${sales>/_sapBadgeS2P} ? ' · SAP API' : ' · Mock')}" expandable="true" expanded="true" class="sapUiSmallMarginBottom">
+                    <Panel headerText="{= '2. Bestellungen je Einkaufsorganisation' + (${sales>/_sapBadgeS2P} ? ' · SAP API' : ' · Mock')}" expandable="true" expanded="true" class="sapUiSmallMarginBottom">
                         <content>
-                            <Text text="Zeigt die Anteile der Ausgaben je Kategorie. Wichtig für die Schwerpunktanalyse im Einkauf (wo fließt das Geld hin?)."
+                            <Text text="Verteilung der Bestellbelege je Einkaufsorganisation (Anzahl). Im API-Header stehen keine Nettobeträge – daher Beleganzahl statt EUR."
                                 class="sapUiSmallMarginBottom"/>
                             <viz:VizFrame
                                 id="s2pSpendChart"
@@ -112,7 +112,7 @@
                                 width="100%"
                                 uiConfig="{applicationSet:'fiori'}"
                                 vizProperties="{
-                                    title: { text: 'Ausgabenverteilung (%)' },
+                                    title: { text: 'Beleganteil je Organisation (%)' },
                                     plotArea: { dataLabel: { visible: true, type: 'percentage' }, colorPalette: ['#0070F2','#1B90FF','#5AAAFF','#107E3E'] },
                                     legend: { visible: true }
                                 }">
@@ -167,7 +167,7 @@
                         </content>
                     </Panel>
                     <Title text="Zusammenfassung" level="H4"/>
-                    <Text text="Für S2P sind Säulendiagramme (Bestelltypen), Donut-Diagramme (Ausgaben nach Einkaufsorganisation) und Säulendiagramme (Bestelleingang-Trend) relevant."
+                    <Text text="Für S2P sind Säulendiagramme (Bestelltypen), Donut-Diagramme (Belegverteilung je Einkaufsorganisation) und Säulendiagramme (Bestelleingang-Trend) relevant."
                         class="sapUiSmallMarginBottom"/>
                 </l:VerticalLayout>
             </ScrollContainer>

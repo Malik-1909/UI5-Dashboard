@@ -9,7 +9,7 @@
  *   S2P:  API_PURCHASEORDER_PROCESS_SRV
  *   R2R:  API_JOURNALENTRYITEMBASIC_SRV
  *   RtR:  SuccessFactors odata/v2/User
- *   D2O:  API_PRODUCTION_ORDERS_2_SRV  (kein Sandbox → Mock-Fallback)
+ *   D2O:  API_MATERIAL_DOCUMENT_SRV + API_MATERIAL_STOCK_SRV (Sandbox; Prod.-Aufträge 403)
  */
 sap.ui.define([], function () {
     "use strict";
@@ -24,18 +24,23 @@ sap.ui.define([], function () {
         purchaseOrders:
             BASE + "/s4hanacloud/sap/opu/odata/sap/API_PURCHASEORDER_PROCESS_SRV/A_PurchaseOrder" +
             "?$top=200&$select=PurchaseOrder,PurchaseOrderType,Supplier,CompanyCode," +
-            "TotalNetOrderAmount,DocumentCurrency,CreationDate,PurchasingOrganization&$format=json",
+            "DocumentCurrency,CreationDate,PurchasingOrganization&$format=json",
         journalEntries:
             BASE + "/s4hanacloud/sap/opu/odata/sap/API_JOURNALENTRYITEMBASIC_SRV/A_JournalEntryItemBasic" +
-            "?$top=300&$select=GLAccount,GLAccountName,AmountInCompanyCodeCurrency," +
-            "CompanyCodeCurrency,FiscalPeriod,FiscalYear,DebitCreditCode,CompanyCode&$format=json",
+            "?$top=300&$filter=CompanyCode%20eq%20'1010'" +
+            "&$select=GLAccount,GLAccountName,AmountInCompanyCodeCurrency," +
+            "CompanyCodeCurrency,FiscalPeriod,LedgerFiscalYear,ControllingDebitCreditCode,CompanyCode&$format=json",
         sfUsers:
             BASE + "/successfactors/odata/v2/User" +
-            "?$top=100&$select=userId,department,jobTitle,country&$format=json",
-        productionOrders:
-            BASE + "/s4hanacloud/sap/opu/odata/sap/API_PRODUCTION_ORDERS_2_SRV/A_ProductionOrder_2" +
-            "?$top=100&$select=ManufacturingOrder,ManufacturingOrderType,Plant," +
-            "MfgOrderPlannedStartDate&$format=json"
+            "?$top=200&$select=userId,department,jobTitle,country&$format=json",
+        materialDocuments:
+            BASE + "/s4hanacloud/sap/opu/odata/sap/API_MATERIAL_DOCUMENT_SRV/A_MaterialDocumentHeader" +
+            "?$top=200&$select=MaterialDocument,PostingDate,CreationDate," +
+            "GoodsMovementCode,InventoryTransactionType&$format=json",
+        materialStock:
+            BASE + "/s4hanacloud/sap/opu/odata/sap/API_MATERIAL_STOCK_SRV/A_MatlStkInAcctMod" +
+            "?$top=200&$filter=Material%20ne%20''" +
+            "&$select=Material,Plant,MatlWrhsStkQtyInMatlBaseUnit,MaterialBaseUnit&$format=json"
     };
 
     // ── Helpers ───────────────────────────────────────────────────────────────
@@ -125,25 +130,26 @@ sap.ui.define([], function () {
 
     function _s2p(aOrders) {
         if (!aOrders.length) { return {}; }
-        var total   = aOrders.reduce(function (s, o) { return s + (parseFloat(o.TotalNetOrderAmount) || 0); }, 0);
         var byType  = _groupCount(aOrders, function (o) { return o.PurchaseOrderType || "NB"; });
-        var byOrg   = _groupSum(aOrders, function (o) { return o.PurchasingOrganization || o.CompanyCode || "0001"; }, function (o) { return o.TotalNetOrderAmount; });
+        // Header enthält im Sandbox keine Beträge → Beleganzahl je Einkaufsorganisation
+        var byOrg   = _groupCount(aOrders, function (o) { return o.PurchasingOrganization || o.CompanyCode || "—"; });
         var suppls  = {};
         aOrders.forEach(function (o) { if (o.Supplier) { suppls[o.Supplier] = 1; } });
         var byMo = _byMonth(aOrders, function (o) { return _parseDate(o.CreationDate); });
+        var nOrg  = byOrg.length;
+        var avgPo = nOrg ? (aOrders.length / nOrg).toFixed(1) : "0";
 
         return {
             S2PProcessFunnel:   byType.map(function (x) { return { stage: x.k, count: x.v }; }),
             S2PSpendByCategory: byOrg.map(function (x) {
-                var a = Math.round(x.v / 1000);
-                return { category: x.k, amount: a, target: Math.round(a * 1.1) };
+                return { category: x.k, amount: x.v, target: Math.max(1, Math.round(x.v * 1.1)) };
             }),
             S2POrdersByMonth: byMo.map(function (x) { return { month: x.month, count: x.cnt }; }),
             S2PKpiTable: [
-                { kpi: "Bestellungen gesamt",   value: String(aOrders.length),                  unit: "Belege"      },
-                { kpi: "Einkaufsvolumen",        value: (total / 1000).toFixed(1),              unit: "T EUR"       },
-                { kpi: "Ø Bestellwert",          value: (total / aOrders.length).toFixed(2),   unit: "EUR"         },
-                { kpi: "Lieferanten",            value: String(Object.keys(suppls).length),     unit: "Lieferanten" }
+                { kpi: "Bestellungen gesamt",        value: String(aOrders.length),              unit: "Belege"           },
+                { kpi: "Einkaufsorganisationen",     value: String(nOrg),                        unit: "Org."             },
+                { kpi: "Ø Belege je Organisation",   value: avgPo,                               unit: "Belege/Org."      },
+                { kpi: "Lieferanten",                value: String(Object.keys(suppls).length), unit: "Lieferanten"      }
             ],
             _sapBadgeS2P: aOrders.length + " Purchase Orders · API_PURCHASEORDER_PROCESS_SRV · SAP Business Accelerator Hub"
         };
@@ -161,13 +167,16 @@ sap.ui.define([], function () {
 
         var debitAmt = 0;
         aEntries.forEach(function (e) {
-            var amt  = Math.abs(parseFloat(e.AmountInCompanyCodeCurrency) || 0);
+            var rawAmt = parseFloat(e.AmountInCompanyCodeCurrency) || 0;
+            var amt    = Math.abs(rawAmt);
             totalAbs += amt;
-            if (e.DebitCreditCode === "S") { debitCnt++; debitAmt += amt; }
+            // ControllingDebitCreditCode ist im Sandbox oft leer → Vorzeichen als Fallback
+            var isDebit = rawAmt < 0 || e.ControllingDebitCreditCode === "S";
+            if (isDebit) { debitCnt++; debitAmt += amt; }
             if (e.CompanyCode) { companies[e.CompanyCode] = 1; }
             var acct = (e.GLAccountName || e.GLAccount || "Andere").slice(0, 22);
             byAcct[acct]  = (byAcct[acct]  || 0) + amt;
-            var per = (e.FiscalYear || "?") + "-" + String(e.FiscalPeriod || 0).padStart(2, "0");
+            var per = (e.LedgerFiscalYear || "?") + "-" + String(e.FiscalPeriod || 0).padStart(2, "0");
             byPeriod[per] = (byPeriod[per] || 0) + 1;
         });
 
@@ -182,11 +191,11 @@ sap.ui.define([], function () {
                 return { type: k, share: Math.round(byAcct[k] / topTotal * 100) };
             }),
             R2RDebitCreditSplit: [
-                { type: "Soll (Debit)",   count: debitCnt,  amount: Math.round(debitAmt  / 1000 * 10) / 10 },
-                { type: "Haben (Credit)", count: creditCnt, amount: Math.round(creditAmt / 1000 * 10) / 10 }
+                { type: "Soll (Debit)",   count: debitCnt,  amount: Math.round(debitAmt  / 1e6 * 10) / 10 },
+                { type: "Haben (Credit)", count: creditCnt, amount: Math.round(creditAmt / 1e6 * 10) / 10 }
             ],
             R2RTopAccounts: topAccts.map(function (k) {
-                return { account: k, amount: Math.round(byAcct[k] / 1000 * 10) / 10 };
+                return { account: k, amount: Math.round(byAcct[k] / 1e6 * 10) / 10 };
             }),
             R2RJournalEntries: periods.map(function (k) { return { period: k, entries: byPeriod[k] }; }),
             R2RProcessFunnel: [
@@ -196,10 +205,10 @@ sap.ui.define([], function () {
                 { stage: "Bericht",     count: Math.round(aEntries.length * 0.40)     }
             ],
             R2RKpiTable: [
-                { kpi: "Buchungszeilen",      value: String(aEntries.length),              unit: "Zeilen"   },
-                { kpi: "Gesamtbetrag",        value: (totalAbs / 1000).toFixed(1),         unit: "T EUR"    },
-                { kpi: "Soll-Buchungen",      value: String(debitCnt),                     unit: "Buchungen"},
-                { kpi: "Buchungsperioden",    value: String(Object.keys(byPeriod).length), unit: "Perioden" }
+                { kpi: "Buchungszeilen",      value: String(aEntries.length),              unit: "Zeilen"    },
+                { kpi: "Gesamtbetrag",        value: (totalAbs / 1e6).toFixed(0),          unit: "Mio. EUR"  },
+                { kpi: "Soll-Buchungen",      value: String(debitCnt),                     unit: "Buchungen" },
+                { kpi: "Buchungsperioden",    value: String(Object.keys(byPeriod).length), unit: "Perioden"  }
             ],
             _sapBadgeR2R: aEntries.length + " Buchungszeilen · API_JOURNALENTRYITEMBASIC_SRV · SAP Business Accelerator Hub"
         };
@@ -213,16 +222,19 @@ sap.ui.define([], function () {
         var countryMap  = {};
         var byTitle     = {};
         aUsers.forEach(function (u) {
-            var d = (u.department || "Keine Abteilung").slice(0, 25);
-            byDept[d] = (byDept[d] || 0) + 1;
+            var d = u.department;
+            if (d && d !== "N/A" && d !== "n/a") {
+                d = d.slice(0, 25);
+                byDept[d] = (byDept[d] || 0) + 1;
+            }
             if (u.country) { countryMap[u.country] = (countryMap[u.country] || 0) + 1; }
             if (u.jobTitle) {
                 var t = u.jobTitle.slice(0, 22);
                 byTitle[t] = (byTitle[t] || 0) + 1;
             }
         });
-        var deptKeys    = Object.keys(byDept).sort(function (a, b) { return byDept[b] - byDept[a]; }).slice(0, 8);
-        var topTitles   = Object.keys(byTitle).sort(function (a, b) { return byTitle[b] - byTitle[a]; }).slice(0, 8);
+        var deptKeys     = Object.keys(byDept).sort(function (a, b) { return byDept[b] - byDept[a]; }).slice(0, 8);
+        var topTitles    = Object.keys(byTitle).sort(function (a, b) { return byTitle[b] - byTitle[a]; }).slice(0, 8);
         var topCountries = Object.keys(countryMap).sort(function (a, b) { return countryMap[b] - countryMap[a]; }).slice(0, 8);
 
         return {
@@ -245,25 +257,52 @@ sap.ui.define([], function () {
         };
     }
 
-    // ── D2O: Produktionsaufträge (kein Sandbox → Fallback auf Mock) ───────────
+    // ── D2O: Warenbewegungen + Lager (Prod.-Aufträge in Sandbox oft 403) ─────
 
-    function _d2o(aOrders) {
-        if (!aOrders.length) { return {}; }
-        var byType  = _groupCount(aOrders, function (o) { return o.ManufacturingOrderType || "PP01"; }, 5);
-        var byPlant = _groupCount(aOrders, function (o) { return o.Plant || "1000"; }, 6);
-        var byMo    = _byMonth(aOrders, function (o) { return _parseDate(o.MfgOrderPlannedStartDate); });
+    function _d2o(aDocs, aStock) {
+        if (!aDocs.length && !aStock.length) { return {}; }
+
+        var byMove = _groupCount(aDocs, function (d) {
+            var g = d.InventoryTransactionType || d.GoodsMovementCode;
+            return g ? String(g) : "Sonstige";
+        }, 8);
+        var funnel = byMove.map(function (x) { return { stage: x.k, count: x.v }; });
+        if (!funnel.length && aStock.length) {
+            funnel = [{ stage: "Lagerbestand (Zeilen)", count: aStock.length }];
+        }
+        var byMo = _byMonth(aDocs, function (d) { return _parseDate(d.PostingDate) || _parseDate(d.CreationDate); });
+
+        var plantQty = {};
+        aStock.forEach(function (s) {
+            var pl = s.Plant || "—";
+            plantQty[pl] = (plantQty[pl] || 0) + (parseFloat(s.MatlWrhsStkQtyInMatlBaseUnit) || 0);
+        });
+        var plantKeys = Object.keys(plantQty).sort(function (a, b) { return plantQty[b] - plantQty[a]; }).slice(0, 8);
+        var maxQ      = plantKeys.reduce(function (m, k) { return Math.max(m, plantQty[k]); }, 1) || 1;
+
+        var mats = {};
+        aStock.forEach(function (s) { if (s.Material) { mats[s.Material] = 1; } });
+
+        var nDoc = aDocs.length;
+        var badgeParts = [];
+        if (nDoc) { badgeParts.push(nDoc + " Warenbewegungen"); }
+        if (aStock.length) { badgeParts.push(aStock.length + " Lagerzeilen"); }
+        var sBadge = badgeParts.join(" · ") + " · API_MATERIAL_DOCUMENT_SRV / API_MATERIAL_STOCK_SRV · SAP Business Accelerator Hub";
 
         return {
-            D2OProcessFunnel:  byType.map(function (x) { return { stage: x.k, count: x.v }; }),
-            D2OCapacityUtil:   byPlant.map(function (x, i) {
-                return { workcenter: x.k, util: Math.round(60 + i * 5), target: 85 };
+            D2OProcessFunnel: funnel,
+            D2OCapacityUtil:  plantKeys.map(function (k) {
+                var u = Math.min(98, Math.round(plantQty[k] / maxQ * 100));
+                return { workcenter: "Werk " + k, util: u, target: 85 };
             }),
-            D2OOutputTrend: byMo.map(function (x) { return { month: x.month, output: x.cnt * 10 }; }),
+            D2OOutputTrend:   byMo.map(function (x) { return { month: x.month, output: x.cnt }; }),
             D2OKpiTable: [
-                { kpi: "Fertigungsaufträge", value: String(aOrders.length), unit: "Aufträge" },
-                { kpi: "Werke",              value: String(byPlant.length), unit: "Werke"    },
-                { kpi: "Auftragstypen",      value: String(byType.length),  unit: "Typen"    }
-            ]
+                { kpi: "Warenbewegungsbelege", value: String(nDoc),                        unit: "Belege"     },
+                { kpi: "Werke (mit Bestand)",  value: String(plantKeys.length),             unit: "Werke"      },
+                { kpi: "Materialien (Lager)",  value: String(Object.keys(mats).length),     unit: "Materialien"},
+                { kpi: "Lagerzeilen",          value: String(aStock.length),                unit: "Zeilen"     }
+            ],
+            _sapBadgeD2O: sBadge
         };
     }
 
@@ -281,7 +320,8 @@ sap.ui.define([], function () {
                 _fetch(URLS.purchaseOrders),
                 _fetch(URLS.journalEntries),
                 _fetch(URLS.sfUsers),
-                _fetch(URLS.productionOrders)
+                _fetch(URLS.materialDocuments),
+                _fetch(URLS.materialStock)
             ]).then(function (res) {
                 var merged = Object.assign(
                     {},
@@ -289,11 +329,17 @@ sap.ui.define([], function () {
                     _s2p(res[1]),
                     _r2r(res[2]),
                     _rtr(res[3]),
-                    _d2o(res[4])
+                    _d2o(res[4], res[5])
                 );
                 return {
                     data: merged,
-                    sources: { l2c: res[0].length, s2p: res[1].length, r2r: res[2].length, rtr: res[3].length, d2o: res[4].length }
+                    sources: {
+                        l2c: res[0].length,
+                        s2p: res[1].length,
+                        r2r: res[2].length,
+                        rtr: res[3].length,
+                        d2o: res[4].length + res[5].length
+                    }
                 };
             });
         }
