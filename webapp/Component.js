@@ -1,8 +1,9 @@
 sap.ui.define([
     "sap/ui/core/UIComponent",
     "sap/ui/model/json/JSONModel",
+    "sap/m/MessageToast",
     "ui5/vizframe/app/utils/SapDataLoader"
-], function (UIComponent, JSONModel, SapDataLoader) {
+], function (UIComponent, JSONModel, MessageToast, SapDataLoader) {
     "use strict";
 
     return UIComponent.extend("ui5.vizframe.app.Component", {
@@ -50,6 +51,13 @@ sap.ui.define([
                     var nLoaded = Object.keys(result.sources).reduce(function (s, k) { return s + result.sources[k]; }, 0);
                     if (!nLoaded) {
                         console.info("[SapDataLoader] Keine Daten – Mock-Daten bleiben aktiv.");
+                        if (!oThis._sapDataNoticeShown) {
+                            oThis._sapDataNoticeShown = true;
+                            MessageToast.show(
+                                "SAP-Sandbox liefert keine Daten (z. B. kein API-Key). Es werden Demo-Daten angezeigt.",
+                                { duration: 4500 }
+                            );
+                        }
                         return;
                     }
                     var oMerged = Object.assign({}, oBaseData, result.data);
@@ -58,6 +66,10 @@ sap.ui.define([
                 })
                 .catch(function (err) {
                     console.warn("[SapDataLoader] Fehler – Mock-Fallback:", err && err.message);
+                    MessageToast.show(
+                        "Live-Daten konnten nicht geladen werden. Demo-Daten bleiben aktiv.",
+                        { duration: 5000 }
+                    );
                 });
         }
     });

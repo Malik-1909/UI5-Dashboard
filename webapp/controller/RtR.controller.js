@@ -6,7 +6,7 @@ sap.ui.define([
 
     return BaseController.extend("ui5.vizframe.app.controller.RtR", {
         onAfterRendering: function () {
-            var aChartIds = ["rtrFunnelChart", "rtrDepartmentChart", "rtrAttritionChart"];
+            var aChartIds = ["rtrFunnelChart", "rtrDepartmentChart", "rtrJobTitleChart"];
             aChartIds.forEach(function (sId) {
                 var oVizFrame = this.byId(sId);
                 if (oVizFrame) {

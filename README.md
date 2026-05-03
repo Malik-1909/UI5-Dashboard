@@ -29,16 +29,18 @@ Proxy und Keys: siehe `middleware/chat-proxy` – Routen `/api/chat` und `/api/s
 ## Technologie-Stack
 
 - SAPUI5 **1.120** (XML-Views, JS-Controller), **sap.viz**, **sap.ui.layout**, **themelib_sap_horizon**
-- **`JSONModel` `sales`** – gesetzt in `webapp/Component.js` (Manifest-OData-Eintrag wird zur Laufzeit überschrieben)
+- **`JSONModel` `sales`** – gesetzt in `webapp/Component.js` (nicht mehr im Manifest als OData deklariert)
 - **`webapp/utils/SapDataLoader.js`** – fetch der Sandbox-URLs unter `/api/sap/...`, Transformation in die bestehenden Entity-Set-Strukturen der Mock-JSONs
-- **UI5 Tooling**, Fiori-Tools-Proxy, optional **FE Mock Server** (`@sap-ux/ui5-middleware-fe-mockserver`) für historisches OData unter `/sap/opu/odata/sap/KPI_SERVICE/` (Startkacheln können davon abhängen – das zentrale Prozessmodell ist aber das JSON-Bundle + Live-Merge)
+- **UI5 Tooling**, Fiori-Tools-Proxy, optional **FE Mock Server** (`@sap-ux/ui5-middleware-fe-mockserver`) unter `/sap/opu/odata/sap/KPI_SERVICE/` (nur noch für lokales Testen der Mock-Metadaten; die App bindet `sales` ausschließlich über `JSONModel` in der Component)
 - **Custom Middleware** `middleware/chat-proxy` (Paket `ui5-middleware-chat-proxy`): Chat + SAP-Proxy
 
 ## Projektstruktur (Auszug)
 
 | Pfad | Inhalt |
 |------|--------|
-| `webapp/Component.js` | `sales` als JSONModel; Merge mit SAP-Daten außerhalb `*.github.io` |
+| `webapp/Component.js` | `sales` als JSONModel; Merge mit SAP-Daten außerhalb `*.github.io`; Hinweis per MessageToast bei Fehlern |
+| `webapp/utils/BurgerMenuHelper.js` | Gemeinsames Burger-Menü (Navigation + KI) für Main und Unterseiten |
+| `webapp/controller/BaseController.js` | Burger-Menü, Chat öffnen; Main erbt davon |
 | `webapp/utils/SapDataLoader.js` | Laden und Aggregieren der SAP-Sandbox-Daten |
 | `webapp/utils/StaticChatMock.js` | Offline-Chat auf GitHub Pages |
 | `middleware/chat-proxy/` | Groq, Mock-Modus, **SAP-Sandbox-Proxy** |

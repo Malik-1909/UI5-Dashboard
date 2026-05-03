@@ -6,7 +6,7 @@ sap.ui.define([
 
     return BaseController.extend("ui5.vizframe.app.controller.S2P", {
         onAfterRendering: function () {
-            var aChartIds = ["s2pFunnelChart", "s2pSpendChart", "s2pInvoiceChart"];
+            var aChartIds = ["s2pFunnelChart", "s2pSpendChart", "s2pOrdersTrendChart"];
             aChartIds.forEach(function (sId) {
                 var oVizFrame = this.byId(sId);
                 if (oVizFrame) {

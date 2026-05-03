@@ -6,7 +6,7 @@ sap.ui.define([
 
     return BaseController.extend("ui5.vizframe.app.controller.L2C", {
         onAfterRendering: function () {
-            var aChartIds = ["l2cFunnelChart", "l2cRevenueChart", "l2cDSOChart"];
+            var aChartIds = ["l2cFunnelChart", "l2cRevenueChart", "l2cOrdersTrendChart"];
             aChartIds.forEach(function (sId) {
                 var oVizFrame = this.byId(sId);
                 if (oVizFrame) {
