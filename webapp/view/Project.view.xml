@@ -23,7 +23,7 @@
             <ScrollContainer height="100%" vertical="true" class="sapUiSmallMargin">
                 <l:VerticalLayout width="100%">
                     <Title text="KPI Dashboard – Geschäftsprozesse" level="H3"/>
-                    <Text text="Diese App visualisiert fünf zentrale End-to-End-Geschäftsprozesse mit KPIs, Diagrammen und Tabellen. Ein integrierter KI-Assistent unterstützt bei Fragen zu Aufbau, Geschäftsprozessen und Kennzahlen und kann bei Bedarf direkt zur passenden Seite der Anwendung wechseln."
+                    <Text text="Diese App visualisiert fünf zentrale End-to-End-Geschäftsprozesse mit KPIs, Diagrammen und Tabellen. Ein integrierter KI-Assistent unterstützt bei Fragen zu Aufbau, Geschäftsprozessen und Kennzahlen und kann bei Bedarf direkt zur passenden Seite wechseln. Lokal spricht der Assistent mit einer Server-Middleware (Groq oder Mock); auf GitHub Pages läuft eine Offline-Simulation mit denselben Demo-Daten wie im OData-Mock."
                         class="sapUiSmallMarginBottom"/>
 
                     <Title text="Die fünf Geschäftsprozesse" level="H3" class="sapUiSmallMarginTop"/>
@@ -67,7 +67,7 @@
                     </Table>
 
                     <Title text="Technologie" level="H3" class="sapUiSmallMarginTop"/>
-                    <Text text="Die App basiert auf SAPUI5 (Version 1.120) und nutzt sap.viz für Chart-Visualisierungen. UI5 Tooling startet den lokalen Server inkl. OData-Mock und Chat-Middleware."
+                    <Text text="Die App basiert auf SAPUI5 (Version 1.120) und nutzt sap.viz für Chart-Visualisierungen. UI5 Tooling startet den lokalen Server inkl. OData-Mock und Chat-Middleware. Für statisches Hosting (z. B. GitHub Pages) bündelt ein Build-Skript die Mock-JSON-Dateien; die Component lädt sie auf *.github.io als JSONModel unter dem Namen sales."
                         class="sapUiSmallMarginBottom"/>
                     <List>
                         <StandardListItem title="sap.m" info="Mobile-first UI Controls"/>
@@ -75,8 +75,9 @@
                         <StandardListItem title="sap.ui.layout" info="Layout (u. a. CSSGrid für die Startkacheln)"/>
                         <StandardListItem title="sap.viz" info="VizFrame – Column, Line, Pie, Donut u. a."/>
                         <StandardListItem title="themelib_sap_horizon" info="SAP Horizon Design Theme"/>
-                        <StandardListItem title="Custom Middleware" info="ui5-middleware-chat-proxy – POST /api/chat (Groq oder Mock)"/>
-                        <StandardListItem title="Fragment + App-Controller" info="Chat-Popover, FAB, Fragment.byId für zuverlässige Control-Zugriffe"/>
+                        <StandardListItem title="Custom Middleware" info="ui5-middleware-chat-proxy – POST /api/chat (Groq oder Mock, nur lokal)"/>
+                        <StandardListItem title="StaticChatMock" info="Offline-Chat auf GitHub Pages (Navigation + FAQ per Regeln)"/>
+                        <StandardListItem title="Fragment + App-Controller" info="Chat-Popover, FAB, Header-KI-Button, Fragment.byId"/>
                     </List>
 
                     <Title text="Funktionen" level="H3" class="sapUiSmallMarginTop"/>
@@ -84,12 +85,12 @@
                         <StandardListItem title="Startseite" info="5 KPI-Kacheln in zwei Reihen – Mini-Charts pro Prozess, Klick öffnet Detailseite"/>
                         <StandardListItem title="Detailseiten" info="Prozessbeschreibung, Schritte, KPI-Tabelle und mehrere Diagramme"/>
                         <StandardListItem title="Navigation" info="Kacheln, Prozesse-Menü, Burger-Menü, Zurück-Button, KI in der Kopfzeile"/>
-                        <StandardListItem title="KI-Assistent" info="Chat unten rechts (FAB) oder über Menü „KI Assistent“ / Button „KI Assistent“ – Navigation und Kontext zur aktuellen Seite"/>
+                        <StandardListItem title="KI-Assistent" info="FAB unten rechts, Burger-Menü oder Kopfzeile – lokal echte KI/Mock-API, auf GitHub Pages Offline-Simulation"/>
                         <StandardListItem title="Responsives Layout" info="3 Spalten (Desktop) → 2 (Tablet) → 1 (Mobile)"/>
                     </List>
 
                     <Title text="Deployment" level="H3" class="sapUiSmallMarginTop"/>
-                    <Text text="Build mit ui5 build. Statisches Hosting (z. B. GitHub Pages aus dist/) liefert nur die UI – der KI-Chat benötigt für echte Antworten einen Server mit /api/chat (lokal: npm run start). Deployment auf SAP BTP oder Fiori Launchpad ist wie zuvor möglich."
+                    <Text text="npm run build erzeugt zuerst static-mock-bundle.json, danach den UI5-Build nach dist/. prepare-ghpages.js richtet index.html für GitHub Pages ein (CDN 1.120, base href aus Repo-Name, SPA-404, .nojekyll). Optional: GitHub Actions (workflow_dispatch) deployt das Artefakt. Für echte KI weiterhin ui5 serve mit Middleware oder ein eigenes Backend; SAP BTP / Launchpad bleiben mögliche Ziele."
                         class="sapUiSmallMarginBottom"/>
                 </l:VerticalLayout>
             </ScrollContainer>
