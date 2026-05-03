@@ -52,9 +52,11 @@
                                     uiConfig="{applicationSet:'fiori'}"
                                     vizProperties="{
                                         title: { visible: false },
-                                        plotArea: { dataLabel: { visible: false }, colorPalette: ['#0070F2'], margin: { top: 15, right: 25, bottom: 35, left: 45 } },
+                                        plotArea: { dataLabel: { visible: false }, colorPalette: ['#0070F2'], margin: { top: 12, right: 8, bottom: 4, left: 44 } },
                                         categoryAxis: { title: { visible: false } },
-                                        valueAxis: { title: { visible: false } }
+                                        valueAxis: { title: { visible: false } },
+                                        legend: { visible: true, isScrollable: true },
+                                        legendGroup: { layout: { position: 'bottom', alignment: 'left' } }
                                     }">
                                     <viz:dataset>
                                         <viz.data:FlattenedDataset data="{sales>/RtrHeadcountFunnel}">
@@ -94,8 +96,13 @@
                                     uiConfig="{applicationSet:'fiori'}"
                                     vizProperties="{
                                         title: { visible: false },
-                                        plotArea: { dataLabel: { visible: false }, colorPalette: ['#0070F2','#1B90FF','#5AAAFF','#107E3E','#F58B00'], margin: { top: 15, right: 25, bottom: 25, left: 25 } },
-                                        legend: { visible: false }
+                                        plotArea: {
+                                            dataLabel: { visible: true, type: 'value' },
+                                            colorPalette: ['#0070F2','#1B90FF','#5AAAFF','#107E3E','#F58B00'],
+                                            margin: { top: 8, right: 8, bottom: 4, left: 8 }
+                                        },
+                                        legend: { visible: true, isScrollable: true },
+                                        legendGroup: { layout: { position: 'bottom', alignment: 'left' } }
                                     }">
                                     <viz:dataset>
                                         <viz.data:FlattenedDataset data="{sales>/R2RByAccountType}">
@@ -103,12 +110,12 @@
                                                 <viz.data:DimensionDefinition name="Kontenklasse" value="{sales>type}"/>
                                             </viz.data:dimensions>
                                             <viz.data:measures>
-                                                <viz.data:MeasureDefinition name="Anteil" value="{sales>share}"/>
+                                                <viz.data:MeasureDefinition name="Anteil %" value="{sales>share}"/>
                                             </viz.data:measures>
                                         </viz.data:FlattenedDataset>
                                     </viz:dataset>
                                     <viz:feeds>
-                                        <viz.feeds:FeedItem uid="size" type="Measure" values="Anteil"/>
+                                        <viz.feeds:FeedItem uid="size" type="Measure" values="Anteil %"/>
                                         <viz.feeds:FeedItem uid="color" type="Dimension" values="Kontenklasse"/>
                                     </viz:feeds>
                                 </viz:VizFrame>
@@ -120,8 +127,8 @@
                 <GenericTile
                     id="tileS2P"
                     header="Source to Pay"
-                    subheader="Beschaffung bis Zahlung"
-                    tooltip="Source to Pay: Detailseite öffnen"
+                    subheader="Bestelleingang pro Monat"
+                    tooltip="Source to Pay: Bestellungen je Monat · Detailseite öffnen"
                     class="processTile tileThird"
                     press=".onTilePress">
                     <tileContent>
@@ -129,28 +136,35 @@
                             <content>
                                 <viz:VizFrame
                                     id="tileChartS2P"
-                                    vizType="donut"
+                                    vizType="column"
                                     height="100%"
                                     width="100%"
                                     uiConfig="{applicationSet:'fiori'}"
                                     vizProperties="{
                                         title: { visible: false },
-                                        plotArea: { dataLabel: { visible: false }, colorPalette: ['#0070F2','#1B90FF','#5AAAFF','#107E3E'], margin: { top: 15, right: 25, bottom: 25, left: 25 } },
-                                        legend: { visible: false }
+                                        plotArea: {
+                                            dataLabel: { visible: true, type: 'value' },
+                                            colorPalette: ['#0070F2'],
+                                            margin: { top: 12, right: 8, bottom: 4, left: 44 }
+                                        },
+                                        categoryAxis: { title: { visible: false } },
+                                        valueAxis: { title: { visible: false } },
+                                        legend: { visible: true, isScrollable: true },
+                                        legendGroup: { layout: { position: 'bottom', alignment: 'left' } }
                                     }">
                                     <viz:dataset>
-                                        <viz.data:FlattenedDataset data="{sales>/S2PSpendByCategory}">
+                                        <viz.data:FlattenedDataset data="{sales>/S2POrdersByMonth}">
                                             <viz.data:dimensions>
-                                                <viz.data:DimensionDefinition name="Kategorie" value="{sales>category}"/>
+                                                <viz.data:DimensionDefinition name="Monat" value="{sales>month}"/>
                                             </viz.data:dimensions>
                                             <viz.data:measures>
-                                                <viz.data:MeasureDefinition name="Anteil" value="{sales>amount}"/>
+                                                <viz.data:MeasureDefinition name="Bestellungen" value="{sales>count}"/>
                                             </viz.data:measures>
                                         </viz.data:FlattenedDataset>
                                     </viz:dataset>
                                     <viz:feeds>
-                                        <viz.feeds:FeedItem uid="size" type="Measure" values="Anteil"/>
-                                        <viz.feeds:FeedItem uid="color" type="Dimension" values="Kategorie"/>
+                                        <viz.feeds:FeedItem uid="valueAxis" type="Measure" values="Bestellungen"/>
+                                        <viz.feeds:FeedItem uid="categoryAxis" type="Dimension" values="Monat"/>
                                     </viz:feeds>
                                 </viz:VizFrame>
                             </content>
@@ -177,9 +191,11 @@
                                     uiConfig="{applicationSet:'fiori'}"
                                     vizProperties="{
                                         title: { visible: false },
-                                        plotArea: { dataLabel: { visible: false }, colorPalette: ['#107E3E'], margin: { top: 15, right: 25, bottom: 35, left: 45 } },
+                                        plotArea: { dataLabel: { visible: false }, colorPalette: ['#107E3E'], margin: { top: 12, right: 8, bottom: 4, left: 44 } },
                                         categoryAxis: { title: { visible: false } },
-                                        valueAxis: { title: { visible: false } }
+                                        valueAxis: { title: { visible: false } },
+                                        legend: { visible: true, isScrollable: true },
+                                        legendGroup: { layout: { position: 'bottom', alignment: 'left' } }
                                     }">
                                     <viz:dataset>
                                         <viz.data:FlattenedDataset data="{sales>/D2OOutputTrend}">
@@ -219,9 +235,11 @@
                                     uiConfig="{applicationSet:'fiori'}"
                                     vizProperties="{
                                         title: { visible: false },
-                                        plotArea: { dataLabel: { visible: false }, colorPalette: ['#0070F2'], margin: { top: 15, right: 25, bottom: 35, left: 45 } },
+                                        plotArea: { dataLabel: { visible: false }, colorPalette: ['#0070F2'], margin: { top: 12, right: 8, bottom: 4, left: 44 } },
                                         categoryAxis: { title: { visible: false } },
-                                        valueAxis: { title: { visible: false } }
+                                        valueAxis: { title: { visible: false } },
+                                        legend: { visible: true, isScrollable: true },
+                                        legendGroup: { layout: { position: 'bottom', alignment: 'left' } }
                                     }">
                                     <viz:dataset>
                                         <viz.data:FlattenedDataset data="{sales>/L2CConversionFunnel}">

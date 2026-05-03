@@ -4,6 +4,7 @@
     xmlns="sap.m"
     xmlns:core="sap.ui.core"
     xmlns:l="sap.ui.layout"
+    xmlns:cssgrid="sap.ui.layout.cssgrid"
     xmlns:viz="sap.viz.ui5.controls"
     xmlns:viz.data="sap.viz.ui5.data"
     xmlns:viz.feeds="sap.viz.ui5.controls.common.feeds"
@@ -23,8 +24,8 @@
             </Bar>
         </customHeader>
         <content>
-            <ScrollContainer height="100%" vertical="true" class="sapUiSmallMargin">
-                <l:VerticalLayout width="100%">
+            <ScrollContainer height="100%" vertical="true" class="processDetailScroll">
+                <l:VerticalLayout width="100%" class="processDetailMain">
                     <Title text="Record-to-Report Prozess" level="H3"/>
                     <Text text="Record to Report (R2R) umfasst den Finanz- und Rechnungswesen-Prozess von der Buchung bis zum Abschluss. Der Prozess bildet die Grundlage für die Finanzberichterstattung."
                         class="sapUiSmallMarginBottom"/>
@@ -40,35 +41,34 @@
                         showCloseButton="false"
                         visible="{= !${sales>/_sapBadgeR2R}}"
                         class="sapUiSmallMarginBottom"/>
-                    <Title text="Prozessschritte" level="H4"/>
-                    <List>
-                        <StandardListItem title="1. Buchung" info="Transaktionserfassung und -validierung"/>
-                        <StandardListItem title="2. Kontenabstimmung" info="Bank- und Sachkontenabstimmung"/>
-                        <StandardListItem title="3. Periodenabschluss" info="Monats- und Jahresabschluss"/>
-                        <StandardListItem title="4. Konsolidierung" info="Konzernabschluss und Intercompany"/>
-                        <StandardListItem title="5. Reporting" info="Finanzberichte und Analysen"/>
-                    </List>
-                    <Title text="KPI-Übersicht" level="H4" class="sapUiSmallMarginTop"/>
-                    <Table id="r2rKpiTable" items="{sales>/R2RKpiTable}" class="sapUiSmallMarginBottom">
-                        <columns>
-                            <Column width="50%"><Text text="KPI"/></Column>
-                            <Column><Text text="Wert"/></Column>
-                            <Column><Text text="Einheit"/></Column>
-                        </columns>
-                        <items>
-                            <ColumnListItem>
-                                <cells>
-                                    <Text text="{sales>kpi}"/>
-                                    <Text text="{sales>value}"/>
-                                    <Text text="{sales>unit}"/>
-                                </cells>
-                            </ColumnListItem>
-                        </items>
-                    </Table>
+                    <VBox width="100%" class="processDetailKpiBlock">
+                            <Title text="KPI-Übersicht" level="H4"/>
+                            <Table id="r2rKpiTable" items="{sales>/R2RKpiTable}" class="processDetailKpiTable">
+                                <columns>
+                                    <Column width="50%"><Text text="KPI"/></Column>
+                                    <Column><Text text="Wert"/></Column>
+                                    <Column><Text text="Einheit"/></Column>
+                                </columns>
+                                <items>
+                                    <ColumnListItem>
+                                        <cells>
+                                            <Text text="{sales>kpi}"/>
+                                            <Text text="{sales>value}"/>
+                                            <Text text="{sales>unit}"/>
+                                        </cells>
+                                    </ColumnListItem>
+                                </items>
+                            </Table>
+                    </VBox>
                     <Title text="Wichtige Diagramme für Record to Report" level="H3" class="sapUiSmallMarginTop"/>
                     <Text text="Die folgenden Diagramme unterstützen die Steuerung des Finanzprozesses: Buchungsvolumen, Abschlussaktivitäten und Close-Cycle-Zeit."
                         class="sapUiSmallMarginBottom"/>
-                    <Panel headerText="{= '1. Buchungen nach Kontenklasse' + (${sales>/_sapBadgeR2R} ? ' · SAP API' : ' · Mock')}" expandable="true" expanded="true" class="sapUiSmallMarginBottom">
+                    <cssgrid:CSSGrid
+                        class="processDetailChartsGrid"
+                        width="100%"
+                        gridTemplateColumns="minmax(0, 1fr) minmax(0, 1fr)"
+                        gridGap="1rem 1.5rem">
+                    <Panel headerText="{= '1. Buchungen nach Kontenklasse' + (${sales>/_sapBadgeR2R} ? ' · SAP API' : ' · Mock')}" expandable="true" expanded="true" class="processDetailChartPanel">
                         <content>
                             <Text text="Zeigt die Verteilung der Buchungen auf Kontenklassen. Typisch für R2R – wo entstehen die meisten Buchungen?"
                                 class="sapUiSmallMarginBottom"/>
@@ -100,7 +100,7 @@
                             </viz:VizFrame>
                         </content>
                     </Panel>
-                    <Panel headerText="{= '2. Buchungen pro Periode' + (${sales>/_sapBadgeR2R} ? ' · SAP API' : ' · Mock')}" expandable="true" expanded="true" class="sapUiSmallMarginBottom">
+                    <Panel headerText="{= '2. Buchungen pro Periode' + (${sales>/_sapBadgeR2R} ? ' · SAP API' : ' · Mock')}" expandable="true" expanded="true" class="processDetailChartPanel">
                         <content>
                             <Text text="Zeigt das Buchungsvolumen je Monat. Wichtig für die Ressourcenplanung und Spitzenerkennung."
                                 class="sapUiSmallMarginBottom"/>
@@ -133,7 +133,8 @@
                             </viz:VizFrame>
                         </content>
                     </Panel>
-                    <Panel headerText="{= '3. Soll-/Haben-Verteilung' + (${sales>/_sapBadgeR2R} ? ' · SAP API' : ' · Mock')}" expandable="true" expanded="true" class="sapUiSmallMarginBottom">
+                    </cssgrid:CSSGrid>
+                    <Panel headerText="{= '3. Soll-/Haben-Verteilung' + (${sales>/_sapBadgeR2R} ? ' · SAP API' : ' · Mock')}" expandable="true" expanded="true" class="processDetailChartPanel processDetailChartPanelFull sapUiSmallMarginTop">
                         <content>
                             <Text text="Zeigt die Verteilung zwischen Soll- und Haben-Buchungen. Grundlegende Prüfgröße im Rechnungswesen – ein ausgeglichenes Verhältnis ist ein Qualitätsmerkmal."
                                 class="sapUiSmallMarginBottom"/>
@@ -168,6 +169,24 @@
                     <Title text="Zusammenfassung" level="H4"/>
                     <Text text="Für R2R sind Kreisdiagramme (Kontenverteilung), Säulendiagramme (Buchungsvolumen pro Periode) und Donut-Diagramme (Soll-/Haben-Verteilung) relevant."
                         class="sapUiSmallMarginBottom"/>
+                    <Panel expandable="true" expanded="false" width="100%" class="processDetailStepsPanel sapUiSmallMarginTop">
+                        <headerToolbar>
+                            <OverflowToolbar style="Clear">
+                                <Title text="Prozessschritte" level="H4"/>
+                                <ToolbarSpacer/>
+                                <core:Icon src="sap-icon://message-information" tooltip="Nur Phasenüberblick; KPI und Diagramme sind für die Steuerung maßgeblich." decorative="false"/>
+                            </OverflowToolbar>
+                        </headerToolbar>
+                        <content>
+                            <List class="processDetailStepsList">
+                                <StandardListItem title="1. Buchung" info="Transaktionserfassung und -validierung"/>
+                                <StandardListItem title="2. Kontenabstimmung" info="Bank- und Sachkontenabstimmung"/>
+                                <StandardListItem title="3. Periodenabschluss" info="Monats- und Jahresabschluss"/>
+                                <StandardListItem title="4. Konsolidierung" info="Konzernabschluss und Intercompany"/>
+                                <StandardListItem title="5. Reporting" info="Finanzberichte und Analysen"/>
+                            </List>
+                        </content>
+                    </Panel>
                 </l:VerticalLayout>
             </ScrollContainer>
         </content>

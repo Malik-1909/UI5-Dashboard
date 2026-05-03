@@ -4,6 +4,7 @@
     xmlns="sap.m"
     xmlns:core="sap.ui.core"
     xmlns:l="sap.ui.layout"
+    xmlns:cssgrid="sap.ui.layout.cssgrid"
     xmlns:viz="sap.viz.ui5.controls"
     xmlns:viz.data="sap.viz.ui5.data"
     xmlns:viz.feeds="sap.viz.ui5.controls.common.feeds"
@@ -23,8 +24,8 @@
             </Bar>
         </customHeader>
         <content>
-            <ScrollContainer height="100%" vertical="true" class="sapUiSmallMargin">
-                <l:VerticalLayout width="100%">
+            <ScrollContainer height="100%" vertical="true" class="processDetailScroll">
+                <l:VerticalLayout width="100%" class="processDetailMain">
                     <Title text="Lead to Cash Prozess" level="H3"/>
                     <Text text="Lead to Cash (L2C) umfasst den gesamten Prozess vom Lead bis zum Zahlungseingang. Der Prozess verbindet Vertrieb, Logistik und Finanzen."
                         class="sapUiSmallMarginBottom"/>
@@ -40,37 +41,34 @@
                         showCloseButton="false"
                         visible="{= !${sales>/_sapBadgeL2C}}"
                         class="sapUiSmallMarginBottom"/>
-                    <Title text="Prozessschritte" level="H4"/>
-                    <List>
-                        <StandardListItem title="1. Lead" info="Interessent wird erfasst und qualifiziert"/>
-                        <StandardListItem title="2. Opportunity" info="Geschäftsmöglichkeit wird bewertet"/>
-                        <StandardListItem title="3. Quote" info="Angebot wird erstellt und versendet"/>
-                        <StandardListItem title="4. Order" info="Auftrag wird erfasst und freigegeben"/>
-                        <StandardListItem title="5. Delivery" info="Lieferung und Übergabe an den Kunden"/>
-                        <StandardListItem title="6. Invoice" info="Rechnungsstellung und Versand"/>
-                        <StandardListItem title="7. Collection" info="Zahlungseingang und Forderungsausgleich"/>
-                    </List>
-                    <Title text="KPI-Übersicht" level="H4" class="sapUiSmallMarginTop"/>
-                    <Table id="l2cKpiTable" items="{sales>/L2CKpiTable}" class="sapUiSmallMarginBottom">
-                        <columns>
-                            <Column width="50%"><Text text="KPI"/></Column>
-                            <Column><Text text="Wert"/></Column>
-                            <Column><Text text="Einheit"/></Column>
-                        </columns>
-                        <items>
-                            <ColumnListItem>
-                                <cells>
-                                    <Text text="{sales>kpi}"/>
-                                    <Text text="{sales>value}"/>
-                                    <Text text="{sales>unit}"/>
-                                </cells>
-                            </ColumnListItem>
-                        </items>
-                    </Table>
+                    <VBox width="100%" class="processDetailKpiBlock">
+                            <Title text="KPI-Übersicht" level="H4"/>
+                            <Table id="l2cKpiTable" items="{sales>/L2CKpiTable}" class="processDetailKpiTable">
+                                <columns>
+                                    <Column width="50%"><Text text="KPI"/></Column>
+                                    <Column><Text text="Wert"/></Column>
+                                    <Column><Text text="Einheit"/></Column>
+                                </columns>
+                                <items>
+                                    <ColumnListItem>
+                                        <cells>
+                                            <Text text="{sales>kpi}"/>
+                                            <Text text="{sales>value}"/>
+                                            <Text text="{sales>unit}"/>
+                                        </cells>
+                                    </ColumnListItem>
+                                </items>
+                            </Table>
+                    </VBox>
                     <Title text="Wichtige Diagramme für L2C" level="H3" class="sapUiSmallMarginTop"/>
                     <Text text="Die folgenden Diagramme sind für die Steuerung und Überwachung des Lead-to-Cash-Prozesses zentral. Sie zeigen Engpässe, Durchlaufzeiten und den Umsatzfluss."
                         class="sapUiSmallMarginBottom"/>
-                    <Panel headerText="{= '1. L2C-Conversion-Funnel' + (${sales>/_sapBadgeL2C} ? ' · SAP API' : ' · Mock')}" expandable="true" expanded="true" class="sapUiSmallMarginBottom">
+                    <cssgrid:CSSGrid
+                        class="processDetailChartsGrid"
+                        width="100%"
+                        gridTemplateColumns="minmax(0, 1fr) minmax(0, 1fr)"
+                        gridGap="1rem 1.5rem">
+                    <Panel headerText="{= '1. L2C-Conversion-Funnel' + (${sales>/_sapBadgeL2C} ? ' · SAP API' : ' · Mock')}" expandable="true" expanded="true" class="processDetailChartPanel">
                         <content>
                             <Text text="Zeigt die Durchlaufmenge pro Prozessstufe. Säulendiagramm für den Conversion-Durchlauf – wichtig zur Identifikation von Abbrüchen und Engpässen."
                                 class="sapUiSmallMarginBottom"/>
@@ -103,7 +101,7 @@
                             </viz:VizFrame>
                         </content>
                     </Panel>
-                    <Panel headerText="{= '2. Umsatz pro Prozessstufe (Ist vs. Ziel)' + (${sales>/_sapBadgeL2C} ? ' · SAP API' : ' · Mock')}" expandable="true" expanded="true" class="sapUiSmallMarginBottom">
+                    <Panel headerText="{= '2. Umsatz pro Prozessstufe (Ist vs. Ziel)' + (${sales>/_sapBadgeL2C} ? ' · SAP API' : ' · Mock')}" expandable="true" expanded="true" class="processDetailChartPanel">
                         <content>
                             <Text text="Vergleicht den tatsächlichen Umsatz mit dem Zielwert je Stufe. Wichtig für die Steuerung von Liefertreue und Forderungsmanagement."
                                 class="sapUiSmallMarginBottom"/>
@@ -137,7 +135,8 @@
                             </viz:VizFrame>
                         </content>
                     </Panel>
-                    <Panel headerText="{= '3. Auftragseingang pro Monat' + (${sales>/_sapBadgeL2C} ? ' · SAP API' : ' · Mock')}" expandable="true" expanded="true" class="sapUiSmallMarginBottom">
+                    </cssgrid:CSSGrid>
+                    <Panel headerText="{= '3. Auftragseingang pro Monat' + (${sales>/_sapBadgeL2C} ? ' · SAP API' : ' · Mock')}" expandable="true" expanded="true" class="processDetailChartPanel processDetailChartPanelFull sapUiSmallMarginTop">
                         <content>
                             <Text text="Zeigt die monatliche Entwicklung des Auftragseingangs. Wichtig für Saisonalitäts- und Trendanalyse im Vertrieb."
                                 class="sapUiSmallMarginBottom"/>
@@ -173,6 +172,26 @@
                     <Title text="Zusammenfassung" level="H4"/>
                     <Text text="Für L2C sind Säulen- und Balkendiagramme (Conversion-Durchlauf, Ist vs. Ziel) sowie Säulendiagramme (Auftragseingang-Trend) relevant. Sie ermöglichen die Überwachung von Durchsatz, Liefertreue und Auftragsvolumen."
                         class="sapUiSmallMarginBottom"/>
+                    <Panel expandable="true" expanded="false" width="100%" class="processDetailStepsPanel sapUiSmallMarginTop">
+                        <headerToolbar>
+                            <OverflowToolbar style="Clear">
+                                <Title text="Prozessschritte" level="H4"/>
+                                <ToolbarSpacer/>
+                                <core:Icon src="sap-icon://message-information" tooltip="Nur Phasenüberblick; KPI und Diagramme sind für die Steuerung maßgeblich." decorative="false"/>
+                            </OverflowToolbar>
+                        </headerToolbar>
+                        <content>
+                            <List class="processDetailStepsList">
+                                <StandardListItem title="1. Lead" info="Interessent wird erfasst und qualifiziert"/>
+                                <StandardListItem title="2. Opportunity" info="Geschäftsmöglichkeit wird bewertet"/>
+                                <StandardListItem title="3. Quote" info="Angebot wird erstellt und versendet"/>
+                                <StandardListItem title="4. Order" info="Auftrag wird erfasst und freigegeben"/>
+                                <StandardListItem title="5. Delivery" info="Lieferung und Übergabe an den Kunden"/>
+                                <StandardListItem title="6. Invoice" info="Rechnungsstellung und Versand"/>
+                                <StandardListItem title="7. Collection" info="Zahlungseingang und Forderungsausgleich"/>
+                            </List>
+                        </content>
+                    </Panel>
                 </l:VerticalLayout>
             </ScrollContainer>
         </content>

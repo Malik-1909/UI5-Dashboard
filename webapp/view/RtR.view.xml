@@ -4,6 +4,7 @@
     xmlns="sap.m"
     xmlns:core="sap.ui.core"
     xmlns:l="sap.ui.layout"
+    xmlns:cssgrid="sap.ui.layout.cssgrid"
     xmlns:viz="sap.viz.ui5.controls"
     xmlns:viz.data="sap.viz.ui5.data"
     xmlns:viz.feeds="sap.viz.ui5.controls.common.feeds"
@@ -23,8 +24,8 @@
             </Bar>
         </customHeader>
         <content>
-            <ScrollContainer height="100%" vertical="true" class="sapUiSmallMargin">
-                <l:VerticalLayout width="100%">
+            <ScrollContainer height="100%" vertical="true" class="processDetailScroll">
+                <l:VerticalLayout width="100%" class="processDetailMain">
                     <Title text="Recruit to Retire Prozess" level="H3"/>
                     <Text text="Recruit to Retire (RtR) umfasst den gesamten Mitarbeiterlebenszyklus von der Rekrutierung bis zum Ruhestand. Der Prozess verbindet Personalbeschaffung, Entwicklung und Offboarding."
                         class="sapUiSmallMarginBottom"/>
@@ -40,36 +41,34 @@
                         showCloseButton="false"
                         visible="{= !${sales>/_sapBadgeRtR}}"
                         class="sapUiSmallMarginBottom"/>
-                    <Title text="Prozessschritte" level="H4"/>
-                    <List>
-                        <StandardListItem title="1. Recruiting" info="Stellenausschreibung und Kandidatensuche"/>
-                        <StandardListItem title="2. Onboarding" info="Einarbeitung und Integration neuer Mitarbeiter"/>
-                        <StandardListItem title="3. Performance" info="Leistungsbeurteilung und Zielvereinbarung"/>
-                        <StandardListItem title="4. Development" info="Weiterbildung und Karriereentwicklung"/>
-                        <StandardListItem title="5. Compensation" info="Vergütung und Benefits"/>
-                        <StandardListItem title="6. Offboarding" info="Austritt und Wissenstransfer"/>
-                    </List>
-                    <Title text="KPI-Übersicht" level="H4" class="sapUiSmallMarginTop"/>
-                    <Table id="rtrKpiTable" items="{sales>/RtrKpiTable}" class="sapUiSmallMarginBottom">
-                        <columns>
-                            <Column width="50%"><Text text="KPI"/></Column>
-                            <Column><Text text="Wert"/></Column>
-                            <Column><Text text="Einheit"/></Column>
-                        </columns>
-                        <items>
-                            <ColumnListItem>
-                                <cells>
-                                    <Text text="{sales>kpi}"/>
-                                    <Text text="{sales>value}"/>
-                                    <Text text="{sales>unit}"/>
-                                </cells>
-                            </ColumnListItem>
-                        </items>
-                    </Table>
+                    <VBox width="100%" class="processDetailKpiBlock">
+                            <Title text="KPI-Übersicht" level="H4"/>
+                            <Table id="rtrKpiTable" items="{sales>/RtrKpiTable}" class="processDetailKpiTable">
+                                <columns>
+                                    <Column width="50%"><Text text="KPI"/></Column>
+                                    <Column><Text text="Wert"/></Column>
+                                    <Column><Text text="Einheit"/></Column>
+                                </columns>
+                                <items>
+                                    <ColumnListItem>
+                                        <cells>
+                                            <Text text="{sales>kpi}"/>
+                                            <Text text="{sales>value}"/>
+                                            <Text text="{sales>unit}"/>
+                                        </cells>
+                                    </ColumnListItem>
+                                </items>
+                            </Table>
+                    </VBox>
                     <Title text="Wichtige Diagramme für RtR" level="H3" class="sapUiSmallMarginTop"/>
                     <Text text="Die folgenden Diagramme unterstützen die Steuerung des HR-Prozesses: Headcount-Funnel, Verteilung nach Abteilung und Fluktuationstrend."
                         class="sapUiSmallMarginBottom"/>
-                    <Panel headerText="{= '1. Headcount-Funnel' + (${sales>/_sapBadgeRtR} ? ' · SAP API' : ' · Mock')}" expandable="true" expanded="true" class="sapUiSmallMarginBottom">
+                    <cssgrid:CSSGrid
+                        class="processDetailChartsGrid"
+                        width="100%"
+                        gridTemplateColumns="minmax(0, 1fr) minmax(0, 1fr)"
+                        gridGap="1rem 1.5rem">
+                    <Panel headerText="{= '1. Headcount-Funnel' + (${sales>/_sapBadgeRtR} ? ' · SAP API' : ' · Mock')}" expandable="true" expanded="true" class="processDetailChartPanel">
                         <content>
                             <Text text="Zeigt die Anzahl Mitarbeiter pro Prozessstufe. Wichtig zur Identifikation von Engpässen im Recruiting und Onboarding."
                                 class="sapUiSmallMarginBottom"/>
@@ -102,7 +101,7 @@
                             </viz:VizFrame>
                         </content>
                     </Panel>
-                    <Panel headerText="{= '2. Headcount nach Abteilung' + (${sales>/_sapBadgeRtR} ? ' · SAP API' : ' · Mock')}" expandable="true" expanded="true" class="sapUiSmallMarginBottom">
+                    <Panel headerText="{= '2. Headcount nach Abteilung' + (${sales>/_sapBadgeRtR} ? ' · SAP API' : ' · Mock')}" expandable="true" expanded="true" class="processDetailChartPanel">
                         <content>
                             <Text text="Zeigt die Verteilung der Mitarbeiter auf Abteilungen. Wichtig für die Ressourcenplanung und Schwerpunktanalyse."
                                 class="sapUiSmallMarginBottom"/>
@@ -134,7 +133,8 @@
                             </viz:VizFrame>
                         </content>
                     </Panel>
-                    <Panel headerText="{= '3. Top Job-Titel' + (${sales>/_sapBadgeRtR} ? ' · SAP API' : ' · Mock')}" expandable="true" expanded="true" class="sapUiSmallMarginBottom">
+                    </cssgrid:CSSGrid>
+                    <Panel headerText="{= '3. Top Job-Titel' + (${sales>/_sapBadgeRtR} ? ' · SAP API' : ' · Mock')}" expandable="true" expanded="true" class="processDetailChartPanel processDetailChartPanelFull sapUiSmallMarginTop">
                         <content>
                             <Text text="Zeigt die häufigsten Stellenbezeichnungen aus dem SuccessFactors-System. Wichtig für Kapazitätsplanung und Kompetenzsteuerung."
                                 class="sapUiSmallMarginBottom"/>
@@ -170,6 +170,25 @@
                     <Title text="Zusammenfassung" level="H4"/>
                     <Text text="Für RtR sind Säulendiagramme (Headcount-Funnel), Donut-Diagramme (Abteilungsverteilung) und Balkendiagramme (Top Job-Titel) relevant."
                         class="sapUiSmallMarginBottom"/>
+                    <Panel expandable="true" expanded="false" width="100%" class="processDetailStepsPanel sapUiSmallMarginTop">
+                        <headerToolbar>
+                            <OverflowToolbar style="Clear">
+                                <Title text="Prozessschritte" level="H4"/>
+                                <ToolbarSpacer/>
+                                <core:Icon src="sap-icon://message-information" tooltip="Nur Phasenüberblick; KPI und Diagramme sind für die Steuerung maßgeblich." decorative="false"/>
+                            </OverflowToolbar>
+                        </headerToolbar>
+                        <content>
+                            <List class="processDetailStepsList">
+                                <StandardListItem title="1. Recruiting" info="Stellenausschreibung und Kandidatensuche"/>
+                                <StandardListItem title="2. Onboarding" info="Einarbeitung und Integration neuer Mitarbeiter"/>
+                                <StandardListItem title="3. Performance" info="Leistungsbeurteilung und Zielvereinbarung"/>
+                                <StandardListItem title="4. Development" info="Weiterbildung und Karriereentwicklung"/>
+                                <StandardListItem title="5. Compensation" info="Vergütung und Benefits"/>
+                                <StandardListItem title="6. Offboarding" info="Austritt und Wissenstransfer"/>
+                            </List>
+                        </content>
+                    </Panel>
                 </l:VerticalLayout>
             </ScrollContainer>
         </content>

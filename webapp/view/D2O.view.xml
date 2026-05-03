@@ -4,6 +4,7 @@
     xmlns="sap.m"
     xmlns:core="sap.ui.core"
     xmlns:l="sap.ui.layout"
+    xmlns:cssgrid="sap.ui.layout.cssgrid"
     xmlns:viz="sap.viz.ui5.controls"
     xmlns:viz.data="sap.viz.ui5.data"
     xmlns:viz.feeds="sap.viz.ui5.controls.common.feeds"
@@ -23,8 +24,8 @@
             </Bar>
         </customHeader>
         <content>
-            <ScrollContainer height="100%" vertical="true" class="sapUiSmallMargin">
-                <l:VerticalLayout width="100%">
+            <ScrollContainer height="100%" vertical="true" class="processDetailScroll">
+                <l:VerticalLayout width="100%" class="processDetailMain">
                     <Title text="Design to Operate Prozess" level="H3"/>
                     <Text text="Design to Operate (D2O) beschreibt den Prozess von der Produktentwicklung bis zum Betrieb und Service. Der Prozess verbindet Design, Engineering, Fertigung und Service."
                         class="sapUiSmallMarginBottom"/>
@@ -40,37 +41,34 @@
                         showCloseButton="false"
                         visible="{= !${sales>/_sapBadgeD2O}}"
                         class="sapUiSmallMarginBottom"/>
-                    <Title text="Prozessschritte" level="H4"/>
-                    <List>
-                        <StandardListItem title="1. Design" info="Produktdesign und Konzeptentwicklung"/>
-                        <StandardListItem title="2. Engineering" info="Konstruktion und technische Spezifikation"/>
-                        <StandardListItem title="3. Procure" info="Beschaffung von Komponenten"/>
-                        <StandardListItem title="4. Manufacture" info="Fertigung und Montage"/>
-                        <StandardListItem title="5. Deploy" info="Auslieferung und Installation"/>
-                        <StandardListItem title="6. Operate" info="Betrieb und Wartung"/>
-                        <StandardListItem title="7. Service" info="Reparatur und Support"/>
-                    </List>
-                    <Title text="KPI-Übersicht" level="H4" class="sapUiSmallMarginTop"/>
-                    <Table id="d2oKpiTable" items="{sales>/D2OKpiTable}" class="sapUiSmallMarginBottom">
-                        <columns>
-                            <Column width="50%"><Text text="KPI"/></Column>
-                            <Column><Text text="Wert"/></Column>
-                            <Column><Text text="Einheit"/></Column>
-                        </columns>
-                        <items>
-                            <ColumnListItem>
-                                <cells>
-                                    <Text text="{sales>kpi}"/>
-                                    <Text text="{sales>value}"/>
-                                    <Text text="{sales>unit}"/>
-                                </cells>
-                            </ColumnListItem>
-                        </items>
-                    </Table>
+                    <VBox width="100%" class="processDetailKpiBlock">
+                            <Title text="KPI-Übersicht" level="H4"/>
+                            <Table id="d2oKpiTable" items="{sales>/D2OKpiTable}" class="processDetailKpiTable">
+                                <columns>
+                                    <Column width="50%"><Text text="KPI"/></Column>
+                                    <Column><Text text="Wert"/></Column>
+                                    <Column><Text text="Einheit"/></Column>
+                                </columns>
+                                <items>
+                                    <ColumnListItem>
+                                        <cells>
+                                            <Text text="{sales>kpi}"/>
+                                            <Text text="{sales>value}"/>
+                                            <Text text="{sales>unit}"/>
+                                        </cells>
+                                    </ColumnListItem>
+                                </items>
+                            </Table>
+                    </VBox>
                     <Title text="Wichtige Diagramme für D2O" level="H3" class="sapUiSmallMarginTop"/>
                     <Text text="Die folgenden Diagramme basieren auf Warenbewegungen und Lagerbeständen (Design-to-Operate als Supply-Chain-Sicht)."
                         class="sapUiSmallMarginBottom"/>
-                    <Panel headerText="{= '1. D2O-Prozess-Funnel' + (${sales>/_sapBadgeD2O} ? ' · SAP API' : ' · Mock')}" expandable="true" expanded="true" class="sapUiSmallMarginBottom">
+                    <cssgrid:CSSGrid
+                        class="processDetailChartsGrid"
+                        width="100%"
+                        gridTemplateColumns="minmax(0, 1fr) minmax(0, 1fr)"
+                        gridGap="1rem 1.5rem">
+                    <Panel headerText="{= '1. D2O-Prozess-Funnel' + (${sales>/_sapBadgeD2O} ? ' · SAP API' : ' · Mock')}" expandable="true" expanded="true" class="processDetailChartPanel">
                         <content>
                             <Text text="Warenbewegungen nach Bewegungsart (InventoryTransactionType / Warenbewegungscode). Zeigt das logistische Volumen im System."
                                 class="sapUiSmallMarginBottom"/>
@@ -103,7 +101,7 @@
                             </viz:VizFrame>
                         </content>
                     </Panel>
-                    <Panel headerText="{= '2. Lager nach Werk (relativ)' + (${sales>/_sapBadgeD2O} ? ' · SAP API' : ' · Mock')}" expandable="true" expanded="true" class="sapUiSmallMarginBottom">
+                    <Panel headerText="{= '2. Lager nach Werk (relativ)' + (${sales>/_sapBadgeD2O} ? ' · SAP API' : ' · Mock')}" expandable="true" expanded="true" class="processDetailChartPanel">
                         <content>
                             <Text text="Vergleicht die relative Lagermenge je Werk (normalisiert auf das größte Werk). Zielwert 85 % dient als Referenz."
                                 class="sapUiSmallMarginBottom"/>
@@ -137,7 +135,8 @@
                             </viz:VizFrame>
                         </content>
                     </Panel>
-                    <Panel headerText="{= '3. Warenbewegungen pro Monat' + (${sales>/_sapBadgeD2O} ? ' · SAP API' : ' · Mock')}" expandable="true" expanded="true" class="sapUiSmallMarginBottom">
+                    </cssgrid:CSSGrid>
+                    <Panel headerText="{= '3. Warenbewegungen pro Monat' + (${sales>/_sapBadgeD2O} ? ' · SAP API' : ' · Mock')}" expandable="true" expanded="true" class="processDetailChartPanel processDetailChartPanelFull sapUiSmallMarginTop">
                         <content>
                             <Text text="Zeigt die Anzahl Warenbewegungsbelege je Monat (Posting-Datum)."
                                 class="sapUiSmallMarginBottom"/>
@@ -173,6 +172,26 @@
                     <Title text="Zusammenfassung" level="H4"/>
                     <Text text="D2O nutzt hier Warenbewegungen und Lagerdaten aus der SAP Sandbox (keine Produktionsaufträge wegen API-Berechtigung)."
                         class="sapUiSmallMarginBottom"/>
+                    <Panel expandable="true" expanded="false" width="100%" class="processDetailStepsPanel sapUiSmallMarginTop">
+                        <headerToolbar>
+                            <OverflowToolbar style="Clear">
+                                <Title text="Prozessschritte" level="H4"/>
+                                <ToolbarSpacer/>
+                                <core:Icon src="sap-icon://message-information" tooltip="Nur Phasenüberblick; KPI und Diagramme sind für die Steuerung maßgeblich." decorative="false"/>
+                            </OverflowToolbar>
+                        </headerToolbar>
+                        <content>
+                            <List class="processDetailStepsList">
+                                <StandardListItem title="1. Design" info="Produktdesign und Konzeptentwicklung"/>
+                                <StandardListItem title="2. Engineering" info="Konstruktion und technische Spezifikation"/>
+                                <StandardListItem title="3. Procure" info="Beschaffung von Komponenten"/>
+                                <StandardListItem title="4. Manufacture" info="Fertigung und Montage"/>
+                                <StandardListItem title="5. Deploy" info="Auslieferung und Installation"/>
+                                <StandardListItem title="6. Operate" info="Betrieb und Wartung"/>
+                                <StandardListItem title="7. Service" info="Reparatur und Support"/>
+                            </List>
+                        </content>
+                    </Panel>
                 </l:VerticalLayout>
             </ScrollContainer>
         </content>

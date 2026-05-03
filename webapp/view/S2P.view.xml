@@ -4,6 +4,7 @@
     xmlns="sap.m"
     xmlns:core="sap.ui.core"
     xmlns:l="sap.ui.layout"
+    xmlns:cssgrid="sap.ui.layout.cssgrid"
     xmlns:viz="sap.viz.ui5.controls"
     xmlns:viz.data="sap.viz.ui5.data"
     xmlns:viz.feeds="sap.viz.ui5.controls.common.feeds"
@@ -23,8 +24,8 @@
             </Bar>
         </customHeader>
         <content>
-            <ScrollContainer height="100%" vertical="true" class="sapUiSmallMargin">
-                <l:VerticalLayout width="100%">
+            <ScrollContainer height="100%" vertical="true" class="processDetailScroll">
+                <l:VerticalLayout width="100%" class="processDetailMain">
                     <Title text="Source to Pay Prozess" level="H3"/>
                     <Text text="Source to Pay (S2P) beschreibt den Beschaffungsprozess von der Bedarfsmeldung bis zur Zahlung an den Lieferanten. Der Prozess verbindet Einkauf, Logistik und Finanzen."
                         class="sapUiSmallMarginBottom"/>
@@ -40,35 +41,34 @@
                         showCloseButton="false"
                         visible="{= !${sales>/_sapBadgeS2P}}"
                         class="sapUiSmallMarginBottom"/>
-                    <Title text="Prozessschritte" level="H4"/>
-                    <List>
-                        <StandardListItem title="1. Bedarfsmeldung" info="Bedarfsanforderung wird erstellt und freigegeben"/>
-                        <StandardListItem title="2. Bestellung" info="Bestellung beim Lieferanten wird ausgelöst"/>
-                        <StandardListItem title="3. Wareneingang" info="Wareneingang und Prüfung"/>
-                        <StandardListItem title="4. Rechnungsprüfung" info="Dreiseitenabgleich und Rechnungsfreigabe"/>
-                        <StandardListItem title="5. Zahlung" info="Zahlungsabwicklung an den Lieferanten"/>
-                    </List>
-                    <Title text="KPI-Übersicht" level="H4" class="sapUiSmallMarginTop"/>
-                    <Table id="s2pKpiTable" items="{sales>/S2PKpiTable}" class="sapUiSmallMarginBottom">
-                        <columns>
-                            <Column width="50%"><Text text="KPI"/></Column>
-                            <Column><Text text="Wert"/></Column>
-                            <Column><Text text="Einheit"/></Column>
-                        </columns>
-                        <items>
-                            <ColumnListItem>
-                                <cells>
-                                    <Text text="{sales>kpi}"/>
-                                    <Text text="{sales>value}"/>
-                                    <Text text="{sales>unit}"/>
-                                </cells>
-                            </ColumnListItem>
-                        </items>
-                    </Table>
+                    <VBox width="100%" class="processDetailKpiBlock">
+                            <Title text="KPI-Übersicht" level="H4"/>
+                            <Table id="s2pKpiTable" items="{sales>/S2PKpiTable}" class="processDetailKpiTable">
+                                <columns>
+                                    <Column width="50%"><Text text="KPI"/></Column>
+                                    <Column><Text text="Wert"/></Column>
+                                    <Column><Text text="Einheit"/></Column>
+                                </columns>
+                                <items>
+                                    <ColumnListItem>
+                                        <cells>
+                                            <Text text="{sales>kpi}"/>
+                                            <Text text="{sales>value}"/>
+                                            <Text text="{sales>unit}"/>
+                                        </cells>
+                                    </ColumnListItem>
+                                </items>
+                            </Table>
+                    </VBox>
                     <Title text="Wichtige Diagramme für S2P" level="H3" class="sapUiSmallMarginTop"/>
                     <Text text="Die folgenden Diagramme unterstützen die Steuerung des Beschaffungsprozesses: Durchlaufmengen, Ausgaben nach Kategorie und Zahlungszyklus."
                         class="sapUiSmallMarginBottom"/>
-                    <Panel headerText="{= '1. S2P-Prozess-Funnel' + (${sales>/_sapBadgeS2P} ? ' · SAP API' : ' · Mock')}" expandable="true" expanded="true" class="sapUiSmallMarginBottom">
+                    <cssgrid:CSSGrid
+                        class="processDetailChartsGrid"
+                        width="100%"
+                        gridTemplateColumns="minmax(0, 1fr) minmax(0, 1fr)"
+                        gridGap="1rem 1.5rem">
+                    <Panel headerText="{= '1. S2P-Prozess-Funnel' + (${sales>/_sapBadgeS2P} ? ' · SAP API' : ' · Mock')}" expandable="true" expanded="true" class="processDetailChartPanel">
                         <content>
                             <Text text="Zeigt die Anzahl Bestellvorgänge pro Stufe. Wichtig zur Identifikation von Engpässen (z.B. viele offene Rechnungsprüfungen)."
                                 class="sapUiSmallMarginBottom"/>
@@ -101,7 +101,7 @@
                             </viz:VizFrame>
                         </content>
                     </Panel>
-                    <Panel headerText="{= '2. Bestellungen je Einkaufsorganisation' + (${sales>/_sapBadgeS2P} ? ' · SAP API' : ' · Mock')}" expandable="true" expanded="true" class="sapUiSmallMarginBottom">
+                    <Panel headerText="{= '2. Bestellungen je Einkaufsorganisation' + (${sales>/_sapBadgeS2P} ? ' · SAP API' : ' · Mock')}" expandable="true" expanded="true" class="processDetailChartPanel">
                         <content>
                             <Text text="Verteilung der Bestellbelege je Einkaufsorganisation (Anzahl). Im API-Header stehen keine Nettobeträge – daher Beleganzahl statt EUR."
                                 class="sapUiSmallMarginBottom"/>
@@ -133,7 +133,8 @@
                             </viz:VizFrame>
                         </content>
                     </Panel>
-                    <Panel headerText="{= '3. Bestelleingang pro Monat' + (${sales>/_sapBadgeS2P} ? ' · SAP API' : ' · Mock')}" expandable="true" expanded="true" class="sapUiSmallMarginBottom">
+                    </cssgrid:CSSGrid>
+                    <Panel headerText="{= '3. Bestelleingang pro Monat' + (${sales>/_sapBadgeS2P} ? ' · SAP API' : ' · Mock')}" expandable="true" expanded="true" class="processDetailChartPanel processDetailChartPanelFull sapUiSmallMarginTop">
                         <content>
                             <Text text="Zeigt die monatliche Entwicklung des Bestelleingangs. Wichtig für Einkaufsplanung, Lieferantensteuerung und Saisonalitätsanalyse."
                                 class="sapUiSmallMarginBottom"/>
@@ -167,8 +168,26 @@
                         </content>
                     </Panel>
                     <Title text="Zusammenfassung" level="H4"/>
-                    <Text text="Für S2P sind Säulendiagramme (Bestelltypen), Donut-Diagramme (Belegverteilung je Einkaufsorganisation) und Säulendiagramme (Bestelleingang-Trend) relevant."
+                    <Text text="Für S2P sind Säulendiagramme (Bestelltypen, Bestelleingang pro Monat), Donut (Ausgaben je Kategorie) und Kennzahlen-Tabelle relevant."
                         class="sapUiSmallMarginBottom"/>
+                    <Panel expandable="true" expanded="false" width="100%" class="processDetailStepsPanel sapUiSmallMarginTop">
+                        <headerToolbar>
+                            <OverflowToolbar style="Clear">
+                                <Title text="Prozessschritte" level="H4"/>
+                                <ToolbarSpacer/>
+                                <core:Icon src="sap-icon://message-information" tooltip="Nur Phasenüberblick; KPI und Diagramme sind für die Steuerung maßgeblich." decorative="false"/>
+                            </OverflowToolbar>
+                        </headerToolbar>
+                        <content>
+                            <List class="processDetailStepsList">
+                                <StandardListItem title="1. Bedarfsmeldung" info="Bedarfsanforderung wird erstellt und freigegeben"/>
+                                <StandardListItem title="2. Bestellung" info="Bestellung beim Lieferanten wird ausgelöst"/>
+                                <StandardListItem title="3. Wareneingang" info="Wareneingang und Prüfung"/>
+                                <StandardListItem title="4. Rechnungsprüfung" info="Dreiseitenabgleich und Rechnungsfreigabe"/>
+                                <StandardListItem title="5. Zahlung" info="Zahlungsabwicklung an den Lieferanten"/>
+                            </List>
+                        </content>
+                    </Panel>
                 </l:VerticalLayout>
             </ScrollContainer>
         </content>
