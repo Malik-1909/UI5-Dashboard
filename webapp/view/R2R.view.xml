@@ -28,6 +28,18 @@
                     <Title text="Record-to-Report Prozess" level="H3"/>
                     <Text text="Record to Report (R2R) umfasst den Finanz- und Rechnungswesen-Prozess von der Buchung bis zum Abschluss. Der Prozess bildet die Grundlage für die Finanzberichterstattung."
                         class="sapUiSmallMarginBottom"/>
+                    <MessageStrip
+                        text="{sales>/_sapBadgeR2R}"
+                        type="Information"
+                        showCloseButton="false"
+                        visible="{= !!${sales>/_sapBadgeR2R}}"
+                        class="sapUiSmallMarginBottom"/>
+                    <MessageStrip
+                        text="Demo-Daten (Mock) · SAP API nicht konfiguriert oder nicht erreichbar"
+                        type="Warning"
+                        showCloseButton="false"
+                        visible="{= !${sales>/_sapBadgeR2R}}"
+                        class="sapUiSmallMarginBottom"/>
                     <Title text="Prozessschritte" level="H4"/>
                     <List>
                         <StandardListItem title="1. Buchung" info="Transaktionserfassung und -validierung"/>
@@ -56,7 +68,7 @@
                     <Title text="Wichtige Diagramme für Record to Report" level="H3" class="sapUiSmallMarginTop"/>
                     <Text text="Die folgenden Diagramme unterstützen die Steuerung des Finanzprozesses: Buchungsvolumen, Abschlussaktivitäten und Close-Cycle-Zeit."
                         class="sapUiSmallMarginBottom"/>
-                    <Panel headerText="1. Buchungen nach Kontenklasse" expandable="true" expanded="true" class="sapUiSmallMarginBottom">
+                    <Panel headerText="{= '1. Buchungen nach Kontenklasse' + (${sales>/_sapBadgeR2R} ? ' · SAP API' : ' · Mock')}" expandable="true" expanded="true" class="sapUiSmallMarginBottom">
                         <content>
                             <Text text="Zeigt die Verteilung der Buchungen auf Kontenklassen. Typisch für R2R – wo entstehen die meisten Buchungen?"
                                 class="sapUiSmallMarginBottom"/>
@@ -88,7 +100,7 @@
                             </viz:VizFrame>
                         </content>
                     </Panel>
-                    <Panel headerText="2. Buchungen pro Periode" expandable="true" expanded="true" class="sapUiSmallMarginBottom">
+                    <Panel headerText="{= '2. Buchungen pro Periode' + (${sales>/_sapBadgeR2R} ? ' · SAP API' : ' · Mock')}" expandable="true" expanded="true" class="sapUiSmallMarginBottom">
                         <content>
                             <Text text="Zeigt das Buchungsvolumen je Monat. Wichtig für die Ressourcenplanung und Spitzenerkennung."
                                 class="sapUiSmallMarginBottom"/>
@@ -121,41 +133,40 @@
                             </viz:VizFrame>
                         </content>
                     </Panel>
-                    <Panel headerText="3. Close-Cycle-Zeit (Tage)" expandable="true" expanded="true" class="sapUiSmallMarginBottom">
+                    <Panel headerText="{= '3. Soll-/Haben-Verteilung' + (${sales>/_sapBadgeR2R} ? ' · SAP API' : ' · Mock')}" expandable="true" expanded="true" class="sapUiSmallMarginBottom">
                         <content>
-                            <Text text="Zeigt die Dauer des Periodenabschlusses in Tagen. Wichtig für die rechtzeitige Berichterstattung."
+                            <Text text="Zeigt die Verteilung zwischen Soll- und Haben-Buchungen. Grundlegende Prüfgröße im Rechnungswesen – ein ausgeglichenes Verhältnis ist ein Qualitätsmerkmal."
                                 class="sapUiSmallMarginBottom"/>
                             <viz:VizFrame
-                                id="r2rCloseChart"
-                                vizType="line"
+                                id="r2rDebitCreditChart"
+                                vizType="donut"
                                 height="280px"
                                 width="100%"
                                 uiConfig="{applicationSet:'fiori'}"
                                 vizProperties="{
-                                    title: { text: 'Abschlussdauer (Tage)' },
-                                    plotArea: { dataLabel: { visible: true }, colorPalette: ['#107E3E'] },
-                                    categoryAxis: { title: { visible: false } },
-                                    valueAxis: { title: { visible: false } }
+                                    title: { text: 'Soll (S) vs. Haben (H) – Anzahl Buchungen' },
+                                    plotArea: { dataLabel: { visible: true, type: 'percentage' }, colorPalette: ['#0070F2','#107E3E'] },
+                                    legend: { visible: true }
                                 }">
                                 <viz:dataset>
-                                    <viz.data:FlattenedDataset data="{sales>/R2RCloseCycle}">
+                                    <viz.data:FlattenedDataset data="{sales>/R2RDebitCreditSplit}">
                                         <viz.data:dimensions>
-                                            <viz.data:DimensionDefinition name="Monat" value="{sales>month}"/>
+                                            <viz.data:DimensionDefinition name="Buchungsart" value="{sales>type}"/>
                                         </viz.data:dimensions>
                                         <viz.data:measures>
-                                            <viz.data:MeasureDefinition name="Tage" value="{sales>days}"/>
+                                            <viz.data:MeasureDefinition name="Anzahl" value="{sales>count}"/>
                                         </viz.data:measures>
                                     </viz.data:FlattenedDataset>
                                 </viz:dataset>
                                 <viz:feeds>
-                                    <viz.feeds:FeedItem uid="valueAxis" type="Measure" values="Tage"/>
-                                    <viz.feeds:FeedItem uid="categoryAxis" type="Dimension" values="Monat"/>
+                                    <viz.feeds:FeedItem uid="size" type="Measure" values="Anzahl"/>
+                                    <viz.feeds:FeedItem uid="color" type="Dimension" values="Buchungsart"/>
                                 </viz:feeds>
                             </viz:VizFrame>
                         </content>
                     </Panel>
                     <Title text="Zusammenfassung" level="H4"/>
-                    <Text text="Für R2R sind Kreisdiagramme (Buchungsverteilung), Säulendiagramme (Buchungsvolumen pro Periode) und Liniendiagramme (Close-Cycle) relevant."
+                    <Text text="Für R2R sind Kreisdiagramme (Kontenverteilung), Säulendiagramme (Buchungsvolumen pro Periode) und Donut-Diagramme (Soll-/Haben-Verteilung) relevant."
                         class="sapUiSmallMarginBottom"/>
                 </l:VerticalLayout>
             </ScrollContainer>

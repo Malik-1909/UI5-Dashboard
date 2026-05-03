@@ -28,6 +28,11 @@
                     <Title text="Design to Operate Prozess" level="H3"/>
                     <Text text="Design to Operate (D2O) beschreibt den Prozess von der Produktentwicklung bis zum Betrieb und Service. Der Prozess verbindet Design, Engineering, Fertigung und Service."
                         class="sapUiSmallMarginBottom"/>
+                    <MessageStrip
+                        text="Demo-Daten (Mock) · Kein SAP Sandbox-Zugang für D2O verfügbar"
+                        type="Warning"
+                        showCloseButton="false"
+                        class="sapUiSmallMarginBottom"/>
                     <Title text="Prozessschritte" level="H4"/>
                     <List>
                         <StandardListItem title="1. Design" info="Produktdesign und Konzeptentwicklung"/>

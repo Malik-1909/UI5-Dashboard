@@ -1,11 +1,13 @@
 /**
- * UI5 Custom Middleware – proxies POST /api/chat to Groq API (kostenlos).
- *
- * Kostenlosen Key holen: https://console.groq.com → "Create API Key"
+ * UI5 Custom Middleware
+ *   POST /api/chat   → Groq KI-API (kostenlos, Key: https://console.groq.com)
+ *   GET  /api/sap/*  → SAP Business Accelerator Hub Sandbox
+ *                      (Key: https://api.sap.com → Settings → Show API Key)
  *
  * .env im Projektstamm:
  *   GROQ_API_KEY=gsk_...
- *   MOCK_MODE=true  (optional, Simulation ohne Key)
+ *   SAP_API_KEY=...
+ *   MOCK_MODE=true  (optional, Chat-Simulation ohne Groq-Key)
  */
 
 const fs   = require("fs");
@@ -28,8 +30,10 @@ function loadDotEnv() {
 }
 loadDotEnv();
 
-const GROQ_URL   = "https://api.groq.com/openai/v1/chat/completions";
-const GROQ_MODEL = "llama-3.3-70b-versatile";
+const GROQ_URL        = "https://api.groq.com/openai/v1/chat/completions";
+const GROQ_MODEL      = "llama-3.3-70b-versatile";
+const SAP_SANDBOX     = "https://sandbox.api.sap.com";
+const SAP_API_PREFIX  = "/api/sap";
 
 const SYSTEM_PROMPT = `Du bist ein intelligenter Dashboard-Assistent für eine SAPUI5 Business-Intelligence-Anwendung.
 
@@ -97,16 +101,27 @@ const MOCK_RESPONSES = [
 
 // ── Middleware export ────────────────────────────────────────────────────────
 module.exports = function () {
-    const apiKey   = process.env.GROQ_API_KEY || "";
-    const mockMode = process.env.MOCK_MODE === "true" || !apiKey;
+    const apiKey    = process.env.GROQ_API_KEY || "";
+    const sapKey    = process.env.SAP_API_KEY  || "";
+    const mockMode  = process.env.MOCK_MODE === "true" || !apiKey;
 
     if (mockMode) {
-        console.log("[chat-proxy] MOCK_MODE aktiv (Demo-Modus ohne API-Key).");
+        console.log("[chat-proxy] MOCK_MODE aktiv (Demo-Modus ohne Groq-Key).");
     } else {
         console.log(`[chat-proxy] Groq bereit – Modell: ${GROQ_MODEL}`);
     }
+    if (sapKey) {
+        console.log("[sap-proxy]  SAP Sandbox bereit – /api/sap/* → sandbox.api.sap.com");
+    } else {
+        console.log("[sap-proxy]  Kein SAP_API_KEY – /api/sap/* antwortet mit 503.");
+    }
 
     return async function chatProxy(req, res, next) {
+        // ── SAP Sandbox Proxy ──────────────────────────────────────────────
+        if (req.url.startsWith(SAP_API_PREFIX)) {
+            return await handleSapProxy(req, res, sapKey);
+        }
+
         if (req.method !== "POST" || req.url !== "/api/chat") { return next(); }
 
         let raw = "";
@@ -130,6 +145,42 @@ module.exports = function () {
         }
     };
 };
+
+// ── SAP Sandbox Proxy ─────────────────────────────────────────────────────────
+async function handleSapProxy(req, res, sapKey) {
+    if (!sapKey) {
+        res.writeHead(503, { "Content-Type": "application/json" });
+        res.end(JSON.stringify({ error: "SAP_API_KEY nicht gesetzt – bitte in .env eintragen." }));
+        return;
+    }
+
+    const targetPath = req.url.slice(SAP_API_PREFIX.length);
+    const targetUrl  = SAP_SANDBOX + targetPath;
+
+    try {
+        const sapRes = await fetch(targetUrl, {
+            method:  req.method,
+            headers: {
+                "APIKey":  sapKey,
+                "Accept":  req.headers["accept"]       || "application/json",
+                "DataServiceVersion": "2.0",
+                "MaxDataServiceVersion": "2.0",
+            },
+        });
+
+        const body        = await sapRes.text();
+        const contentType = sapRes.headers.get("content-type") || "application/json";
+        res.writeHead(sapRes.status, {
+            "Content-Type":  contentType,
+            "Cache-Control": "no-cache",
+        });
+        res.end(body);
+    } catch (err) {
+        console.error("[sap-proxy] Fehler:", err.message);
+        res.writeHead(502, { "Content-Type": "application/json" });
+        res.end(JSON.stringify({ error: "SAP Sandbox nicht erreichbar: " + err.message }));
+    }
+}
 
 // ── Groq API call ────────────────────────────────────────────────────────────
 async function callGroq(messages, context, apiKey) {

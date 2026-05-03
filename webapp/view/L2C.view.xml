@@ -28,6 +28,18 @@
                     <Title text="Lead to Cash Prozess" level="H3"/>
                     <Text text="Lead to Cash (L2C) umfasst den gesamten Prozess vom Lead bis zum Zahlungseingang. Der Prozess verbindet Vertrieb, Logistik und Finanzen."
                         class="sapUiSmallMarginBottom"/>
+                    <MessageStrip
+                        text="{sales>/_sapBadgeL2C}"
+                        type="Information"
+                        showCloseButton="false"
+                        visible="{= !!${sales>/_sapBadgeL2C}}"
+                        class="sapUiSmallMarginBottom"/>
+                    <MessageStrip
+                        text="Demo-Daten (Mock) · SAP API nicht konfiguriert oder nicht erreichbar"
+                        type="Warning"
+                        showCloseButton="false"
+                        visible="{= !${sales>/_sapBadgeL2C}}"
+                        class="sapUiSmallMarginBottom"/>
                     <Title text="Prozessschritte" level="H4"/>
                     <List>
                         <StandardListItem title="1. Lead" info="Interessent wird erfasst und qualifiziert"/>
@@ -58,7 +70,7 @@
                     <Title text="Wichtige Diagramme für L2C" level="H3" class="sapUiSmallMarginTop"/>
                     <Text text="Die folgenden Diagramme sind für die Steuerung und Überwachung des Lead-to-Cash-Prozesses zentral. Sie zeigen Engpässe, Durchlaufzeiten und den Umsatzfluss."
                         class="sapUiSmallMarginBottom"/>
-                    <Panel headerText="1. L2C-Conversion-Funnel" expandable="true" expanded="true" class="sapUiSmallMarginBottom">
+                    <Panel headerText="{= '1. L2C-Conversion-Funnel' + (${sales>/_sapBadgeL2C} ? ' · SAP API' : ' · Mock')}" expandable="true" expanded="true" class="sapUiSmallMarginBottom">
                         <content>
                             <Text text="Zeigt die Durchlaufmenge pro Prozessstufe. Säulendiagramm für den Conversion-Durchlauf – wichtig zur Identifikation von Abbrüchen und Engpässen."
                                 class="sapUiSmallMarginBottom"/>
@@ -91,7 +103,7 @@
                             </viz:VizFrame>
                         </content>
                     </Panel>
-                    <Panel headerText="2. Umsatz pro Prozessstufe (Ist vs. Ziel)" expandable="true" expanded="true" class="sapUiSmallMarginBottom">
+                    <Panel headerText="{= '2. Umsatz pro Prozessstufe (Ist vs. Ziel)' + (${sales>/_sapBadgeL2C} ? ' · SAP API' : ' · Mock')}" expandable="true" expanded="true" class="sapUiSmallMarginBottom">
                         <content>
                             <Text text="Vergleicht den tatsächlichen Umsatz mit dem Zielwert je Stufe. Wichtig für die Steuerung von Liefertreue und Forderungsmanagement."
                                 class="sapUiSmallMarginBottom"/>
@@ -125,41 +137,41 @@
                             </viz:VizFrame>
                         </content>
                     </Panel>
-                    <Panel headerText="3. DSO (Days Sales Outstanding)" expandable="true" expanded="true" class="sapUiSmallMarginBottom">
+                    <Panel headerText="{= '3. Auftragseingang pro Monat' + (${sales>/_sapBadgeL2C} ? ' · SAP API' : ' · Mock')}" expandable="true" expanded="true" class="sapUiSmallMarginBottom">
                         <content>
-                            <Text text="Zeigt die durchschnittliche Zahlungszielüberschreitung in Tagen. Wichtig für das Forderungsmanagement und die Liquiditätsplanung."
+                            <Text text="Zeigt die monatliche Entwicklung des Auftragseingangs. Wichtig für Saisonalitäts- und Trendanalyse im Vertrieb."
                                 class="sapUiSmallMarginBottom"/>
                             <viz:VizFrame
-                                id="l2cDSOChart"
-                                vizType="line"
+                                id="l2cOrdersTrendChart"
+                                vizType="column"
                                 height="280px"
                                 width="100%"
                                 uiConfig="{applicationSet:'fiori'}"
                                 vizProperties="{
-                                    title: { text: 'Ausstehende Forderungen (Tage)' },
+                                    title: { text: 'Auftragseingang pro Monat' },
                                     plotArea: { dataLabel: { visible: true }, colorPalette: ['#107E3E'] },
                                     categoryAxis: { title: { visible: false } },
                                     valueAxis: { title: { visible: false } }
                                 }">
                                 <viz:dataset>
-                                    <viz.data:FlattenedDataset data="{sales>/L2CDSO}">
+                                    <viz.data:FlattenedDataset data="{sales>/L2COrdersByMonth}">
                                         <viz.data:dimensions>
                                             <viz.data:DimensionDefinition name="Monat" value="{sales>month}"/>
                                         </viz.data:dimensions>
                                         <viz.data:measures>
-                                            <viz.data:MeasureDefinition name="Tage" value="{sales>days}"/>
+                                            <viz.data:MeasureDefinition name="Aufträge" value="{sales>count}"/>
                                         </viz.data:measures>
                                     </viz.data:FlattenedDataset>
                                 </viz:dataset>
                                 <viz:feeds>
-                                    <viz.feeds:FeedItem uid="valueAxis" type="Measure" values="Tage"/>
+                                    <viz.feeds:FeedItem uid="valueAxis" type="Measure" values="Aufträge"/>
                                     <viz.feeds:FeedItem uid="categoryAxis" type="Dimension" values="Monat"/>
                                 </viz:feeds>
                             </viz:VizFrame>
                         </content>
                     </Panel>
                     <Title text="Zusammenfassung" level="H4"/>
-                    <Text text="Für L2C sind Säulen- und Balkendiagramme (Conversion-Durchlauf, Ist vs. Ziel) sowie Liniendiagramme (DSO-Trend) relevant. Sie ermöglichen die Überwachung von Durchsatz, Liefertreue und Zahlungsmoral."
+                    <Text text="Für L2C sind Säulen- und Balkendiagramme (Conversion-Durchlauf, Ist vs. Ziel) sowie Säulendiagramme (Auftragseingang-Trend) relevant. Sie ermöglichen die Überwachung von Durchsatz, Liefertreue und Auftragsvolumen."
                         class="sapUiSmallMarginBottom"/>
                 </l:VerticalLayout>
             </ScrollContainer>

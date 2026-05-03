@@ -28,6 +28,18 @@
                     <Title text="Recruit to Retire Prozess" level="H3"/>
                     <Text text="Recruit to Retire (RtR) umfasst den gesamten Mitarbeiterlebenszyklus von der Rekrutierung bis zum Ruhestand. Der Prozess verbindet Personalbeschaffung, Entwicklung und Offboarding."
                         class="sapUiSmallMarginBottom"/>
+                    <MessageStrip
+                        text="{sales>/_sapBadgeRtR}"
+                        type="Information"
+                        showCloseButton="false"
+                        visible="{= !!${sales>/_sapBadgeRtR}}"
+                        class="sapUiSmallMarginBottom"/>
+                    <MessageStrip
+                        text="Demo-Daten (Mock) · SAP API nicht konfiguriert oder nicht erreichbar"
+                        type="Warning"
+                        showCloseButton="false"
+                        visible="{= !${sales>/_sapBadgeRtR}}"
+                        class="sapUiSmallMarginBottom"/>
                     <Title text="Prozessschritte" level="H4"/>
                     <List>
                         <StandardListItem title="1. Recruiting" info="Stellenausschreibung und Kandidatensuche"/>
@@ -57,7 +69,7 @@
                     <Title text="Wichtige Diagramme für RtR" level="H3" class="sapUiSmallMarginTop"/>
                     <Text text="Die folgenden Diagramme unterstützen die Steuerung des HR-Prozesses: Headcount-Funnel, Verteilung nach Abteilung und Fluktuationstrend."
                         class="sapUiSmallMarginBottom"/>
-                    <Panel headerText="1. Headcount-Funnel" expandable="true" expanded="true" class="sapUiSmallMarginBottom">
+                    <Panel headerText="{= '1. Headcount-Funnel' + (${sales>/_sapBadgeRtR} ? ' · SAP API' : ' · Mock')}" expandable="true" expanded="true" class="sapUiSmallMarginBottom">
                         <content>
                             <Text text="Zeigt die Anzahl Mitarbeiter pro Prozessstufe. Wichtig zur Identifikation von Engpässen im Recruiting und Onboarding."
                                 class="sapUiSmallMarginBottom"/>
@@ -90,7 +102,7 @@
                             </viz:VizFrame>
                         </content>
                     </Panel>
-                    <Panel headerText="2. Headcount nach Abteilung" expandable="true" expanded="true" class="sapUiSmallMarginBottom">
+                    <Panel headerText="{= '2. Headcount nach Abteilung' + (${sales>/_sapBadgeRtR} ? ' · SAP API' : ' · Mock')}" expandable="true" expanded="true" class="sapUiSmallMarginBottom">
                         <content>
                             <Text text="Zeigt die Verteilung der Mitarbeiter auf Abteilungen. Wichtig für die Ressourcenplanung und Schwerpunktanalyse."
                                 class="sapUiSmallMarginBottom"/>
@@ -122,41 +134,41 @@
                             </viz:VizFrame>
                         </content>
                     </Panel>
-                    <Panel headerText="3. Fluktuationstrend (%)" expandable="true" expanded="true" class="sapUiSmallMarginBottom">
+                    <Panel headerText="{= '3. Top Job-Titel' + (${sales>/_sapBadgeRtR} ? ' · SAP API' : ' · Mock')}" expandable="true" expanded="true" class="sapUiSmallMarginBottom">
                         <content>
-                            <Text text="Zeigt die monatliche Fluktuationsrate. Wichtig für die Mitarbeiterbindung und Retention-Strategien."
+                            <Text text="Zeigt die häufigsten Stellenbezeichnungen aus dem SuccessFactors-System. Wichtig für Kapazitätsplanung und Kompetenzsteuerung."
                                 class="sapUiSmallMarginBottom"/>
                             <viz:VizFrame
-                                id="rtrAttritionChart"
-                                vizType="line"
-                                height="280px"
+                                id="rtrJobTitleChart"
+                                vizType="bar"
+                                height="300px"
                                 width="100%"
                                 uiConfig="{applicationSet:'fiori'}"
                                 vizProperties="{
-                                    title: { text: 'Fluktuation (%)' },
-                                    plotArea: { dataLabel: { visible: true }, colorPalette: ['#107E3E'] },
+                                    title: { text: 'Top Job-Titel (Anzahl Mitarbeiter)' },
+                                    plotArea: { dataLabel: { visible: true }, colorPalette: ['#0070F2'] },
                                     categoryAxis: { title: { visible: false } },
                                     valueAxis: { title: { visible: false } }
                                 }">
                                 <viz:dataset>
-                                    <viz.data:FlattenedDataset data="{sales>/RtrAttritionTrend}">
+                                    <viz.data:FlattenedDataset data="{sales>/RtrByJobTitle}">
                                         <viz.data:dimensions>
-                                            <viz.data:DimensionDefinition name="Monat" value="{sales>month}"/>
+                                            <viz.data:DimensionDefinition name="Titel" value="{sales>title}"/>
                                         </viz.data:dimensions>
                                         <viz.data:measures>
-                                            <viz.data:MeasureDefinition name="Rate" value="{sales>rate}"/>
+                                            <viz.data:MeasureDefinition name="Anzahl" value="{sales>count}"/>
                                         </viz.data:measures>
                                     </viz.data:FlattenedDataset>
                                 </viz:dataset>
                                 <viz:feeds>
-                                    <viz.feeds:FeedItem uid="valueAxis" type="Measure" values="Rate"/>
-                                    <viz.feeds:FeedItem uid="categoryAxis" type="Dimension" values="Monat"/>
+                                    <viz.feeds:FeedItem uid="valueAxis" type="Measure" values="Anzahl"/>
+                                    <viz.feeds:FeedItem uid="categoryAxis" type="Dimension" values="Titel"/>
                                 </viz:feeds>
                             </viz:VizFrame>
                         </content>
                     </Panel>
                     <Title text="Zusammenfassung" level="H4"/>
-                    <Text text="Für RtR sind Säulendiagramme (Headcount-Funnel), Donut-Diagramme (Abteilungsverteilung) und Liniendiagramme (Fluktuationstrend) relevant."
+                    <Text text="Für RtR sind Säulendiagramme (Headcount-Funnel), Donut-Diagramme (Abteilungsverteilung) und Balkendiagramme (Top Job-Titel) relevant."
                         class="sapUiSmallMarginBottom"/>
                 </l:VerticalLayout>
             </ScrollContainer>

@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "SAPUI5 App with VizFrame Charts",
   "scripts": {
-    "start": "ui5 serve --open index.html",
+    "start": "node scripts/bundle-static-mock.js && ui5 serve --open index.html",
     "start:full": "ui5 build --all --clean-dest && sed -i '' 's|src=\"resources/sap-ui-core.js\"|src=\"https://ui5.sap.com/1.120.0/resources/sap-ui-core.js\"|g' dist/index.html && npx --yes serve dist -l 8080",
     "build": "node scripts/bundle-static-mock.js && ui5 build --clean-dest",
     "deploy": "npm run build && node scripts/prepare-ghpages.js && npx gh-pages -d dist",
