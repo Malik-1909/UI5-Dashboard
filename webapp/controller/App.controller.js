@@ -115,10 +115,9 @@ sap.ui.define([
                     ? "Auf GitHub Pages nutze ich Demo-Daten und eine <strong>Offline-Simulation</strong> (kein API-Key). Lokal mit <code>npm run start</code> ist die echte KI aktiv.<br><br>"
                     : "";
                 that._addBotMsg(
-                    "Hallo! Ich bin dein KI-Assistent.<br>" +
+                    "Hallo! Ich bin dein KI-Assistent für dieses Dashboard.<br>" +
                     sGh +
-                    "Ich beantworte KPI-Fragen und navigiere dich durch die App.<br>" +
-                    "Zum Beispiel: <em>\"Zeige R2R\"</em> oder <em>\"Was ist Lead to Cash?\"</em>"
+                    "Frag zu den Prozessen, Kacheln oder KPIs. Für einen Seitenwechsel z. B. <em>„Navigiere zu R2R“</em> oder <em>„Gehe zur Startseite“</em>."
                 );
 
                 return oPopover;
@@ -165,7 +164,7 @@ sap.ui.define([
             var oComp = this.getOwnerComponent();
             if (oComp && oComp.isRunningOnGitHubPages && oComp.isRunningOnGitHubPages()) {
                 that._hideTyping();
-                that._handleReply(StaticChatMock.getReply(sText));
+                that._handleReply(StaticChatMock.getReply(sText), sText);
                 return;
             }
             fetch("/api/chat", {
@@ -184,7 +183,7 @@ sap.ui.define([
                     that._addBotMsg("<strong>Hinweis:</strong> " + that._escapeHtml(String(data.error)));
                     return;
                 }
-                that._handleReply(data.reply || "");
+                that._handleReply(data.reply || "", sText);
             })
             .catch(function (err) {
                 that._hideTyping();
@@ -192,7 +191,19 @@ sap.ui.define([
             });
         },
 
-        _handleReply: function (sReply) {
+        /** Nur bei ausdrücklichem Navigationsbefehl im Nutzertext Router auslösen (nicht bei halluziniertem JSON). */
+        _userExplicitlyRequestedNavigation: function (sUserText) {
+            var s = (sUserText || "").trim();
+            if (!s) {
+                return false;
+            }
+            return /\b(geh|gehe)\s+zu(r|m)?\b/i.test(s)
+                || /\bnavigier(?:e)?\s+zu(r|m)?\b/i.test(s)
+                || /\bwechsle\s+zu(r|m)?\b/i.test(s)
+                || /\b(bring|bringt)\s+mich\s+(zu(r|m)?|auf)\b/i.test(s);
+        },
+
+        _handleReply: function (sReply, sLastUserMessage) {
             if (!sReply || !sReply.trim()) {
                 this._addBotMsg("Keine Antwort erhalten – bitte erneut versuchen.");
                 return;
@@ -201,6 +212,13 @@ sap.ui.define([
             try {
                 var oIntent = JSON.parse(sReply.trim());
                 if (oIntent.action === "navigate" && oIntent.route) {
+                    if (!this._userExplicitlyRequestedNavigation(sLastUserMessage)) {
+                        var sHint = "Für einen Seitenwechsel bitte ausdrücklich z. B. "
+                            + "<strong>Gehe zu …</strong> oder <strong>Navigiere zu …</strong> schreiben.";
+                        this._chatHistory.push({ role: "bot", text: sHint.replace(/<[^>]+>/g, "") });
+                        this._addBotMsg(sHint);
+                        return;
+                    }
                     var mLabels = {
                         main:    "Startseite",
                         r2r:     "Record to Report",
@@ -296,21 +314,66 @@ sap.ui.define([
 
         // ── Helpers ──────────────────────────────────────────────────────────
 
+        /** Welche Modellpfade für den Chat-Kontext je Route mitgeschickt werden. */
+        _contextModelKeysForRoute: function (sRoute) {
+            var r = (sRoute || "main").split("/")[0] || "main";
+            var m = {
+                "":        ["RtrHeadcountFunnel", "R2RByAccountType", "S2POrdersByMonth", "D2OOutputTrend", "L2CConversionFunnel"],
+                main:      ["RtrHeadcountFunnel", "R2RByAccountType", "S2POrdersByMonth", "D2OOutputTrend", "L2CConversionFunnel"],
+                r2r:       ["R2RKpiTable", "R2RByAccountType", "R2RProcessFunnel", "R2RCloseCycle", "R2RJournalEntries"],
+                rtr:       ["RtrKpiTable", "RtrHeadcountFunnel", "RtrByDepartment", "RtrAttritionTrend"],
+                s2p:       ["S2PKpiTable", "S2POrdersByMonth", "S2PProcessFunnel", "S2PSpendByCategory", "S2PInvoiceCycle"],
+                d2o:       ["D2OKpiTable", "D2OOutputTrend", "D2OProcessFunnel", "D2OCapacityUtil"],
+                l2c:       ["L2CKpiTable", "L2CConversionFunnel", "L2CRevenueByStage", "L2CDSO", "L2COrdersByMonth"],
+                project:   []
+            };
+            return m[r] || m.main;
+        },
+
         _buildContext: function () {
             try {
-                var oRouter = this.getOwnerComponent().getRouter();
-                var sHash   = window.location.hash.replace("#", "") || "main";
+                var oComp = this.getOwnerComponent();
+                var sRaw  = (window.location.hash || "").replace(/^#/, "").replace(/^\//, "") || "main";
+                var sRoute = (sRaw.split("/")[0] || "main").trim() || "main";
                 var mNames  = {
                     "":        "Startseite",
-                    "main":    "Startseite",
-                    "r2r":     "Record to Report",
-                    "rtr":     "Recruit to Retire",
-                    "s2p":     "Source to Pay",
-                    "d2o":     "Design to Operate",
-                    "l2c":     "Lead to Cash",
-                    "project": "Projektseite"
+                    main:      "Startseite",
+                    r2r:       "Record to Report",
+                    rtr:       "Recruit to Retire",
+                    s2p:       "Source to Pay",
+                    d2o:       "Design to Operate",
+                    l2c:       "Lead to Cash",
+                    project:   "Projektseite"
                 };
-                return "Aktuell angezeigte Seite: " + (mNames[sHash] || sHash);
+                var sPage = mNames[sRoute] || sRoute;
+                var aParts = ["Aktuell angezeigte Seite: " + sPage];
+
+                var oSales = oComp.getModel("sales");
+                if (oSales && typeof oSales.getData === "function") {
+                    var oData = oSales.getData();
+                    if (oData && typeof oData === "object") {
+                        var aKeys = this._contextModelKeysForRoute(sRoute);
+                        var oSlice = {};
+                        var i;
+                        for (i = 0; i < aKeys.length; i++) {
+                            var k = aKeys[i];
+                            if (oData[k] != null) {
+                                oSlice[k] = oData[k];
+                            }
+                        }
+                        if (Object.keys(oSlice).length) {
+                            var sJson = JSON.stringify(oSlice);
+                            var nMax = 14000;
+                            if (sJson.length > nMax) {
+                                sJson = sJson.slice(0, nMax) + "…(gekürzt)";
+                            }
+                            aParts.push("");
+                            aParts.push("KPI-Daten aus der App (Mock oder Live, wie im Diagramm – für Zahlenfragen diese Werte verwenden):");
+                            aParts.push(sJson);
+                        }
+                    }
+                }
+                return aParts.join("\n");
             } catch (e) {
                 return "";
             }

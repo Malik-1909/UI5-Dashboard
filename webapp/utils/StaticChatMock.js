@@ -18,7 +18,7 @@ sap.ui.define([], function () {
         { test: /\b(projekt|project|über das|about)\b/i,
             reply: "{\"action\":\"navigate\",\"route\":\"project\"}" },
         { test: /\b(hallo|hi|hey|moin|guten\s*(morgen|tag|abend))\b/i,
-            reply: "Hallo! Ich bin dein KI-Assistent für dieses SAP-Dashboard.\n\nIch kann:\n• Geschäftsprozesse erklären (R2R, RtR, S2P, D2O, L2C)\n• Zu Seiten navigieren – sag einfach \"Zeige R2R\"\n• KPI-Fragen beantworten\n\nWas möchtest du wissen?" },
+            reply: "Hallo! Ich bin dein KI-Assistent für dieses Dashboard.\n\nIch helfe bei den Prozessen (R2R, RtR, S2P, D2O, L2C), den Kacheln und KPIs. Wobei darf ich helfen?" },
         { test: /\b(kachel|kackel|tile|oben links|oben rechts|mitte oben|links oben|rechts oben)\b/i,
             reply: "Die Startseite hat 5 Prozesskacheln in 2 Reihen:<br><br><strong>Reihe 1 (oben, je 1/3):</strong><br>• Links: <strong>Recruit to Retire (RtR)</strong> – Balkendiagramm<br>• Mitte: <strong>Record to Report (R2R)</strong> – Kreisdiagramm<br>• Rechts: <strong>Source to Pay (S2P)</strong> – Donut-Diagramm<br><br><strong>Reihe 2 (unten, je 1/2):</strong><br>• Links: <strong>Design to Operate (D2O)</strong> – Liniendiagramm<br>• Rechts: <strong>Lead to Cash (L2C)</strong> – Balkendiagramm<br><br>Klick auf eine Kachel für die Detailseite!" },
         { test: /\b(was ist|erkl|bedeutet).*(r2r|record)\b/i,
@@ -34,10 +34,16 @@ sap.ui.define([], function () {
         { test: /\b(kpi|kennzahl|daten|zahlen|metr)\b/i,
             reply: "Auf <strong>GitHub Pages</strong> kommen die Diagramme aus den gleichen <strong>Demo-JSON-Dateien</strong> wie lokal im Mock – ohne echtes SAP-Backend." },
         { test: /\bwas\s+kannst\s+du\s+alles\b/i,
-            reply: "Ich kann helfen mit:\n\n<strong>Navigation:</strong> \"Zeige R2R\"\n<strong>Prozesse:</strong> \"Was ist Lead to Cash?\"\n<strong>App-Fragen:</strong> \"Was machen die Kacheln?\"\n<strong>KPIs:</strong> \"Welche KPIs gibt es?\"\n\n(Hinweis: Auf GitHub Pages läuft nur diese Offline-Simulation – keine echte KI.)" },
+            reply: "Ich erkläre die App und die Geschäftsprozesse, beantworte Fragen zu Kacheln und KPIs und wechsle die Seite, wenn du es ausdrücklich möchtest (z. B. „Gehe zur Startseite“ / „Navigiere zu L2C“).\n\n(Hinweis: Auf GitHub Pages läuft nur die Offline-Simulation – keine echte KI.)" },
         { test: /\b(hilfe|help|was kannst|was kannst du|was kann|fähigkeit)\b/i,
-            reply: "Ich kann helfen mit:\n\n<strong>Navigation:</strong> \"Zeige R2R\"\n<strong>Prozesse:</strong> \"Was ist Lead to Cash?\"\n<strong>App-Fragen:</strong> \"Was machen die Kacheln?\"\n<strong>KPIs:</strong> \"Welche KPIs gibt es?\"\n\n(Hinweis: Auf GitHub Pages läuft nur diese Offline-Simulation – keine echte KI.)" }
+            reply: "Ich erkläre die App und die Geschäftsprozesse, beantworte Fragen zu Kacheln und KPIs und wechsle die Seite, wenn du es ausdrücklich möchtest (z. B. „Gehe zur Startseite“ / „Navigiere zu L2C“).\n\n(Hinweis: Auf GitHub Pages läuft nur die Offline-Simulation – keine echte KI.)" }
     ];
+
+    /** Wie im chat-proxy: Off-Topic im Offline-Mock abfangen. */
+    var CHAT_OFF_TOPIC = /\b(wetter|fu(ß|ss)ball|bundesliga|champions|handball|tennis|basketball|hockey|formel\s*1|olymp|wm\s+20|em\s+20|sportler|politik|bundestag|bundeskanzler|kanzler|wahl|partei|präsident|horoskop|bitcoin|krypto|aktien|netflix|film|serie|musikcharts|rezept|dating)\b/i;
+
+    var SCOPE_DECLINE =
+        "Dazu kann ich hier nichts sagen – ich unterstütze nur bei <strong>dieser App</strong> und den <strong>dargestellten Prozessen</strong>.";
 
     function getReply(sText) {
         var s = (sText || "").trim();
@@ -46,8 +52,11 @@ sap.ui.define([], function () {
                 return MOCK_RESPONSES[i].reply;
             }
         }
+        if (CHAT_OFF_TOPIC.test(s)) {
+            return SCOPE_DECLINE;
+        }
         return "Auf GitHub Pages ist kein Chat-Backend verfügbar. Lokal mit <code>npm run start</code> und API-Key antwortet die echte KI.\n\n" +
-            "Trotzdem: Probiere <strong>\"Zeige R2R\"</strong>, <strong>\"Was ist L2C?\"</strong> oder <strong>\"Hilfe\"</strong> – Navigation und Kurzantworten funktionieren offline.";
+            "Offline gilt: nur diese App und die Prozesse im Dashboard. Schreib <strong>Hilfe</strong> für eine Kurzübersicht.";
     }
 
     return { getReply: getReply };
