@@ -1,0 +1,14 @@
+// Design token aliases and fallback values for custom styling.
+$radius-sm: 0.25rem;
+$radius-md: 0.75rem;
+$radius-lg: 1rem;
+$radius-pill: 1.125rem;
+
+$shadow-card: 0 1px 4px rgba(0, 0, 0, 0.08);
+$shadow-card-hover: 0 4px 12px rgba(0, 0, 0, 0.1);
+$shadow-chat-fab: 0 4px 18px rgba(107, 76, 255, 0.45), 0 2px 8px rgba(0, 112, 242, 0.25);
+$shadow-chat-fab-hover: 0 6px 22px rgba(107, 76, 255, 0.55), 0 4px 12px rgba(0, 112, 242, 0.35);
+
+$bp-mobile: 600px;
+$bp-tablet: 900px;
+$bp-desktop-narrow: 960px;

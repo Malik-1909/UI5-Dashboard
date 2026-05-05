@@ -1,0 +1,65 @@
+@use "../abstracts/tokens" as t;
+
+#content .processDetailScroll {
+  width: 100%;
+  max-width: none;
+  box-sizing: border-box;
+  padding: 0.25rem 0.5rem 1.25rem;
+}
+
+#content .sapMPage:has(.processDetailScroll) .sapMPageContent {
+  padding-left: 0.5rem !important;
+  padding-right: 0.5rem !important;
+}
+
+#content .processDetailMain {
+  width: 100%;
+  max-width: none;
+  margin-left: 0;
+  margin-right: 0;
+  box-sizing: border-box;
+}
+
+.processDetailScroll {
+  .processDetailStepsPanel .sapMPanelHdr {
+    cursor: pointer;
+  }
+
+  .processDetailKpiBlock,
+  .processDetailStepsPanel {
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+
+  .processDetailChartsGrid {
+    box-sizing: border-box;
+    min-width: 0;
+  }
+
+  .processDetailChartPanel {
+    min-width: 0;
+  }
+
+  .processDetailChartPanelFull {
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+
+  .processDetailKpiTable {
+    width: 100%;
+  }
+
+  .processDetailStepsList {
+    width: 100%;
+    max-height: 22rem;
+    overflow: auto;
+  }
+}
+
+@media (max-width: t.$bp-tablet) {
+  #content .processDetailScroll .processDetailChartsGrid {
+    grid-template-columns: 1fr !important;
+  }
+}

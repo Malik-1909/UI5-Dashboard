@@ -1,0 +1,133 @@
+@use "../abstracts/tokens" as t;
+
+.chartCard {
+  background: #fff;
+  border-radius: t.$radius-md;
+  box-shadow: t.$shadow-card;
+  padding: 0.75rem;
+  overflow: hidden;
+}
+
+.chartWide {
+  grid-column: span 2;
+}
+
+@media (max-width: t.$bp-tablet) {
+  .chartWide {
+    grid-column: span 1;
+  }
+}
+
+/* Große Prozess-Tiles auf der Startseite: 3 pro Reihe (Desktop), 2 (Tablet), 1 (Mobile) */
+.processTilesGrid {
+  width: 100%;
+  max-width: none;
+  min-height: 80vh;
+  box-sizing: border-box;
+  padding: 1rem 1.5rem 1.5rem;
+
+  .processTile {
+    width: 100% !important;
+    min-width: 0;
+    min-height: 100px;
+    height: 100%;
+
+    .sapMTileContent {
+      min-height: 300px;
+      height: 100% !important;
+      overflow: visible !important;
+      padding: 1rem 1.25rem 1.5rem !important;
+      box-sizing: border-box;
+    }
+  }
+
+  /* 2-Zeilen-Layout: Zeile 1 = 3 Kacheln (je 1/3), Zeile 2 = 2 Kacheln (je 50%) */
+  /* 6-Spalten-Grid: tileThird = span 2 (1/3), tileHalf = span 3 (50%) */
+  .tileThird {
+    grid-column: span 2;
+  }
+
+  .tileHalf {
+    grid-column: span 3;
+  }
+}
+
+/* Tile-Content-Container: height 100% für vollständige Diagrammanzeige */
+[id*="tileR2R-content"],
+[id*="tileRtR-content"],
+[id*="tileS2P-content"],
+[id*="tileD2O-content"],
+[id*="tileL2C-content"] {
+  height: 100% !important;
+  min-height: 280px !important;
+}
+
+/* VizFrame: füllt den Content-Container */
+.processTilesGrid .sapVizFrame {
+  overflow: visible !important;
+  min-width: 200px;
+  min-height: 240px !important;
+  height: 100% !important;
+}
+
+/* Grid-Kinder (Tiles) füllen die Zelle komplett, min-width verhindert Overflow */
+.processTilesGrid > div,
+.processTilesGrid .sapMTile {
+  width: 100% !important;
+  max-width: none !important;
+  min-width: 0;
+  min-height: 380px;
+}
+
+@media (max-width: t.$bp-desktop-narrow) {
+  .processTilesGrid[id*="processTilesGrid"] {
+    grid-template-columns: 1fr 1fr !important;
+  }
+
+  .processTilesGrid .tileThird,
+  .processTilesGrid .tileHalf {
+    grid-column: span 1;
+  }
+}
+
+@media (max-width: t.$bp-mobile) {
+  .processTilesGrid[id*="processTilesGrid"] {
+    grid-template-columns: 1fr !important;
+  }
+
+  .processTilesGrid .tileThird,
+  .processTilesGrid .tileHalf {
+    grid-column: span 1;
+  }
+
+  /* Mobile: Tiles und Grid anpassen */
+  .processTilesGrid {
+    padding: 0.75rem 1rem 1rem;
+    min-height: auto;
+  }
+
+  .processTilesGrid .sapMTile,
+  .processTilesGrid > div {
+    min-height: 320px;
+  }
+
+  .processTilesGrid .processTile .sapMTileContent {
+    padding: 0.75rem 1rem 1rem !important;
+  }
+
+  .processTilesGrid .sapVizFrame {
+    min-height: 200px !important;
+  }
+}
+
+/* GenericTile: Hover statt Hintergrundfarbe – Card hebt sich leicht an */
+.sapMGT:hover:not(.sapMGTPressActive):not(.sapMGTBackgroundImage) {
+  background: transparent !important;
+  transform: translateY(-4px);
+  box-shadow: t.$shadow-card-hover;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.sapMGT {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
