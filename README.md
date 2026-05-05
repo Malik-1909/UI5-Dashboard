@@ -45,6 +45,7 @@ Proxy und Keys: siehe `middleware/chat-proxy` – Routen `/api/chat` und `/api/s
 | `webapp/utils/StaticChatMock.js` | Offline-Chat auf GitHub Pages |
 | `middleware/chat-proxy/` | Groq, Mock-Modus, **SAP-Sandbox-Proxy** |
 | `webapp/localService/data/` | Demo-JSON pro Entity-Set |
+| `webapp/styles/` | SCSS-Quellen (`main.scss` → generiert `webapp/css/style.css`) |
 | `webapp/localService/static-mock-bundle.json` | Build-Artefakt (per `bundle-static-mock.js`, steht in `.gitignore`) |
 | `scripts/bundle-static-mock.js` | Bündelt `data/*.json` vor `ui5 build` / `start` |
 | `scripts/prepare-ghpages.js` | `dist/index.html` für GitHub Pages (CDN 1.120, `base`, SPA-404) |
@@ -60,6 +61,39 @@ npm run start
 ```
 
 Vor dem Start wird `static-mock-bundle.json` erzeugt (falls noch nicht vorhanden). Die App nutzt den Dev-Server inkl. Middleware.
+
+### SCSS-Workflow (Source of Truth)
+
+- **Quell-Dateien:** `webapp/styles/**/*.scss` (Einstieg: [`webapp/styles/main.scss`](webapp/styles/main.scss)).
+- **Generierte Datei:** [`webapp/css/style.css`](webapp/css/style.css) – **nicht manuell bearbeiten**; wird bei jedem Build überschrieben.
+- **UI5 lädt** die Styles über [`webapp/manifest.json`](webapp/manifest.json) (`sap.ui5.resources.css` → `css/style.css` relativ zu `webapp`).
+
+**Befehle:**
+
+| Befehl | Zweck |
+|--------|--------|
+| `npm start` | Führt zuerst `scss:build` aus, dann Mock-Bundle und `ui5 serve`. |
+| `npm run build` | Wie Start: SCSS kompilieren, dann `ui5 build`. |
+| `npm run scss:build` | Einmalig SCSS → `webapp/css/style.css`. |
+| `npm run scss:watch` | Live-Kompilierung bei Änderungen (zweites Terminal neben `npm start`). |
+
+**Foundations** (unter `webapp/styles/abstracts/`):
+
+- `_tokens.scss` – Breakpoints, Radien, Schatten.
+- `_functions.scss` – z. B. `rem()` für Größen.
+- `_mixins.scss` – z. B. `@include bp-mobile`, `focus-ring`, `card-hover-lift`.
+
+In Partials Mixins/Funktionen nutzen: `@use "../abstracts/mixins" as m;` bzw. `@use "../abstracts/functions" as fn;` und dann `@include m.bp-mobile { … }` oder `fn.rem(14)`.
+
+**Konventionen:**
+
+- Neue **app-spezifische** Klassen idealerweise mit Präfix **`app-`** (bestehende Klassen schrittweise nicht zwingend umbenennen).
+- Styles nach Bereichen: `components/`, `pages/`, `layout/`, `utilities/`, `base/`.
+- **`!important`** nur bei nötigen UI5-Control-Overrides; kurz kommentieren, warum.
+
+### Aktive App vs. Legacy
+
+Die **aktive** SAPUI5-Anwendung liegt unter **`webapp/`** (Component, Views, Manifest, Styles). Weitere Ordner im Repo-Root (z. B. Demo-HTML, ältere Kopien wie `UI5-Dashboard/`) sind **Legacy** bzw. Referenz – für tägliche Entwicklung und Deployment gilt `webapp/` plus Root-`ui5.yaml` / `package.json`.
 
 ### Umgebungsvariablen (`.env`)
 

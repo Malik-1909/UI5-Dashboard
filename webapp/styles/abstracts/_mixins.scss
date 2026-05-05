@@ -1,0 +1,33 @@
+@use "tokens" as t;
+
+/// Mobile-first: apply styles from max-width breakpoint (tokens).
+@mixin bp-mobile {
+  @media (max-width: t.$bp-mobile) {
+    @content;
+  }
+}
+
+@mixin bp-tablet {
+  @media (max-width: t.$bp-tablet) {
+    @content;
+  }
+}
+
+@mixin bp-desktop-narrow {
+  @media (max-width: t.$bp-desktop-narrow) {
+    @content;
+  }
+}
+
+/// Accessible focus ring (uses SAP theme CSS variables with fallbacks).
+@mixin focus-ring($offset: 2px, $width: 2px) {
+  outline: $width solid var(--sapContent_FocusColor, #000);
+  outline-offset: $offset;
+}
+
+/// Card lift on hover (GenericTile / custom cards).
+@mixin card-hover-lift($shadow: t.$shadow-card-hover, $translate: -4px) {
+  transform: translateY($translate);
+  box-shadow: $shadow;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}

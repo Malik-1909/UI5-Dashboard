@@ -1,0 +1,12 @@
+@use "sass:math";
+
+/// Converts pixel values to rem (default root font size 16px).
+/// @param {Number} $px - Pixel value (unitless or with px).
+/// @param {Number} $base [16] - Root font size in px.
+@function rem($px, $base: 16) {
+  $value: $px;
+  @if math.unit($px) == "px" {
+    $value: math.div($px, 1px);
+  }
+  @return math.div($value, $base) * 1rem;
+}
