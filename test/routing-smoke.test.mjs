@@ -1,8 +1,11 @@
 import fs from "node:fs";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
 import test from "node:test";
 import assert from "node:assert/strict";
 
-const manifestPath = "/Users/MalikPrivat/Desktop/UI5/webapp/manifest.json";
+const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
+const manifestPath = path.join(root, "webapp/manifest.json");
 
 test("Manifest routing defines all core process routes", () => {
   const manifest = JSON.parse(fs.readFileSync(manifestPath, "utf8"));

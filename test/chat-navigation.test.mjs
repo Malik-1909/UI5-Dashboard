@@ -1,9 +1,11 @@
 import path from "node:path";
+import { fileURLToPath } from "node:url";
 import test from "node:test";
 import assert from "node:assert/strict";
 import { loadUi5Module } from "./helpers/ui5ModuleLoader.mjs";
 
-const root = "/Users/MalikPrivat/Desktop/UI5";
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const root = path.resolve(__dirname, "..");
 const routeConfigPath = path.join(root, "webapp/utils/ChatRouteConfig.js");
 const navigationGuardPath = path.join(root, "webapp/utils/ChatNavigationGuard.js");
 

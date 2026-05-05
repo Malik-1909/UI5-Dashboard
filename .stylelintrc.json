@@ -3,6 +3,10 @@
     "stylelint-config-standard-scss"
   ],
   "rules": {
+    "color-no-invalid-hex": true,
+    "length-zero-no-unit": true,
+    "number-max-precision": 4,
+    "max-nesting-depth": 5,
     "alpha-value-notation": null,
     "at-rule-empty-line-before": null,
     "color-function-alias-notation": null,

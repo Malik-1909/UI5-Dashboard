@@ -7,7 +7,9 @@ sap.ui.define([
     "ui5/vizframe/app/utils/StaticChatMock",
     "ui5/vizframe/app/utils/ChatContextBuilder",
     "ui5/vizframe/app/utils/ChatNavigationGuard",
-    "ui5/vizframe/app/utils/ChatTextFormat"
+    "ui5/vizframe/app/utils/ChatTextFormat",
+    "ui5/vizframe/app/utils/ChatApi",
+    "ui5/vizframe/app/utils/ChatMessageView"
 ], function (
     Controller,
     Fragment,
@@ -17,7 +19,9 @@ sap.ui.define([
     StaticChatMock,
     ChatContextBuilder,
     ChatNavigationGuard,
-    ChatTextFormat
+    ChatTextFormat,
+    ChatApi,
+    ChatMessageView
 ) {
     "use strict";
 
@@ -44,6 +48,10 @@ sap.ui.define([
             if (!oView) { return null; }
             var oCtrl = Fragment.byId(oView.getId(), sId);
             return oCtrl || this.byId(sId);
+        },
+
+        _chatMessageControls: function () {
+            return { HBox: HBox, FormattedText: FormattedText };
         },
 
         /**
@@ -180,15 +188,10 @@ sap.ui.define([
                 that._handleReply(StaticChatMock.getReply(sText), sText);
                 return;
             }
-            fetch("/api/chat", {
-                method:  "POST",
-                headers: { "Content-Type": "application/json" },
-                body:    JSON.stringify({
-                    messages: this._chatHistory,
-                    context:  ChatContextBuilder.buildContext(this.getOwnerComponent())
-                })
+            ChatApi.postChat({
+                messages: this._chatHistory,
+                context:  ChatContextBuilder.buildContext(this.getOwnerComponent())
             })
-            .then(function (res) { return res.json(); })
             .then(function (data) {
                 that._hideTyping();
                 if (data.error) {
@@ -240,12 +243,7 @@ sap.ui.define([
             var oChatMessages = this._chatById("chatMessages");
             if (!oChatMessages || oChatMessages.bIsDestroyed) { return; }
 
-            var oRow = new HBox({ justifyContent: "End" }).addStyleClass("chatRow");
-            var oBubble = new FormattedText({
-                htmlText: ChatTextFormat.escapeHtml(sText).replace(/\n/g, "<br>")
-            }).addStyleClass("chatBubble chatBubbleUser");
-            oRow.addItem(oBubble);
-            oChatMessages.addItem(oRow);
+            ChatMessageView.appendUserMessage(oChatMessages, sText, this._chatMessageControls());
             this._scrollToBottom();
         },
 
@@ -253,10 +251,7 @@ sap.ui.define([
             var oChatMessages = this._chatById("chatMessages");
             if (!oChatMessages || oChatMessages.bIsDestroyed) { return; }
 
-            var oRow = new HBox({ justifyContent: "Start" }).addStyleClass("chatRow");
-            var oBubble = new FormattedText({ htmlText: sHtml }).addStyleClass("chatBubble chatBubbleBot");
-            oRow.addItem(oBubble);
-            oChatMessages.addItem(oRow);
+            ChatMessageView.appendBotHtml(oChatMessages, sHtml, this._chatMessageControls());
             this._scrollToBottom();
         },
 
@@ -264,25 +259,14 @@ sap.ui.define([
             var oChatMessages = this._chatById("chatMessages");
             if (!oChatMessages || oChatMessages.bIsDestroyed) { return; }
 
-            var oRow = new HBox({ justifyContent: "Start" }).addStyleClass("chatRow chatTypingRow");
-            var oBubble = new FormattedText({ htmlText: "<span class='chatDots'><span></span></span>" })
-                .addStyleClass("chatBubble chatBubbleBot chatTypingBubble");
-            oRow.addItem(oBubble);
-            oChatMessages.addItem(oRow);
+            ChatMessageView.appendTyping(oChatMessages, this._chatMessageControls());
             this._scrollToBottom();
         },
 
         _hideTyping: function () {
             var oChatMessages = this._chatById("chatMessages");
             if (!oChatMessages || oChatMessages.bIsDestroyed) { return; }
-            var aItems = oChatMessages.getItems();
-            for (var i = aItems.length - 1; i >= 0; i--) {
-                if (aItems[i].hasStyleClass("chatTypingRow")) {
-                    oChatMessages.removeItem(aItems[i]);
-                    aItems[i].destroy();
-                    break;
-                }
-            }
+            ChatMessageView.removeTyping(oChatMessages);
         },
 
         _scrollToBottom: function () {
