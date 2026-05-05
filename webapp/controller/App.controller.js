@@ -4,8 +4,21 @@ sap.ui.define([
     "sap/m/Button",
     "sap/m/HBox",
     "sap/m/FormattedText",
-    "ui5/vizframe/app/utils/StaticChatMock"
-], function (Controller, Fragment, Button, HBox, FormattedText, StaticChatMock) {
+    "ui5/vizframe/app/utils/StaticChatMock",
+    "ui5/vizframe/app/utils/ChatContextBuilder",
+    "ui5/vizframe/app/utils/ChatNavigationGuard",
+    "ui5/vizframe/app/utils/ChatTextFormat"
+], function (
+    Controller,
+    Fragment,
+    Button,
+    HBox,
+    FormattedText,
+    StaticChatMock,
+    ChatContextBuilder,
+    ChatNavigationGuard,
+    ChatTextFormat
+) {
     "use strict";
 
     return Controller.extend("ui5.vizframe.app.controller.App", {
@@ -172,7 +185,7 @@ sap.ui.define([
                 headers: { "Content-Type": "application/json" },
                 body:    JSON.stringify({
                     messages: this._chatHistory,
-                    context:  this._buildContext()
+                    context:  ChatContextBuilder.buildContext(this.getOwnerComponent())
                 })
             })
             .then(function (res) { return res.json(); })
@@ -180,27 +193,15 @@ sap.ui.define([
                 that._hideTyping();
                 if (data.error) {
                     // escape so FormattedText renders it correctly
-                    that._addBotMsg("<strong>Hinweis:</strong> " + that._escapeHtml(String(data.error)));
+                    that._addBotMsg("<strong>Hinweis:</strong> " + ChatTextFormat.escapeHtml(String(data.error)));
                     return;
                 }
                 that._handleReply(data.reply || "", sText);
             })
             .catch(function (err) {
                 that._hideTyping();
-                that._addBotMsg("<strong>Verbindungsfehler:</strong> " + that._escapeHtml(err.message));
+                that._addBotMsg("<strong>Verbindungsfehler:</strong> " + ChatTextFormat.escapeHtml(err.message));
             });
-        },
-
-        /** Nur bei ausdrücklichem Navigationsbefehl im Nutzertext Router auslösen (nicht bei halluziniertem JSON). */
-        _userExplicitlyRequestedNavigation: function (sUserText) {
-            var s = (sUserText || "").trim();
-            if (!s) {
-                return false;
-            }
-            return /\b(geh|gehe)\s+zu(r|m)?\b/i.test(s)
-                || /\bnavigier(?:e)?\s+zu(r|m)?\b/i.test(s)
-                || /\bwechsle\s+zu(r|m)?\b/i.test(s)
-                || /\b(bring|bringt)\s+mich\s+(zu(r|m)?|auf)\b/i.test(s);
         },
 
         _handleReply: function (sReply, sLastUserMessage) {
@@ -208,49 +209,29 @@ sap.ui.define([
                 this._addBotMsg("Keine Antwort erhalten – bitte erneut versuchen.");
                 return;
             }
-            // Check for navigation intent JSON from the model
-            try {
-                var oIntent = JSON.parse(sReply.trim());
-                if (oIntent.action === "navigate" && oIntent.route) {
-                    if (!this._userExplicitlyRequestedNavigation(sLastUserMessage)) {
-                        var sHint = "Für einen Seitenwechsel bitte ausdrücklich z. B. "
-                            + "<strong>Gehe zu …</strong> oder <strong>Navigiere zu …</strong> schreiben.";
-                        this._chatHistory.push({ role: "bot", text: sHint.replace(/<[^>]+>/g, "") });
-                        this._addBotMsg(sHint);
-                        return;
-                    }
-                    var mLabels = {
-                        main:    "Startseite",
-                        r2r:     "Record to Report",
-                        rtr:     "Recruit to Retire",
-                        s2p:     "Source to Pay",
-                        d2o:     "Design to Operate",
-                        l2c:     "Lead to Cash",
-                        project: "Projekt"
-                    };
-                    var sLabel = mLabels[oIntent.route] || oIntent.route;
-                    this._addBotMsg("Navigiere zu <strong>" + sLabel + "</strong> ...");
-                    this._chatHistory.push({ role: "bot", text: "Navigation: " + sLabel });
 
-                    if (this._oChatPopover) { this._oChatPopover.close(); }
-                    setTimeout(function () {
-                        sap.ui.getCore().getComponent("ui5.vizframe.app")
-                            || (this.getOwnerComponent().getRouter().navTo(oIntent.route));
-                    }.bind(this), 400);
-                    this.getOwnerComponent().getRouter().navTo(oIntent.route);
+            var oNavResult = ChatNavigationGuard.tryNavigateFromReply({
+                reply: sReply,
+                lastUserMessage: sLastUserMessage
+            });
+            if (oNavResult.handled) {
+                if (!oNavResult.shouldNavigate) {
+                    this._chatHistory.push({ role: "bot", text: oNavResult.hintText });
+                    this._addBotMsg(oNavResult.hintHtml);
                     return;
                 }
-            } catch (e) {
-                // Plain text reply — fall through
+
+                this._addBotMsg("Navigiere zu <strong>" + oNavResult.label + "</strong> ...");
+                this._chatHistory.push({ role: "bot", text: "Navigation: " + oNavResult.label });
+                if (this._oChatPopover) {
+                    this._oChatPopover.close();
+                }
+                this.getOwnerComponent().getRouter().navTo(oNavResult.route);
+                return;
             }
 
             this._chatHistory.push({ role: "bot", text: sReply });
-            // Convert markdown + newlines; trust AI HTML (FormattedText sanitises anyway)
-            var sHtml = sReply
-                .replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>")
-                .replace(/\*(.+?)\*/g, "<em>$1</em>")
-                .replace(/\n/g, "<br>");
-            this._addBotMsg(sHtml);
+            this._addBotMsg(ChatTextFormat.markdownToSimpleHtml(sReply));
         },
 
         // ── Message Rendering ────────────────────────────────────────────────
@@ -261,7 +242,7 @@ sap.ui.define([
 
             var oRow = new HBox({ justifyContent: "End" }).addStyleClass("chatRow");
             var oBubble = new FormattedText({
-                htmlText: this._escapeHtml(sText).replace(/\n/g, "<br>")
+                htmlText: ChatTextFormat.escapeHtml(sText).replace(/\n/g, "<br>")
             }).addStyleClass("chatBubble chatBubbleUser");
             oRow.addItem(oBubble);
             oChatMessages.addItem(oRow);
@@ -310,80 +291,6 @@ sap.ui.define([
                 var oScroll = that._chatById("chatScroll");
                 if (oScroll && !oScroll.bIsDestroyed) { oScroll.scrollTo(0, 99999, 150); }
             }, 60);
-        },
-
-        // ── Helpers ──────────────────────────────────────────────────────────
-
-        /** Welche Modellpfade für den Chat-Kontext je Route mitgeschickt werden. */
-        _contextModelKeysForRoute: function (sRoute) {
-            var r = (sRoute || "main").split("/")[0] || "main";
-            var m = {
-                "":        ["RtrHeadcountFunnel", "R2RByAccountType", "S2POrdersByMonth", "D2OOutputTrend", "L2CConversionFunnel"],
-                main:      ["RtrHeadcountFunnel", "R2RByAccountType", "S2POrdersByMonth", "D2OOutputTrend", "L2CConversionFunnel"],
-                r2r:       ["R2RKpiTable", "R2RByAccountType", "R2RProcessFunnel", "R2RCloseCycle", "R2RJournalEntries"],
-                rtr:       ["RtrKpiTable", "RtrHeadcountFunnel", "RtrByDepartment", "RtrAttritionTrend"],
-                s2p:       ["S2PKpiTable", "S2POrdersByMonth", "S2PProcessFunnel", "S2PSpendByCategory", "S2PInvoiceCycle"],
-                d2o:       ["D2OKpiTable", "D2OOutputTrend", "D2OProcessFunnel", "D2OCapacityUtil"],
-                l2c:       ["L2CKpiTable", "L2CConversionFunnel", "L2CRevenueByStage", "L2CDSO", "L2COrdersByMonth"],
-                project:   []
-            };
-            return m[r] || m.main;
-        },
-
-        _buildContext: function () {
-            try {
-                var oComp = this.getOwnerComponent();
-                var sRaw  = (window.location.hash || "").replace(/^#/, "").replace(/^\//, "") || "main";
-                var sRoute = (sRaw.split("/")[0] || "main").trim() || "main";
-                var mNames  = {
-                    "":        "Startseite",
-                    main:      "Startseite",
-                    r2r:       "Record to Report",
-                    rtr:       "Recruit to Retire",
-                    s2p:       "Source to Pay",
-                    d2o:       "Design to Operate",
-                    l2c:       "Lead to Cash",
-                    project:   "Projektseite"
-                };
-                var sPage = mNames[sRoute] || sRoute;
-                var aParts = ["Aktuell angezeigte Seite: " + sPage];
-
-                var oSales = oComp.getModel("sales");
-                if (oSales && typeof oSales.getData === "function") {
-                    var oData = oSales.getData();
-                    if (oData && typeof oData === "object") {
-                        var aKeys = this._contextModelKeysForRoute(sRoute);
-                        var oSlice = {};
-                        var i;
-                        for (i = 0; i < aKeys.length; i++) {
-                            var k = aKeys[i];
-                            if (oData[k] != null) {
-                                oSlice[k] = oData[k];
-                            }
-                        }
-                        if (Object.keys(oSlice).length) {
-                            var sJson = JSON.stringify(oSlice);
-                            var nMax = 14000;
-                            if (sJson.length > nMax) {
-                                sJson = sJson.slice(0, nMax) + "…(gekürzt)";
-                            }
-                            aParts.push("");
-                            aParts.push("KPI-Daten aus der App (Mock oder Live, wie im Diagramm – für Zahlenfragen diese Werte verwenden):");
-                            aParts.push(sJson);
-                        }
-                    }
-                }
-                return aParts.join("\n");
-            } catch (e) {
-                return "";
-            }
-        },
-
-        _escapeHtml: function (s) {
-            return s
-                .replace(/&/g, "&amp;")
-                .replace(/</g, "&lt;")
-                .replace(/>/g, "&gt;");
         }
     });
 });

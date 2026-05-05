@@ -29,6 +29,7 @@ Proxy und Keys: siehe `middleware/chat-proxy` – Routen `/api/chat` und `/api/s
 ## Technologie-Stack
 
 - SAPUI5 **1.120** (XML-Views, JS-Controller), **sap.viz**, **sap.ui.layout**, **themelib_sap_horizon**
+- `sap.viz` bleibt bewusst global geladen, da Dashboard und Prozess-Detailseiten durchgehend VizFrame-Charts nutzen (Lazy-Loading wäre ein späterer, größerer Schritt).
 - **`JSONModel` `sales`** – gesetzt in `webapp/Component.js` (nicht mehr im Manifest als OData deklariert)
 - **`webapp/utils/SapDataLoader.js`** – fetch der Sandbox-URLs unter `/api/sap/...`, Transformation in die bestehenden Entity-Set-Strukturen der Mock-JSONs
 - **UI5 Tooling**, Fiori-Tools-Proxy, optional **FE Mock Server** (`@sap-ux/ui5-middleware-fe-mockserver`) unter `/sap/opu/odata/sap/KPI_SERVICE/` (nur noch für lokales Testen der Mock-Metadaten; die App bindet `sales` ausschließlich über `JSONModel` in der Component)

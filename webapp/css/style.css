@@ -254,7 +254,7 @@ body {
   box-shadow: 0 6px 22px rgba(107, 76, 255, 0.55), 0 4px 12px rgba(0, 112, 242, 0.35);
 }
 #chatFabHost .chatFabBtn.chatFabAi .sapMBtnIcon {
-  color: #ffffff !important;
+  color: #fff !important;
 }
 #chatFabHost .chatFabBtn .sapMBtnInner {
   border-radius: 50%;
@@ -378,7 +378,7 @@ body {
 /* User bubble – right, accent color */
 .chatBubbleUser {
   background: var(--sapButton_Emphasized_Background, #0a6ed1);
-  color: #ffffff;
+  color: #fff;
   border-radius: 1rem 1rem 0.25rem 1rem;
 }
 

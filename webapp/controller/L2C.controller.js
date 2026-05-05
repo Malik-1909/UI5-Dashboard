@@ -1,20 +1,14 @@
 sap.ui.define([
     "ui5/vizframe/app/controller/BaseController",
-    "sap/viz/ui5/controls/Popover"
-], function (BaseController, VizPopover) {
+    "ui5/vizframe/app/utils/VizFramePopoverHelper"
+], function (BaseController, VizFramePopoverHelper) {
     "use strict";
 
     return BaseController.extend("ui5.vizframe.app.controller.L2C", {
         onAfterRendering: function () {
-            var aChartIds = ["l2cFunnelChart", "l2cRevenueChart", "l2cOrdersTrendChart"];
-            aChartIds.forEach(function (sId) {
-                var oVizFrame = this.byId(sId);
-                if (oVizFrame) {
-                    var oPopover = new VizPopover({});
-                    oPopover.connect(oVizFrame.getVizUid());
-                }
-            }.bind(this));
+            VizFramePopoverHelper.connectPopovers(this, ["l2cFunnelChart", "l2cRevenueChart", "l2cOrdersTrendChart"]);
         },
+
         onNavBack: function () {
             this.getOwnerComponent().getRouter().navTo("main");
         }

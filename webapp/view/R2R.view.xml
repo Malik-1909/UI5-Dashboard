@@ -11,17 +11,7 @@
     displayBlock="true">
     <Page id="r2rPage" title="Record to Report" enableScrolling="true" showHeader="true">
         <customHeader>
-            <Bar>
-                <contentLeft>
-                    <Button icon="sap-icon://nav-back" tooltip="Zurück" accessibleName="Zurück zur Startseite" press=".onNavBack"/>
-                    <Title text="Record to Report" level="H2"/>
-                </contentLeft>
-                <contentMiddle/>
-                <contentRight>
-                    <core:Fragment fragmentName="ui5.vizframe.app.fragment.HeaderKiButton" type="XML"/>
-                    <Button id="burgerButton" icon="sap-icon://menu2" tooltip="Menü" accessibleName="Hauptmenü öffnen" press=".onBurgerPress" class="headerBurgerButton"/>
-                </contentRight>
-            </Bar>
+            <core:Fragment fragmentName="ui5.vizframe.app.fragment.ProcessDetailHeader" type="XML"/>
         </customHeader>
         <content>
             <ScrollContainer height="100%" vertical="true" class="processDetailScroll">
