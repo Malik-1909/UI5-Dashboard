@@ -115,6 +115,19 @@ npm run deploy         # Build + prepare-ghpages + gh-pages
 npm run deploy:zip     # ZIP-Artefakt
 ```
 
+## Lightweight Tests (Solo)
+
+```bash
+npm run test
+```
+
+Aktuell enthalten:
+- Routing-Smoke via `webapp/manifest.json` (Kernrouten + Targets).
+- Chat-Navigation-Guard (nur bei explizitem Navigationswunsch).
+- Chat-Context-Builder (passender KPI-Slice je Route).
+
+Diese Tests sind bewusst leichtgewichtig und schnell, damit Refactors sofort eine Basissicherung haben.
+
 **GitHub Pages:** Statisches Hosting – **keine** SAP-Live-Daten, **kein** Groq; Bundle + StaticChatMock. Für Produktion mit echten Systemen: **SAP BTP** (HTML5 App Repo, Destinations) und ein **Backend** für den Chat (Keys serverseitig).
 
 **CI:** `.github/workflows/deploy.yml` mit `workflow_dispatch` (Pages-Environment im Repo konfigurieren).
