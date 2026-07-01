@@ -94,13 +94,14 @@ Quellen: `webapp/styles/**/*.scss` → generiert `webapp/css/style.css` (nicht m
 
 ```bash
 npm run build          # → dist/
-npm run deploy         # GitHub Pages
+npm run deploy         # startet den GitHub-Pages-Workflow (manuell)
+npm run deploy:gh-pages-branch  # optional: klassischer gh-pages-Branch Deploy
 npm run deploy:zip     # ZIP für BTP Staticfile (interim)
 npm run test           # Lightweight Smoke-Tests
 npm run screenshots    # README-Screenshots (startet Dev-Server automatisch)
 ```
 
-**GitHub Pages:** Statisch – Mock + StaticChatMock. Deploy via `npm run deploy` oder GitHub Actions (`workflow_dispatch`).
+**GitHub Pages:** Statisch – Mock + StaticChatMock. Deploy wird manuell per `npm run deploy` (Workflow `workflow_dispatch`) gestartet.
 
 **CI:** `.github/workflows/deploy.yml`
 
