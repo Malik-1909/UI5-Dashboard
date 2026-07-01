@@ -51,6 +51,14 @@ Proxy und Keys: `middleware/chat-proxy` – Routen `/api/chat` und `/api/sap/*` 
 - **`webapp/utils/SapDataLoader.js`** – Sandbox-Fetch unter `/api/sap/...`, Transformation in Mock-Strukturen
 - **Custom Middleware** `middleware/chat-proxy`: Chat + SAP-Proxy
 
+## Architektur in 5 Punkten
+
+- **Frontend:** eine SAPUI5 Single-Page-App in `webapp/` mit XML-Views und Router.
+- **Datenmodell:** zentrales `JSONModel` `sales`, das alle KPI-Tabellen und Charts speist.
+- **Datenquellen:** lokal Merge aus Mock + optional SAP Sandbox; auf GitHub Pages nur Mock.
+- **KI-Integration:** lokal via `/api/chat` (Groq über Middleware), auf GitHub Pages per `StaticChatMock`.
+- **Deployment-Schnittstelle:** Build über `npm run build`, Hosting-spezifische Vorbereitung über `scripts/prepare-ghpages.js`.
+
 ## Projektstruktur (Auszug)
 
 | Pfad | Inhalt |
@@ -94,14 +102,33 @@ Quellen: `webapp/styles/**/*.scss` → generiert `webapp/css/style.css` (nicht m
 
 ```bash
 npm run build          # → dist/
-npm run deploy         # startet den GitHub-Pages-Workflow (manuell)
-npm run deploy:gh-pages-branch  # optional: klassischer gh-pages-Branch Deploy
+npm run deploy         # startet den GitHub-Pages-Workflow (manuell, Standard)
+npm run deploy:gh-pages-branch  # optional/legacy: klassischer gh-pages-Branch Deploy
 npm run deploy:zip     # ZIP für BTP Staticfile (interim)
 npm run test           # Lightweight Smoke-Tests
 npm run screenshots    # README-Screenshots (startet Dev-Server automatisch)
 ```
 
-**GitHub Pages:** Statisch – Mock + StaticChatMock. Deploy wird manuell per `npm run deploy` (Workflow `workflow_dispatch`) gestartet.
+**GitHub Pages:** Statisch – Mock + StaticChatMock. Standard-Deploy wird manuell per `npm run deploy` (Workflow `workflow_dispatch`) gestartet.
+
+### GitHub Pages Deploy-Checkliste
+
+1. Token setzen: `export GITHUB_TOKEN="<token>"` (alternativ `GH_TOKEN`).
+2. Deploy starten: `npm run deploy`.
+3. Workflow prüfen: GitHub → Actions → `Deploy to GitHub Pages` muss erfolgreich sein.
+4. Live-Seite prüfen: Hard Refresh (`Cmd+Shift+R`) auf [malik-1909.github.io/UI5-Dashboard](https://malik-1909.github.io/UI5-Dashboard/).
+
+### Token-Rechte für `npm run deploy`
+
+- Empfohlen: **Personal access token (classic)**.
+- Benötigte Scopes: `repo` und `workflow`.
+- Der Token wird nur lokal genutzt, um `workflow_dispatch` auszulösen.
+
+### Troubleshooting GitHub Pages Deploy
+
+- **`Missing token`**: `GITHUB_TOKEN` oder `GH_TOKEN` ist nicht gesetzt.
+- **`403 Resource not accessible by personal access token`**: Token hat keine passenden Scopes (`repo`, `workflow`) oder falscher Token ist gesetzt.
+- **Deploy erfolgreich, Seite wirkt alt**: Hard Refresh/Inkognito testen und 1-2 Minuten CDN-Propagation abwarten.
 
 **CI:** `.github/workflows/deploy.yml`
 

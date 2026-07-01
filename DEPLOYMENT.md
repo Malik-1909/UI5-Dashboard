@@ -4,7 +4,8 @@
 
 | Ziel | Befehl | SAP-Daten | KI | Hinweis |
 |------|--------|-----------|-----|---------|
-| GitHub Pages | `npm run deploy` | Mock | StaticChatMock | Öffentliche Demo |
+| GitHub Pages | `npm run deploy` | Mock | StaticChatMock | Öffentliche Demo (Standard) |
+| GitHub Pages (legacy) | `npm run deploy:gh-pages-branch` | Mock | StaticChatMock | Nur optional/fallback |
 | BTP Staticfile (interim) | `npm run deploy:zip` | Mock* | Nein* | Nur Frontend – siehe unten |
 | BTP mit Backend (geplant) | – | Sandbox | Groq | Node-App auf CF – nächster Schritt |
 
@@ -18,7 +19,31 @@
 npm run deploy
 ```
 
-Oder GitHub Actions: Repository → Actions → „Deploy to GitHub Pages“ → `workflow_dispatch`.
+Alternativ manuell in GitHub Actions: Repository → Actions → „Deploy to GitHub Pages“ → `workflow_dispatch`.
+
+### Voraussetzungen für `npm run deploy`
+
+- `GITHUB_TOKEN` oder `GH_TOKEN` ist lokal gesetzt.
+- Empfohlen: Personal access token (classic) mit Scopes `repo` und `workflow`.
+
+Beispiel:
+
+```bash
+export GITHUB_TOKEN="<token>"
+npm run deploy
+```
+
+### Mini-Checkliste
+
+1. `npm run deploy`
+2. Actions-Run ist `success`
+3. Live-Seite mit Hard Refresh prüfen (`Cmd+Shift+R`)
+
+### Troubleshooting
+
+- **`Missing token`** → Token als `GITHUB_TOKEN`/`GH_TOKEN` setzen.
+- **`403 Resource not accessible by personal access token`** → Scopes `repo` + `workflow` prüfen, danach Token neu exportieren.
+- **Deploy success, aber alte Inhalte** → Hard Refresh/Inkognito + kurze CDN-Verzögerung beachten.
 
 Vorbereitung in `scripts/prepare-ghpages.js`: UI5 **1.120** vom CDN, `base href`, SPA-404, `.nojekyll`.
 
