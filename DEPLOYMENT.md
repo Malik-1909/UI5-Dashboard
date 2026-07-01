@@ -7,7 +7,7 @@
 | GitHub Pages | `npm run deploy` | Mock | StaticChatMock | Öffentliche Demo (Standard) |
 | GitHub Pages (legacy) | `npm run deploy:gh-pages-branch` | Mock | StaticChatMock | Nur optional/fallback |
 | BTP Staticfile (interim) | `npm run deploy:zip` | Mock* | Nein* | Nur Frontend – siehe unten |
-| BTP mit Backend (geplant) | – | Sandbox | Groq | Node-App auf CF – nächster Schritt |
+| BTP mit Backend (Node) | `cf push -f manifest-node.yml` | Sandbox | Groq | API-Keys als CF Env Vars |
 
 \* Ohne Backend versucht die App `/api/sap/*` und `/api/chat` – Antworten scheitern, Mock-Fallback greift.
 
@@ -91,9 +91,28 @@ Erzeugt `ui5-vizframe-app.zip` (~44 Dateien, UI5 vom CDN **1.120**).
 
 Ziel: dieselbe Funktion wie lokal (`npm run start`).
 
-1. **Node/Express-App** auf CF – statisches `dist/` + Routen `/api/sap/*` und `/api/chat`
-2. **Umgebungsvariablen** auf CF: `GROQ_API_KEY`, `SAP_API_KEY`
-3. **Buildpack:** `nodejs_buildpack` statt `staticfile_buildpack`
-4. GitHub Pages unverändert als Demo-Fallback
+1. **Node-App** auf CF deployen:
+
+```bash
+cf login -a https://api.cf.us10-001.hana.ondemand.com
+cf target -o <ORG> -s <SPACE>
+cf push -f manifest-node.yml
+```
+
+2. **API-Keys serverseitig setzen** (nicht im Frontend, nicht im Manifest):
+
+```bash
+cf set-env ui5-app-node GROQ_API_KEY "<groq-key>"
+cf set-env ui5-app-node SAP_API_KEY "<sap-key>"
+cf restage ui5-app-node
+```
+
+3. Optionaler Check:
+
+```bash
+cf logs ui5-app-node --recent
+```
+
+4. GitHub Pages bleibt unverändert als Demo-Fallback
 
 Die UI5-Oberfläche bleibt unverändert; nur das Hosting-Backend wird ergänzt.

@@ -1,0 +1,9 @@
+applications:
+  - name: ui5-app-node
+    buildpack: nodejs_buildpack
+    memory: 512M
+    disk_quota: 1G
+    path: .
+    command: npm run build:cf && npm run start:cf
+    env:
+      NODE_ENV: production

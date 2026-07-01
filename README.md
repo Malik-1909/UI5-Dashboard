@@ -28,7 +28,7 @@ SAPUI5-Web-App zur Visualisierung von Kennzahlen und Diagrammen entlang von **f�
 |----------|-----------|--------------|---------------|
 | **Lokal** (`npm run start`) | Sandbox (mit `SAP_API_KEY`) oder Mock | Groq (mit `GROQ_API_KEY`) oder Mock | UI5 Dev-Server + Middleware |
 | **GitHub Pages** | Mock only | StaticChatMock | Nein (statisch) |
-| **BTP (geplant)** | Sandbox via Proxy | Groq via Proxy | Ja – Node-Backend auf CF |
+| **BTP (Node/CF)** | Sandbox via Proxy | Groq via Proxy | Ja – Node-Backend auf CF |
 
 Details zu GitHub Pages: `npm run deploy` · BTP-Vorbereitung: siehe [DEPLOYMENT.md](DEPLOYMENT.md) · Vollständiges BTP-Setup (Live-Daten + KI) folgt als nächster Schritt.
 
@@ -69,6 +69,8 @@ Proxy und Keys: `middleware/chat-proxy` – Routen `/api/chat` und `/api/sap/*` 
 | `webapp/i18n/` | Zentrale UI-Texte (`i18n.properties`, `i18n_en.properties`) |
 | `webapp/utils/SapDataLoader.js` | SAP-Sandbox laden und aggregieren |
 | `middleware/chat-proxy/` | Groq-Chat, SAP-Sandbox-Proxy |
+| `server.js` | Node Runtime für CF (`dist` + `/api/chat` + `/api/sap/*`) |
+| `manifest-node.yml` | CF Node Deploy (Phase 2, mit Backend) |
 | `scripts/prepare-ghpages.js` | GitHub-Pages-Vorbereitung (CDN 1.120, SPA-404) |
 | `.env` / `.env.example` | `GROQ_API_KEY`, `SAP_API_KEY`, optional `MOCK_MODE` |
 
@@ -112,6 +114,15 @@ npm run screenshots    # README-Screenshots (startet Dev-Server automatisch)
 ```
 
 **GitHub Pages:** Statisch – Mock + StaticChatMock. Standard-Deploy wird manuell per `npm run deploy` (Workflow `workflow_dispatch`) gestartet.
+
+**BTP Node (KI + SAP):**
+
+```bash
+cf push -f manifest-node.yml
+cf set-env ui5-app-node GROQ_API_KEY "<groq-key>"
+cf set-env ui5-app-node SAP_API_KEY "<sap-key>"
+cf restage ui5-app-node
+```
 
 ### GitHub Pages Deploy-Checkliste
 
