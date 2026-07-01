@@ -15,45 +15,94 @@ sap.ui.define([], function () {
     "use strict";
 
     var BASE = "/api/sap";
+    var REQUEST_TIMEOUT_MS = 10000;
+    var MAX_RETRIES = 2;
+    var RETRY_DELAY_MS = 600;
+    var STAGGER_DELAY_MS = 220;
 
     var URLS = {
         salesOrders:
             BASE + "/s4hanacloud/sap/opu/odata/sap/API_SALES_ORDER_SRV/A_SalesOrder" +
-            "?$top=200&$select=SalesOrder,SalesOrderType,SoldToParty,CreationDate," +
+            "?$top=120&$select=SalesOrder,SalesOrderType,SoldToParty,CreationDate," +
             "TotalNetAmount,TransactionCurrency&$format=json",
         purchaseOrders:
             BASE + "/s4hanacloud/sap/opu/odata/sap/API_PURCHASEORDER_PROCESS_SRV/A_PurchaseOrder" +
-            "?$top=200&$select=PurchaseOrder,PurchaseOrderType,Supplier,CompanyCode," +
+            "?$top=120&$select=PurchaseOrder,PurchaseOrderType,Supplier,CompanyCode," +
             "DocumentCurrency,CreationDate,PurchasingOrganization&$format=json",
         journalEntries:
             BASE + "/s4hanacloud/sap/opu/odata/sap/API_JOURNALENTRYITEMBASIC_SRV/A_JournalEntryItemBasic" +
-            "?$top=300&$filter=CompanyCode%20eq%20'1010'" +
+            "?$top=180&$filter=CompanyCode%20eq%20'1010'" +
             "&$select=GLAccount,GLAccountName,AmountInCompanyCodeCurrency," +
             "CompanyCodeCurrency,FiscalPeriod,LedgerFiscalYear,ControllingDebitCreditCode,CompanyCode&$format=json",
         sfUsers:
             BASE + "/successfactors/odata/v2/User" +
-            "?$top=200&$select=userId,department,jobTitle,country&$format=json",
+            "?$top=120&$select=userId,department,jobTitle,country&$format=json",
         materialDocuments:
             BASE + "/s4hanacloud/sap/opu/odata/sap/API_MATERIAL_DOCUMENT_SRV/A_MaterialDocumentHeader" +
-            "?$top=200&$select=MaterialDocument,PostingDate,CreationDate," +
+            "?$top=120&$select=MaterialDocument,PostingDate,CreationDate," +
             "GoodsMovementCode,InventoryTransactionType&$format=json",
         materialStock:
             BASE + "/s4hanacloud/sap/opu/odata/sap/API_MATERIAL_STOCK_SRV/A_MatlStkInAcctMod" +
-            "?$top=200&$filter=Material%20ne%20''" +
+            "?$top=120&$filter=Material%20ne%20''" +
             "&$select=Material,Plant,MatlWrhsStkQtyInMatlBaseUnit,MaterialBaseUnit&$format=json"
     };
 
     // ── Helpers ───────────────────────────────────────────────────────────────
 
+    function _sleep(ms) {
+        return new Promise(function (resolve) { setTimeout(resolve, ms); });
+    }
+
+    function _extractResults(data) {
+        return (data && data.d && data.d.results) ? data.d.results
+            : (data && data.value)                ? data.value
+            : [];
+    }
+
+    function _fetchWithTimeout(url, timeoutMs) {
+        if (typeof AbortController === "undefined") {
+            return fetch(url, { headers: { Accept: "application/json" } });
+        }
+        var controller = new AbortController();
+        var timer = setTimeout(function () { controller.abort(); }, timeoutMs);
+        return fetch(url, {
+            headers: { Accept: "application/json" },
+            signal: controller.signal
+        }).finally(function () {
+            clearTimeout(timer);
+        });
+    }
+
     function _fetch(url) {
-        return fetch(url, { headers: { Accept: "application/json" } })
-            .then(function (res) { return res.ok ? res.json() : Promise.reject(res.status); })
-            .then(function (data) {
-                return (data && data.d && data.d.results) ? data.d.results
-                    : (data && data.value)                ? data.value
-                    : [];
-            })
-            .catch(function () { return []; });
+        var attempt = 0;
+
+        function run() {
+            attempt++;
+            return _fetchWithTimeout(url, REQUEST_TIMEOUT_MS)
+                .then(function (res) {
+                    if (!res.ok) {
+                        return res.text().then(function (txt) {
+                            throw { kind: "http", status: res.status, body: txt || "" };
+                        });
+                    }
+                    return res.json().then(function (data) {
+                        return { rows: _extractResults(data), error: "", attempts: attempt };
+                    });
+                })
+                .catch(function (err) {
+                    var retryable = !err || err.name === "AbortError" ||
+                        (err.kind === "http" && (err.status >= 500 || err.status === 429));
+                    if (retryable && attempt <= MAX_RETRIES) {
+                        return _sleep(RETRY_DELAY_MS * attempt).then(run);
+                    }
+                    var code = (err && err.kind === "http") ? ("HTTP " + err.status)
+                        : (err && err.name === "AbortError") ? "Timeout"
+                        : "Network";
+                    return { rows: [], error: code, attempts: attempt };
+                });
+        }
+
+        return run();
     }
 
     function _parseDate(sVal) {
@@ -310,36 +359,50 @@ sap.ui.define([], function () {
 
     return {
         /**
-         * Lädt alle SAP Sandbox-Daten parallel.
-         * Gibt { data: {EntitySet: [...], ...}, sources: {l2c:n, s2p:n, ...} } zurück.
+         * Lädt SAP Sandbox-Daten gestaffelt mit Retry/Timeout.
+         * Gibt { data: {EntitySet: [...], ...}, sources: {l2c:n, s2p:n, ...}, failures: {...} } zurück.
          * Schlägt eine API fehl, bleibt ihr Teil leer → Component.js nutzt Mock-Fallback.
          */
         loadAll: function () {
-            return Promise.all([
-                _fetch(URLS.salesOrders),
-                _fetch(URLS.purchaseOrders),
-                _fetch(URLS.journalEntries),
-                _fetch(URLS.sfUsers),
-                _fetch(URLS.materialDocuments),
-                _fetch(URLS.materialStock)
-            ]).then(function (res) {
+            var endpoints = [
+                { key: "l2c", url: URLS.salesOrders },
+                { key: "s2p", url: URLS.purchaseOrders },
+                { key: "r2r", url: URLS.journalEntries },
+                { key: "rtr", url: URLS.sfUsers },
+                { key: "d2oDocs", url: URLS.materialDocuments },
+                { key: "d2oStock", url: URLS.materialStock }
+            ];
+
+            return endpoints.reduce(function (chain, endpoint) {
+                return chain.then(function (state) {
+                    return _fetch(endpoint.url).then(function (result) {
+                        state.results[endpoint.key] = result.rows;
+                        if (result.error) {
+                            state.failures[endpoint.key] = result.error + " (Versuche: " + result.attempts + ")";
+                        }
+                        return _sleep(STAGGER_DELAY_MS).then(function () { return state; });
+                    });
+                });
+            }, Promise.resolve({ results: {}, failures: {} })).then(function (state) {
+                var res = state.results;
                 var merged = Object.assign(
                     {},
-                    _l2c(res[0]),
-                    _s2p(res[1]),
-                    _r2r(res[2]),
-                    _rtr(res[3]),
-                    _d2o(res[4], res[5])
+                    _l2c(res.l2c || []),
+                    _s2p(res.s2p || []),
+                    _r2r(res.r2r || []),
+                    _rtr(res.rtr || []),
+                    _d2o(res.d2oDocs || [], res.d2oStock || [])
                 );
                 return {
                     data: merged,
                     sources: {
-                        l2c: res[0].length,
-                        s2p: res[1].length,
-                        r2r: res[2].length,
-                        rtr: res[3].length,
-                        d2o: res[4].length + res[5].length
-                    }
+                        l2c: (res.l2c || []).length,
+                        s2p: (res.s2p || []).length,
+                        r2r: (res.r2r || []).length,
+                        rtr: (res.rtr || []).length,
+                        d2o: (res.d2oDocs || []).length + (res.d2oStock || []).length
+                    },
+                    failures: state.failures
                 };
             });
         }

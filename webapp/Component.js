@@ -60,6 +60,28 @@ sap.ui.define([
             return SapDataLoader.loadAll()
                 .then(function (result) {
                     var nLoaded = Object.keys(result.sources).reduce(function (s, k) { return s + result.sources[k]; }, 0);
+                    var mFailures = result.failures || {};
+                    var aFailureKeys = Object.keys(mFailures);
+                    var mNames = {
+                        l2c: "L2C",
+                        s2p: "S2P",
+                        r2r: "R2R",
+                        rtr: "RtR",
+                        d2oDocs: "D2O",
+                        d2oStock: "D2O"
+                    };
+                    if (aFailureKeys.length) {
+                        var aLabels = [];
+                        aFailureKeys.forEach(function (k) {
+                            var lbl = mNames[k] || k;
+                            if (aLabels.indexOf(lbl) < 0) { aLabels.push(lbl); }
+                        });
+                        console.warn("[SapDataLoader] Teilweise Live-Ausfälle:", JSON.stringify(mFailures));
+                        MessageToast.show(
+                            "Live-API aktuell teilweise nicht erreichbar (" + aLabels.join(", ") + "). Für diese Bereiche werden Demo-Daten angezeigt.",
+                            { duration: 7000 }
+                        );
+                    }
                     if (!nLoaded) {
                         console.info("[SapDataLoader] Keine Daten – Mock-Daten bleiben aktiv.");
                         if (!oThis._sapDataNoticeShown) {
