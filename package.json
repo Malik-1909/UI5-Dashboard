@@ -10,19 +10,22 @@
     "scss:watch": "sass --watch webapp/styles/main.scss:webapp/css/style.css",
     "lint:scss": "stylelint \"webapp/styles/**/*.scss\"",
     "test": "node --test test/*.test.mjs",
+    "screenshots": "node scripts/capture-screenshots.mjs --with-server",
+    "screenshots:only": "node scripts/capture-screenshots.mjs",
     "deploy": "npm run build && node scripts/prepare-ghpages.js && npx gh-pages -d dist",
     "deploy:zip": "npm run build && sed -i '' 's|src=\"resources/sap-ui-core.js\"|src=\"https://ui5.sap.com/1.120.0/resources/sap-ui-core.js\"|g' dist/index.html && echo pushstate: enabled > dist/Staticfile && rm -f ui5-vizframe-app.zip && cd dist && find . -path ./test-resources -prune -o -type f -print | zip -r ../ui5-vizframe-app.zip -@ && cd ..",
     "preview": "npm run deploy:zip && npx --yes http-server dist -p 8080 -o -c-1",
     "open": "open http://127.0.0.1:8080/index.html"
   },
   "devDependencies": {
-    "ui5-middleware-chat-proxy": "file:./middleware/chat-proxy",
     "@sap-ux/ui5-middleware-fe-mockserver": "^2.4.10",
     "@sap/ux-ui5-tooling": "^1",
     "@ui5/cli": "^4.0.0",
     "gh-pages": "^6.0.0",
+    "playwright": "^1.49.0",
     "sass": "^1.93.2",
     "stylelint": "^16.25.0",
-    "stylelint-config-standard-scss": "^16.0.0"
+    "stylelint-config-standard-scss": "^16.0.0",
+    "ui5-middleware-chat-proxy": "file:./middleware/chat-proxy"
   }
 }

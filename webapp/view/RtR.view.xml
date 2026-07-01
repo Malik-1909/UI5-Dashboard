@@ -26,9 +26,6 @@
         <content>
             <ScrollContainer height="100%" vertical="true" class="processDetailScroll">
                 <l:VerticalLayout width="100%" class="processDetailMain">
-                    <Title text="Recruit to Retire Prozess" level="H3"/>
-                    <Text text="Recruit to Retire (RtR) umfasst den gesamten Mitarbeiterlebenszyklus von der Rekrutierung bis zum Ruhestand. Der Prozess verbindet Personalbeschaffung, Entwicklung und Offboarding."
-                        class="sapUiSmallMarginBottom"/>
                     <MessageStrip
                         text="{sales>/_sapBadgeRtR}"
                         type="Information"
@@ -60,9 +57,7 @@
                                 </items>
                             </Table>
                     </VBox>
-                    <Title text="Wichtige Diagramme für RtR" level="H3" class="sapUiSmallMarginTop"/>
-                    <Text text="Die folgenden Diagramme unterstützen die Steuerung des HR-Prozesses: Headcount-Funnel, Verteilung nach Abteilung und Fluktuationstrend."
-                        class="sapUiSmallMarginBottom"/>
+                    <Title text="Diagramme" level="H3" class="sapUiSmallMarginTop"/>
                     <cssgrid:CSSGrid
                         class="processDetailChartsGrid"
                         width="100%"
@@ -70,8 +65,6 @@
                         gridGap="1rem 1.5rem">
                     <Panel headerText="{= '1. Headcount-Funnel' + (${sales>/_sapBadgeRtR} ? ' · SAP API' : ' · Mock')}" expandable="true" expanded="true" class="processDetailChartPanel">
                         <content>
-                            <Text text="Zeigt die Anzahl Mitarbeiter pro Prozessstufe. Wichtig zur Identifikation von Engpässen im Recruiting und Onboarding."
-                                class="sapUiSmallMarginBottom"/>
                             <viz:VizFrame
                                 id="rtrFunnelChart"
                                 vizType="column"
@@ -103,8 +96,6 @@
                     </Panel>
                     <Panel headerText="{= '2. Headcount nach Abteilung' + (${sales>/_sapBadgeRtR} ? ' · SAP API' : ' · Mock')}" expandable="true" expanded="true" class="processDetailChartPanel">
                         <content>
-                            <Text text="Zeigt die Verteilung der Mitarbeiter auf Abteilungen. Wichtig für die Ressourcenplanung und Schwerpunktanalyse."
-                                class="sapUiSmallMarginBottom"/>
                             <viz:VizFrame
                                 id="rtrDepartmentChart"
                                 vizType="donut"
@@ -136,8 +127,6 @@
                     </cssgrid:CSSGrid>
                     <Panel headerText="{= '3. Top Job-Titel' + (${sales>/_sapBadgeRtR} ? ' · SAP API' : ' · Mock')}" expandable="true" expanded="true" class="processDetailChartPanel processDetailChartPanelFull sapUiSmallMarginTop">
                         <content>
-                            <Text text="Zeigt die häufigsten Stellenbezeichnungen aus dem SuccessFactors-System. Wichtig für Kapazitätsplanung und Kompetenzsteuerung."
-                                class="sapUiSmallMarginBottom"/>
                             <viz:VizFrame
                                 id="rtrJobTitleChart"
                                 vizType="bar"
@@ -165,28 +154,6 @@
                                     <viz.feeds:FeedItem uid="categoryAxis" type="Dimension" values="Titel"/>
                                 </viz:feeds>
                             </viz:VizFrame>
-                        </content>
-                    </Panel>
-                    <Title text="Zusammenfassung" level="H4"/>
-                    <Text text="Für RtR sind Säulendiagramme (Headcount-Funnel), Donut-Diagramme (Abteilungsverteilung) und Balkendiagramme (Top Job-Titel) relevant."
-                        class="sapUiSmallMarginBottom"/>
-                    <Panel expandable="true" expanded="false" width="100%" class="processDetailStepsPanel sapUiSmallMarginTop">
-                        <headerToolbar>
-                            <OverflowToolbar style="Clear">
-                                <Title text="Prozessschritte" level="H4"/>
-                                <ToolbarSpacer/>
-                                <core:Icon src="sap-icon://message-information" tooltip="Nur Phasenüberblick; KPI und Diagramme sind für die Steuerung maßgeblich." decorative="false"/>
-                            </OverflowToolbar>
-                        </headerToolbar>
-                        <content>
-                            <List class="processDetailStepsList">
-                                <StandardListItem title="1. Recruiting" info="Stellenausschreibung und Kandidatensuche"/>
-                                <StandardListItem title="2. Onboarding" info="Einarbeitung und Integration neuer Mitarbeiter"/>
-                                <StandardListItem title="3. Performance" info="Leistungsbeurteilung und Zielvereinbarung"/>
-                                <StandardListItem title="4. Development" info="Weiterbildung und Karriereentwicklung"/>
-                                <StandardListItem title="5. Compensation" info="Vergütung und Benefits"/>
-                                <StandardListItem title="6. Offboarding" info="Austritt und Wissenstransfer"/>
-                            </List>
                         </content>
                     </Panel>
                 </l:VerticalLayout>

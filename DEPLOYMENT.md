@@ -1,54 +1,74 @@
-# Deployment auf SAP BTP (Cloud Foundry)
+# Deployment
 
-## Voraussetzungen
+## Deployment-Matrix
 
-- SAP BTP Subaccount mit Cloud Foundry
-- CF CLI installiert (`cf --version`)
-- Eingeloggt: `cf login` (API-Endpunkt, E-Mail, Passwort)
+| Ziel | Befehl | SAP-Daten | KI | Hinweis |
+|------|--------|-----------|-----|---------|
+| GitHub Pages | `npm run deploy` | Mock | StaticChatMock | Öffentliche Demo |
+| BTP Staticfile (interim) | `npm run deploy:zip` | Mock* | Nein* | Nur Frontend – siehe unten |
+| BTP mit Backend (geplant) | – | Sandbox | Groq | Node-App auf CF – nächster Schritt |
+
+\* Ohne Backend versucht die App `/api/sap/*` und `/api/chat` – Antworten scheitern, Mock-Fallback greift.
 
 ---
 
-## ZIP für SAP BTP Deploy-Dialog erstellen
+## GitHub Pages
 
-**Wichtig:** Die ZIP enthält nur ~44 Dateien (unter dem CF-Limit von 5000). UI5 wird zur Laufzeit vom CDN geladen.
+```bash
+npm run deploy
+```
 
-### Ein Befehl (empfohlen)
+Oder GitHub Actions: Repository → Actions → „Deploy to GitHub Pages“ → `workflow_dispatch`.
+
+Vorbereitung in `scripts/prepare-ghpages.js`: UI5 **1.120** vom CDN, `base href`, SPA-404, `.nojekyll`.
+
+---
+
+## SAP BTP (Cloud Foundry) – Staticfile (interim)
+
+Aktuell nur das **statische Frontend** – für Live-Daten und KI folgt ein Node-Backend (siehe Roadmap in README).
+
+### Voraussetzungen
+
+- SAP BTP Subaccount mit Cloud Foundry
+- CF CLI: `cf login`
+
+### ZIP erstellen
 
 ```bash
 npm run deploy:zip
 ```
 
-Erzeugt `ui5-vizframe-app.zip` im Projektroot.
+Erzeugt `ui5-vizframe-app.zip` (~44 Dateien, UI5 vom CDN **1.120**).
 
-### Manuell
+### Im BTP Deploy-Dialog
 
-```bash
-npm run build
-sed -i '' 's|src="resources/sap-ui-core.js"|src="https://ui5.sap.com/1.130.0/resources/sap-ui-core.js"|g' dist/index.html
-echo "pushstate: enabled" > dist/Staticfile
-cd dist && zip -r ../ui5-vizframe-app.zip . && cd ..
-```
+1. **File location:** `ui5-vizframe-app.zip`
+2. **Manifest location:** `manifest.yml` (Projektroot)
+3. **Deploy**
 
-### Im SAP BTP Deploy-Dialog
-
-1. **File location:** `ui5-vizframe-app.zip` auswählen
-2. **Manifest location:** `manifest.yml` auswählen (im Projektroot)
-3. **Deploy** klicken
-
----
-
-## Benötigte Dateien
+### Benötigte Dateien
 
 | Datei | Zweck |
 |-------|-------|
-| **ui5-vizframe-app.zip** | Enthält den Inhalt von `dist/` im ZIP-Root (index.html, Component.js, etc.). UI5 wird vom CDN geladen. |
-| **manifest.yml** | CF-Konfiguration (App-Name, Buildpack, Memory) |
+| `ui5-vizframe-app.zip` | Inhalt von `dist/` im ZIP-Root |
+| `manifest.yml` | CF Staticfile Buildpack, 256M RAM |
+
+### Troubleshooting
+
+- **404 auf Routen:** `Staticfile` enthält `pushstate: enabled`
+- **Weißer Bildschirm:** ZIP-Root muss `index.html` enthalten (nicht `dist/` als Ordner)
+- **Falsche ZIP:** Nur `dist/`-Inhalt zippen, nicht `node_modules`
 
 ---
 
-## Troubleshooting
+## SAP BTP – Vollständiges Setup (geplant)
 
-- **Deployment schlägt fehl:** „View Details“ im Fehlerdialog prüfen – oft fehlt Memory (256M eingestellt) oder der Buildpack wird nicht erkannt
-- **Falsche ZIP:** Wenn du das ganze Projekt (inkl. node_modules) zippst, entstehen 100.000+ Dateien – das führt zu Fehlern. Immer nur `dist/`-Inhalt verwenden
-- **404 auf Routen:** Die `Staticfile` in der ZIP enthält `pushstate: enabled` für SPA-Routing
-- **Weißer Bildschirm:** Die ZIP muss `index.html` im Root haben (Inhalt von dist/, nicht dist/ als Ordner). Manifest `path: .` verwenden. Prüfe in der Browser-Konsole (F12) auf Fehler (z.B. 404 für Component.js oder CORS bei CDN-Load)
+Ziel: dieselbe Funktion wie lokal (`npm run start`).
+
+1. **Node/Express-App** auf CF – statisches `dist/` + Routen `/api/sap/*` und `/api/chat`
+2. **Umgebungsvariablen** auf CF: `GROQ_API_KEY`, `SAP_API_KEY`
+3. **Buildpack:** `nodejs_buildpack` statt `staticfile_buildpack`
+4. GitHub Pages unverändert als Demo-Fallback
+
+Die UI5-Oberfläche bleibt unverändert; nur das Hosting-Backend wird ergänzt.

@@ -26,9 +26,6 @@
         <content>
             <ScrollContainer height="100%" vertical="true" class="processDetailScroll">
                 <l:VerticalLayout width="100%" class="processDetailMain">
-                    <Title text="Design to Operate Prozess" level="H3"/>
-                    <Text text="Design to Operate (D2O) beschreibt den Prozess von der Produktentwicklung bis zum Betrieb und Service. Der Prozess verbindet Design, Engineering, Fertigung und Service."
-                        class="sapUiSmallMarginBottom"/>
                     <MessageStrip
                         text="{sales>/_sapBadgeD2O}"
                         type="Information"
@@ -36,7 +33,7 @@
                         visible="{= !!${sales>/_sapBadgeD2O}}"
                         class="sapUiSmallMarginBottom"/>
                     <MessageStrip
-                        text="Demo-Daten (Mock) · SAP API nicht erreichbar"
+                        text="Demo-Daten (Mock) · SAP API nicht konfiguriert oder nicht erreichbar"
                         type="Warning"
                         showCloseButton="false"
                         visible="{= !${sales>/_sapBadgeD2O}}"
@@ -60,9 +57,7 @@
                                 </items>
                             </Table>
                     </VBox>
-                    <Title text="Wichtige Diagramme für D2O" level="H3" class="sapUiSmallMarginTop"/>
-                    <Text text="Die folgenden Diagramme basieren auf Warenbewegungen und Lagerbeständen (Design-to-Operate als Supply-Chain-Sicht)."
-                        class="sapUiSmallMarginBottom"/>
+                    <Title text="Diagramme" level="H3" class="sapUiSmallMarginTop"/>
                     <cssgrid:CSSGrid
                         class="processDetailChartsGrid"
                         width="100%"
@@ -70,8 +65,6 @@
                         gridGap="1rem 1.5rem">
                     <Panel headerText="{= '1. D2O-Prozess-Funnel' + (${sales>/_sapBadgeD2O} ? ' · SAP API' : ' · Mock')}" expandable="true" expanded="true" class="processDetailChartPanel">
                         <content>
-                            <Text text="Warenbewegungen nach Bewegungsart (InventoryTransactionType / Warenbewegungscode). Zeigt das logistische Volumen im System."
-                                class="sapUiSmallMarginBottom"/>
                             <viz:VizFrame
                                 id="d2oFunnelChart"
                                 vizType="column"
@@ -103,8 +96,6 @@
                     </Panel>
                     <Panel headerText="{= '2. Lager nach Werk (relativ)' + (${sales>/_sapBadgeD2O} ? ' · SAP API' : ' · Mock')}" expandable="true" expanded="true" class="processDetailChartPanel">
                         <content>
-                            <Text text="Vergleicht die relative Lagermenge je Werk (normalisiert auf das größte Werk). Zielwert 85 % dient als Referenz."
-                                class="sapUiSmallMarginBottom"/>
                             <viz:VizFrame
                                 id="d2oCapacityChart"
                                 vizType="column"
@@ -138,8 +129,6 @@
                     </cssgrid:CSSGrid>
                     <Panel headerText="{= '3. Warenbewegungen pro Monat' + (${sales>/_sapBadgeD2O} ? ' · SAP API' : ' · Mock')}" expandable="true" expanded="true" class="processDetailChartPanel processDetailChartPanelFull sapUiSmallMarginTop">
                         <content>
-                            <Text text="Zeigt die Anzahl Warenbewegungsbelege je Monat (Posting-Datum)."
-                                class="sapUiSmallMarginBottom"/>
                             <viz:VizFrame
                                 id="d2oOutputChart"
                                 vizType="line"
@@ -167,29 +156,6 @@
                                     <viz.feeds:FeedItem uid="categoryAxis" type="Dimension" values="Monat"/>
                                 </viz:feeds>
                             </viz:VizFrame>
-                        </content>
-                    </Panel>
-                    <Title text="Zusammenfassung" level="H4"/>
-                    <Text text="D2O nutzt hier Warenbewegungen und Lagerdaten aus der SAP Sandbox (keine Produktionsaufträge wegen API-Berechtigung)."
-                        class="sapUiSmallMarginBottom"/>
-                    <Panel expandable="true" expanded="false" width="100%" class="processDetailStepsPanel sapUiSmallMarginTop">
-                        <headerToolbar>
-                            <OverflowToolbar style="Clear">
-                                <Title text="Prozessschritte" level="H4"/>
-                                <ToolbarSpacer/>
-                                <core:Icon src="sap-icon://message-information" tooltip="Nur Phasenüberblick; KPI und Diagramme sind für die Steuerung maßgeblich." decorative="false"/>
-                            </OverflowToolbar>
-                        </headerToolbar>
-                        <content>
-                            <List class="processDetailStepsList">
-                                <StandardListItem title="1. Design" info="Produktdesign und Konzeptentwicklung"/>
-                                <StandardListItem title="2. Engineering" info="Konstruktion und technische Spezifikation"/>
-                                <StandardListItem title="3. Procure" info="Beschaffung von Komponenten"/>
-                                <StandardListItem title="4. Manufacture" info="Fertigung und Montage"/>
-                                <StandardListItem title="5. Deploy" info="Auslieferung und Installation"/>
-                                <StandardListItem title="6. Operate" info="Betrieb und Wartung"/>
-                                <StandardListItem title="7. Service" info="Reparatur und Support"/>
-                            </List>
                         </content>
                     </Panel>
                 </l:VerticalLayout>

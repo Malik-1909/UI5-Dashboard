@@ -16,9 +16,6 @@
         <content>
             <ScrollContainer height="100%" vertical="true" class="processDetailScroll">
                 <l:VerticalLayout width="100%" class="processDetailMain">
-                    <Title text="Source to Pay Prozess" level="H3"/>
-                    <Text text="Source to Pay (S2P) beschreibt den Beschaffungsprozess von der Bedarfsmeldung bis zur Zahlung an den Lieferanten. Der Prozess verbindet Einkauf, Logistik und Finanzen."
-                        class="sapUiSmallMarginBottom"/>
                     <MessageStrip
                         text="{sales>/_sapBadgeS2P}"
                         type="Information"
@@ -50,9 +47,7 @@
                                 </items>
                             </Table>
                     </VBox>
-                    <Title text="Wichtige Diagramme für S2P" level="H3" class="sapUiSmallMarginTop"/>
-                    <Text text="Die folgenden Diagramme unterstützen die Steuerung des Beschaffungsprozesses: Durchlaufmengen, Ausgaben nach Kategorie und Zahlungszyklus."
-                        class="sapUiSmallMarginBottom"/>
+                    <Title text="Diagramme" level="H3" class="sapUiSmallMarginTop"/>
                     <cssgrid:CSSGrid
                         class="processDetailChartsGrid"
                         width="100%"
@@ -60,8 +55,6 @@
                         gridGap="1rem 1.5rem">
                     <Panel headerText="{= '1. S2P-Prozess-Funnel' + (${sales>/_sapBadgeS2P} ? ' · SAP API' : ' · Mock')}" expandable="true" expanded="true" class="processDetailChartPanel">
                         <content>
-                            <Text text="Zeigt die Anzahl Bestellvorgänge pro Stufe. Wichtig zur Identifikation von Engpässen (z.B. viele offene Rechnungsprüfungen)."
-                                class="sapUiSmallMarginBottom"/>
                             <viz:VizFrame
                                 id="s2pFunnelChart"
                                 vizType="bar"
@@ -93,7 +86,7 @@
                     </Panel>
                     <Panel headerText="{= '2. Bestellungen je Einkaufsorganisation' + (${sales>/_sapBadgeS2P} ? ' · SAP API' : ' · Mock')}" expandable="true" expanded="true" class="processDetailChartPanel">
                         <content>
-                            <Text text="Verteilung der Bestellbelege je Einkaufsorganisation (Anzahl). Im API-Header stehen keine Nettobeträge – daher Beleganzahl statt EUR."
+                            <Text text="Sandbox-API: keine Nettobeträge im Bestellheader → Darstellung als Beleganzahl je Organisation."
                                 class="sapUiSmallMarginBottom"/>
                             <viz:VizFrame
                                 id="s2pSpendChart"
@@ -126,8 +119,6 @@
                     </cssgrid:CSSGrid>
                     <Panel headerText="{= '3. Bestelleingang pro Monat' + (${sales>/_sapBadgeS2P} ? ' · SAP API' : ' · Mock')}" expandable="true" expanded="true" class="processDetailChartPanel processDetailChartPanelFull sapUiSmallMarginTop">
                         <content>
-                            <Text text="Zeigt die monatliche Entwicklung des Bestelleingangs. Wichtig für Einkaufsplanung, Lieferantensteuerung und Saisonalitätsanalyse."
-                                class="sapUiSmallMarginBottom"/>
                             <viz:VizFrame
                                 id="s2pOrdersTrendChart"
                                 vizType="column"
@@ -155,27 +146,6 @@
                                     <viz.feeds:FeedItem uid="categoryAxis" type="Dimension" values="Monat"/>
                                 </viz:feeds>
                             </viz:VizFrame>
-                        </content>
-                    </Panel>
-                    <Title text="Zusammenfassung" level="H4"/>
-                    <Text text="Für S2P sind Säulendiagramme (Bestelltypen, Bestelleingang pro Monat), Donut (Ausgaben je Kategorie) und Kennzahlen-Tabelle relevant."
-                        class="sapUiSmallMarginBottom"/>
-                    <Panel expandable="true" expanded="false" width="100%" class="processDetailStepsPanel sapUiSmallMarginTop">
-                        <headerToolbar>
-                            <OverflowToolbar style="Clear">
-                                <Title text="Prozessschritte" level="H4"/>
-                                <ToolbarSpacer/>
-                                <core:Icon src="sap-icon://message-information" tooltip="Nur Phasenüberblick; KPI und Diagramme sind für die Steuerung maßgeblich." decorative="false"/>
-                            </OverflowToolbar>
-                        </headerToolbar>
-                        <content>
-                            <List class="processDetailStepsList">
-                                <StandardListItem title="1. Bedarfsmeldung" info="Bedarfsanforderung wird erstellt und freigegeben"/>
-                                <StandardListItem title="2. Bestellung" info="Bestellung beim Lieferanten wird ausgelöst"/>
-                                <StandardListItem title="3. Wareneingang" info="Wareneingang und Prüfung"/>
-                                <StandardListItem title="4. Rechnungsprüfung" info="Dreiseitenabgleich und Rechnungsfreigabe"/>
-                                <StandardListItem title="5. Zahlung" info="Zahlungsabwicklung an den Lieferanten"/>
-                            </List>
                         </content>
                     </Panel>
                 </l:VerticalLayout>

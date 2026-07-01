@@ -16,9 +16,6 @@
         <content>
             <ScrollContainer height="100%" vertical="true" class="processDetailScroll">
                 <l:VerticalLayout width="100%" class="processDetailMain">
-                    <Title text="Record-to-Report Prozess" level="H3"/>
-                    <Text text="Record to Report (R2R) umfasst den Finanz- und Rechnungswesen-Prozess von der Buchung bis zum Abschluss. Der Prozess bildet die Grundlage für die Finanzberichterstattung."
-                        class="sapUiSmallMarginBottom"/>
                     <MessageStrip
                         text="{sales>/_sapBadgeR2R}"
                         type="Information"
@@ -50,9 +47,7 @@
                                 </items>
                             </Table>
                     </VBox>
-                    <Title text="Wichtige Diagramme für Record to Report" level="H3" class="sapUiSmallMarginTop"/>
-                    <Text text="Die folgenden Diagramme unterstützen die Steuerung des Finanzprozesses: Buchungsvolumen, Abschlussaktivitäten und Close-Cycle-Zeit."
-                        class="sapUiSmallMarginBottom"/>
+                    <Title text="Diagramme" level="H3" class="sapUiSmallMarginTop"/>
                     <cssgrid:CSSGrid
                         class="processDetailChartsGrid"
                         width="100%"
@@ -60,8 +55,6 @@
                         gridGap="1rem 1.5rem">
                     <Panel headerText="{= '1. Buchungen nach Kontenklasse' + (${sales>/_sapBadgeR2R} ? ' · SAP API' : ' · Mock')}" expandable="true" expanded="true" class="processDetailChartPanel">
                         <content>
-                            <Text text="Zeigt die Verteilung der Buchungen auf Kontenklassen. Typisch für R2R – wo entstehen die meisten Buchungen?"
-                                class="sapUiSmallMarginBottom"/>
                             <viz:VizFrame
                                 id="r2rFunnelChart"
                                 vizType="pie"
@@ -92,8 +85,6 @@
                     </Panel>
                     <Panel headerText="{= '2. Buchungen pro Periode' + (${sales>/_sapBadgeR2R} ? ' · SAP API' : ' · Mock')}" expandable="true" expanded="true" class="processDetailChartPanel">
                         <content>
-                            <Text text="Zeigt das Buchungsvolumen je Monat. Wichtig für die Ressourcenplanung und Spitzenerkennung."
-                                class="sapUiSmallMarginBottom"/>
                             <viz:VizFrame
                                 id="r2rEntriesChart"
                                 vizType="column"
@@ -126,8 +117,6 @@
                     </cssgrid:CSSGrid>
                     <Panel headerText="{= '3. Soll-/Haben-Verteilung' + (${sales>/_sapBadgeR2R} ? ' · SAP API' : ' · Mock')}" expandable="true" expanded="true" class="processDetailChartPanel processDetailChartPanelFull sapUiSmallMarginTop">
                         <content>
-                            <Text text="Zeigt die Verteilung zwischen Soll- und Haben-Buchungen. Grundlegende Prüfgröße im Rechnungswesen – ein ausgeglichenes Verhältnis ist ein Qualitätsmerkmal."
-                                class="sapUiSmallMarginBottom"/>
                             <viz:VizFrame
                                 id="r2rDebitCreditChart"
                                 vizType="donut"
@@ -154,27 +143,6 @@
                                     <viz.feeds:FeedItem uid="color" type="Dimension" values="Buchungsart"/>
                                 </viz:feeds>
                             </viz:VizFrame>
-                        </content>
-                    </Panel>
-                    <Title text="Zusammenfassung" level="H4"/>
-                    <Text text="Für R2R sind Kreisdiagramme (Kontenverteilung), Säulendiagramme (Buchungsvolumen pro Periode) und Donut-Diagramme (Soll-/Haben-Verteilung) relevant."
-                        class="sapUiSmallMarginBottom"/>
-                    <Panel expandable="true" expanded="false" width="100%" class="processDetailStepsPanel sapUiSmallMarginTop">
-                        <headerToolbar>
-                            <OverflowToolbar style="Clear">
-                                <Title text="Prozessschritte" level="H4"/>
-                                <ToolbarSpacer/>
-                                <core:Icon src="sap-icon://message-information" tooltip="Nur Phasenüberblick; KPI und Diagramme sind für die Steuerung maßgeblich." decorative="false"/>
-                            </OverflowToolbar>
-                        </headerToolbar>
-                        <content>
-                            <List class="processDetailStepsList">
-                                <StandardListItem title="1. Buchung" info="Transaktionserfassung und -validierung"/>
-                                <StandardListItem title="2. Kontenabstimmung" info="Bank- und Sachkontenabstimmung"/>
-                                <StandardListItem title="3. Periodenabschluss" info="Monats- und Jahresabschluss"/>
-                                <StandardListItem title="4. Konsolidierung" info="Konzernabschluss und Intercompany"/>
-                                <StandardListItem title="5. Reporting" info="Finanzberichte und Analysen"/>
-                            </List>
                         </content>
                     </Panel>
                 </l:VerticalLayout>
