@@ -62,17 +62,7 @@ Proxy und Keys: `middleware/chat-proxy` – Routen `/api/chat` und `/api/sap/*` 
 | `scripts/prepare-ghpages.js` | GitHub-Pages-Vorbereitung (CDN 1.120, SPA-404) |
 | `.env` / `.env.example` | `GROQ_API_KEY`, `SAP_API_KEY`, optional `MOCK_MODE` |
 
-### Legacy (nicht für Deployment)
-
-Diese Pfade sind **nicht** Teil der aktiven App und werden nicht deployed:
-
-| Pfad | Status |
-|------|--------|
-| `view/`, `controller/` (Repo-Root) | Alte Kopien – ignorieren |
-| `index.html` (Repo-Root) | Legacy-Einstieg |
-| `UI5-Dashboard/` | Frühere Projektversion (falls vorhanden) |
-
-Entwicklung und Build immer über **`webapp/`** + Root-`ui5.yaml` / `package.json`.
+Entwicklung und Build laufen über **`webapp/`** + Root-`ui5.yaml` / `package.json`.
 
 ## Lokale Entwicklung
 
