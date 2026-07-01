@@ -118,6 +118,7 @@ npm run screenshots    # README-Screenshots (startet Dev-Server automatisch)
 **BTP Node (KI + SAP):**
 
 ```bash
+npm run build:cf
 cf push -f manifest-node.yml
 cf set-env ui5-app-node GROQ_API_KEY "<groq-key>"
 cf set-env ui5-app-node SAP_API_KEY "<sap-key>"

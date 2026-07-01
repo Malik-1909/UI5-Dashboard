@@ -12,6 +12,11 @@
 
 const fs   = require("fs");
 const path = require("path");
+const dns  = require("dns");
+
+// CF/Node kann bei manchen Hosts zuerst IPv6 versuchen; SAP Sandbox ist dort
+// aus Trial-Containern nicht immer stabil erreichbar. IPv4 zuerst ist robuster.
+dns.setDefaultResultOrder("ipv4first");
 
 // Lädt .env aus dem Projektstamm
 function loadDotEnv() {
@@ -196,7 +201,9 @@ async function handleSapProxy(req, res, sapKey) {
     } catch (err) {
         console.error("[sap-proxy] Fehler:", err.message);
         res.writeHead(502, { "Content-Type": "application/json" });
-        res.end(JSON.stringify({ error: "SAP Sandbox nicht erreichbar: " + err.message }));
+        var cause = err && err.cause ? (err.cause.code || err.cause.message || "") : "";
+        var suffix = cause ? (" (" + cause + ")") : "";
+        res.end(JSON.stringify({ error: "SAP Sandbox nicht erreichbar: " + err.message + suffix }));
     }
 }
 

@@ -6,7 +6,7 @@
     "start": "npm run scss:build && node scripts/bundle-static-mock.js && ui5 serve --open index.html",
     "start:full": "ui5 build --all --clean-dest && sed -i '' 's|src=\"resources/sap-ui-core.js\"|src=\"https://ui5.sap.com/1.120.0/resources/sap-ui-core.js\"|g' dist/index.html && npx --yes serve dist -l 8080",
     "build": "npm run scss:build && node scripts/bundle-static-mock.js && ui5 build --clean-dest",
-    "build:cf": "npm run build && node scripts/prepare-ghpages.js",
+    "build:cf": "npm run build && sed -i '' 's|src=\"resources/sap-ui-core.js\"|src=\"https://ui5.sap.com/1.120.0/resources/sap-ui-core.js\"|g' dist/index.html",
     "scss:build": "sass --no-source-map webapp/styles/main.scss:webapp/css/style.css",
     "scss:watch": "sass --watch webapp/styles/main.scss:webapp/css/style.css",
     "lint:scss": "stylelint \"webapp/styles/**/*.scss\"",

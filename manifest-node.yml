@@ -4,6 +4,6 @@ applications:
     memory: 512M
     disk_quota: 1G
     path: .
-    command: npm run build:cf && npm run start:cf
+    command: npm run start:cf
     env:
       NODE_ENV: production

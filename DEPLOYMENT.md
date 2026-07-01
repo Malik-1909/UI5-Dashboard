@@ -96,6 +96,7 @@ Ziel: dieselbe Funktion wie lokal (`npm run start`).
 ```bash
 cf login -a https://api.cf.us10-001.hana.ondemand.com
 cf target -o <ORG> -s <SPACE>
+npm run build:cf
 cf push -f manifest-node.yml
 ```
 
