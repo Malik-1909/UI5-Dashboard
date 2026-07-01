@@ -1,0 +1,2 @@
+sap.ui.define([],function(){"use strict";function e(e){return String(e||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;")}function r(e){return String(e||"").replace(/\*\*(.+?)\*\*/g,"<strong>$1</strong>").replace(/\*(.+?)\*/g,"<em>$1</em>").replace(/\n/g,"<br>")}return{escapeHtml:e,markdownToSimpleHtml:r}});
+//# sourceMappingURL=ChatTextFormat.js.map

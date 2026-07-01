@@ -6,17 +6,8 @@
 		"applicationVersion": {
 			"version": "1.0.0"
 		},
-		"title": "UI5 VizFrame App",
-		"description": "SAPUI5 App mit VizFrame Charts",
-		"dataSources": {
-			"kpiService": {
-				"uri": "/sap/opu/odata/sap/KPI_SERVICE/",
-				"type": "OData",
-				"settings": {
-					"odataVersion": "2.0"
-				}
-			}
-		}
+		"title": "KPI Dashboard – Geschäftsprozesse",
+		"description": "SAPUI5 KPI-Dashboard mit Diagrammen, SAP-Sandbox-Daten (lokal) und KI-Assistent"
 	},
 	"sap.ui": {
 		"technology": "UI5",
@@ -39,13 +30,6 @@
 		"contentDensities": {
 			"compact": true,
 			"cozy": true
-		},
-		"models": {
-			"sales": {
-				"dataSource": "kpiService",
-				"preload": true,
-				"type": "sap.ui.model.odata.v2.ODataModel"
-			}
 		},
 		"rootView": {
 			"viewName": "ui5.vizframe.app.view.App",

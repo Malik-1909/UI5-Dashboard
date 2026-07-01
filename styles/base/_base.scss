@@ -1,0 +1,33 @@
+html,
+body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+#content {
+  height: 100%;
+  min-height: 100vh;
+  clear: both;
+
+  .sapMApp {
+    height: 100%;
+  }
+
+  .sapMPage {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .sapMPageEnableScrolling {
+    flex: 1 1 auto;
+    min-height: 100px;
+    overflow-y: auto;
+  }
+
+  .sapMPageFooter,
+  .sapMBar {
+    flex-shrink: 0;
+  }
+}

@@ -4,63 +4,67 @@
     xmlns="sap.m"
     xmlns:core="sap.ui.core"
     xmlns:l="sap.ui.layout"
+    xmlns:cssgrid="sap.ui.layout.cssgrid"
     xmlns:viz="sap.viz.ui5.controls"
     xmlns:viz.data="sap.viz.ui5.data"
     xmlns:viz.feeds="sap.viz.ui5.controls.common.feeds"
     displayBlock="true">
-    <Page id="d2oPage" enableScrolling="true" showHeader="true">
+    <Page id="d2oPage" title="Design to Operate" enableScrolling="true" showHeader="true">
         <customHeader>
             <Bar>
                 <contentLeft>
-                    <Button icon="sap-icon://nav-back" press=".onNavBack"/>
+                    <Button icon="sap-icon://nav-back" tooltip="Zurück" accessibleName="Zurück zur Startseite" press=".onNavBack"/>
                     <Title text="Design to Operate" level="H2"/>
                 </contentLeft>
                 <contentMiddle/>
                 <contentRight>
-                    <Button id="burgerButton" icon="sap-icon://menu2" press=".onBurgerPress" class="headerBurgerButton"/>
+                    <core:Fragment fragmentName="ui5.vizframe.app.fragment.HeaderKiButton" type="XML"/>
+                    <Button id="burgerButton" icon="sap-icon://menu2" tooltip="Menü" accessibleName="Hauptmenü öffnen" press=".onBurgerPress" class="headerBurgerButton"/>
                 </contentRight>
             </Bar>
         </customHeader>
         <content>
-            <ScrollContainer height="100%" vertical="true" class="sapUiSmallMargin">
-                <l:VerticalLayout width="100%">
-                    <Title text="Design to Operate Prozess" level="H3"/>
-                    <Text text="Design to Operate (D2O) beschreibt den Prozess von der Produktentwicklung bis zum Betrieb und Service. Der Prozess verbindet Design, Engineering, Fertigung und Service."
+            <ScrollContainer height="100%" vertical="true" class="processDetailScroll">
+                <l:VerticalLayout width="100%" class="processDetailMain">
+                    <MessageStrip
+                        text="{sales>/_sapBadgeD2O}"
+                        type="Information"
+                        showCloseButton="false"
+                        visible="{= !!${sales>/_sapBadgeD2O}}"
                         class="sapUiSmallMarginBottom"/>
-                    <Title text="Prozessschritte" level="H4"/>
-                    <List>
-                        <StandardListItem title="1. Design" info="Produktdesign und Konzeptentwicklung"/>
-                        <StandardListItem title="2. Engineering" info="Konstruktion und technische Spezifikation"/>
-                        <StandardListItem title="3. Procure" info="Beschaffung von Komponenten"/>
-                        <StandardListItem title="4. Manufacture" info="Fertigung und Montage"/>
-                        <StandardListItem title="5. Deploy" info="Auslieferung und Installation"/>
-                        <StandardListItem title="6. Operate" info="Betrieb und Wartung"/>
-                        <StandardListItem title="7. Service" info="Reparatur und Support"/>
-                    </List>
-                    <Title text="KPI-Übersicht" level="H4" class="sapUiSmallMarginTop"/>
-                    <Table id="d2oKpiTable" items="{sales>/D2OKpiTable}" class="sapUiSmallMarginBottom">
-                        <columns>
-                            <Column width="50%"><Text text="KPI"/></Column>
-                            <Column><Text text="Wert"/></Column>
-                            <Column><Text text="Einheit"/></Column>
-                        </columns>
-                        <items>
-                            <ColumnListItem>
-                                <cells>
-                                    <Text text="{sales>kpi}"/>
-                                    <Text text="{sales>value}"/>
-                                    <Text text="{sales>unit}"/>
-                                </cells>
-                            </ColumnListItem>
-                        </items>
-                    </Table>
-                    <Title text="Wichtige Diagramme für D2O" level="H3" class="sapUiSmallMarginTop"/>
-                    <Text text="Die folgenden Diagramme unterstützen die Steuerung des Design-to-Operate-Prozesses: Durchlaufmengen, Kapazitätsauslastung und Output-Trend."
+                    <MessageStrip
+                        text="Demo-Daten (Mock) · SAP API nicht konfiguriert oder nicht erreichbar"
+                        type="Warning"
+                        showCloseButton="false"
+                        visible="{= !${sales>/_sapBadgeD2O}}"
                         class="sapUiSmallMarginBottom"/>
-                    <Panel headerText="1. D2O-Prozess-Funnel" expandable="true" expanded="true" class="sapUiSmallMarginBottom">
+                    <VBox width="100%" class="processDetailKpiBlock">
+                            <Title text="KPI-Übersicht" level="H4"/>
+                            <Table id="d2oKpiTable" items="{sales>/D2OKpiTable}" class="processDetailKpiTable">
+                                <columns>
+                                    <Column width="50%"><Text text="KPI"/></Column>
+                                    <Column><Text text="Wert"/></Column>
+                                    <Column><Text text="Einheit"/></Column>
+                                </columns>
+                                <items>
+                                    <ColumnListItem>
+                                        <cells>
+                                            <Text text="{sales>kpi}"/>
+                                            <Text text="{sales>value}"/>
+                                            <Text text="{sales>unit}"/>
+                                        </cells>
+                                    </ColumnListItem>
+                                </items>
+                            </Table>
+                    </VBox>
+                    <Title text="Diagramme" level="H3" class="sapUiSmallMarginTop"/>
+                    <cssgrid:CSSGrid
+                        class="processDetailChartsGrid"
+                        width="100%"
+                        gridTemplateColumns="minmax(0, 1fr) minmax(0, 1fr)"
+                        gridGap="1rem 1.5rem">
+                    <Panel headerText="{= '1. D2O-Prozess-Funnel' + (${sales>/_sapBadgeD2O} ? ' · SAP API' : ' · Mock')}" expandable="true" expanded="true" class="processDetailChartPanel">
                         <content>
-                            <Text text="Zeigt die Anzahl Vorgänge pro Stufe. Säulendiagramm für den Produktdurchlauf – wichtig zur Identifikation von Engpässen."
-                                class="sapUiSmallMarginBottom"/>
                             <viz:VizFrame
                                 id="d2oFunnelChart"
                                 vizType="column"
@@ -68,7 +72,7 @@
                                 width="100%"
                                 uiConfig="{applicationSet:'fiori'}"
                                 vizProperties="{
-                                    title: { text: 'Vorgänge pro Prozessstufe' },
+                                    title: { text: 'Warenbewegungen nach Art' },
                                     plotArea: { dataLabel: { visible: true }, colorPalette: ['#0070F2'] },
                                     categoryAxis: { title: { visible: false } },
                                     valueAxis: { title: { visible: false } }
@@ -90,10 +94,8 @@
                             </viz:VizFrame>
                         </content>
                     </Panel>
-                    <Panel headerText="2. Kapazitätsauslastung (Ist vs. Ziel)" expandable="true" expanded="true" class="sapUiSmallMarginBottom">
+                    <Panel headerText="{= '2. Lager nach Werk (relativ)' + (${sales>/_sapBadgeD2O} ? ' · SAP API' : ' · Mock')}" expandable="true" expanded="true" class="processDetailChartPanel">
                         <content>
-                            <Text text="Zeigt die Auslastung der Bereiche in Prozent. Säulendiagramm für den Vergleich Ist vs. Ziel."
-                                class="sapUiSmallMarginBottom"/>
                             <viz:VizFrame
                                 id="d2oCapacityChart"
                                 vizType="column"
@@ -101,7 +103,7 @@
                                 width="100%"
                                 uiConfig="{applicationSet:'fiori'}"
                                 vizProperties="{
-                                    title: { text: 'Auslastung (%) pro Bereich' },
+                                    title: { text: 'Lagermenge je Werk (Ist vs. Ziel %)' },
                                     plotArea: { dataLabel: { visible: false }, colorPalette: ['#0070F2','#F58B00'] },
                                     categoryAxis: { title: { visible: false } },
                                     valueAxis: { title: { visible: false } }
@@ -124,10 +126,9 @@
                             </viz:VizFrame>
                         </content>
                     </Panel>
-                    <Panel headerText="3. Output-Trend" expandable="true" expanded="true" class="sapUiSmallMarginBottom">
+                    </cssgrid:CSSGrid>
+                    <Panel headerText="{= '3. Warenbewegungen pro Monat' + (${sales>/_sapBadgeD2O} ? ' · SAP API' : ' · Mock')}" expandable="true" expanded="true" class="processDetailChartPanel processDetailChartPanelFull sapUiSmallMarginTop">
                         <content>
-                            <Text text="Zeigt die produzierte Menge je Monat. Wichtig für die Leistungssteuerung und Liefertreue."
-                                class="sapUiSmallMarginBottom"/>
                             <viz:VizFrame
                                 id="d2oOutputChart"
                                 vizType="line"
@@ -135,7 +136,7 @@
                                 width="100%"
                                 uiConfig="{applicationSet:'fiori'}"
                                 vizProperties="{
-                                    title: { text: 'Output (Stück)' },
+                                    title: { text: 'Warenbewegungen (Anzahl)' },
                                     plotArea: { dataLabel: { visible: true }, colorPalette: ['#107E3E'] },
                                     categoryAxis: { title: { visible: false } },
                                     valueAxis: { title: { visible: false } }
@@ -146,20 +147,17 @@
                                             <viz.data:DimensionDefinition name="Monat" value="{sales>month}"/>
                                         </viz.data:dimensions>
                                         <viz.data:measures>
-                                            <viz.data:MeasureDefinition name="Output" value="{sales>output}"/>
+                                            <viz.data:MeasureDefinition name="Belege" value="{sales>output}"/>
                                         </viz.data:measures>
                                     </viz.data:FlattenedDataset>
                                 </viz:dataset>
                                 <viz:feeds>
-                                    <viz.feeds:FeedItem uid="valueAxis" type="Measure" values="Output"/>
+                                    <viz.feeds:FeedItem uid="valueAxis" type="Measure" values="Belege"/>
                                     <viz.feeds:FeedItem uid="categoryAxis" type="Dimension" values="Monat"/>
                                 </viz:feeds>
                             </viz:VizFrame>
                         </content>
                     </Panel>
-                    <Title text="Zusammenfassung" level="H4"/>
-                    <Text text="Für D2O sind Säulendiagramme (Prozessdurchlauf, Kapazitätsauslastung) und Liniendiagramme (Output-Trend) relevant."
-                        class="sapUiSmallMarginBottom"/>
                 </l:VerticalLayout>
             </ScrollContainer>
         </content>

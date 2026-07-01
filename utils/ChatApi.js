@@ -1,0 +1,2 @@
+sap.ui.define([],function(){"use strict";function t(t){return fetch("/api/chat",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(t)}).then(function(t){return t.json()})}return{postChat:t}});
+//# sourceMappingURL=ChatApi.js.map

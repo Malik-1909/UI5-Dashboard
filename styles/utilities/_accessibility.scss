@@ -1,0 +1,52 @@
+/* Skip-Link (WCAG 2.4.1) – nur bei Tastaturfokus sichtbar */
+.skipLink {
+  position: absolute;
+  left: -10000px;
+  top: auto;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+
+  &:focus {
+    position: fixed;
+    left: 0.75rem;
+    top: 0.75rem;
+    z-index: 10001;
+    width: auto;
+    height: auto;
+    clip: auto;
+    overflow: visible;
+    white-space: normal;
+    padding: 0.5rem 1rem;
+    background: var(--sapHighlightColor, #0070f2);
+    color: var(--sapContent_ContrastTextColor, #fff);
+    font-size: 0.875rem;
+    font-weight: 600;
+    text-decoration: none;
+    border-radius: 0.25rem;
+    outline: 2px solid var(--sapContent_FocusColor, #000);
+    outline-offset: 2px;
+  }
+}
+
+/* Fokus sichtbar (WCAG 2.4.7) – FAB außerhalb UI5-Theme */
+#chatFabHost .chatFabBtn.chatFabAi.sapMBtn:focus-visible {
+  outline: 3px solid var(--sapContent_FocusColor, #000);
+  outline-offset: 3px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .chatDots::before,
+  .chatDots::after,
+  .chatDots span {
+    animation: none !important;
+  }
+
+  .sapMGT,
+  #chatFabHost .chatFabBtn.chatFabAi.sapMBtn {
+    transition: none !important;
+  }
+}

@@ -1,20 +1,19 @@
 sap.ui.define([
     "ui5/vizframe/app/controller/BaseController",
-    "sap/viz/ui5/controls/Popover"
-], function (BaseController, VizPopover) {
+    "sap/ui/model/json/JSONModel",
+    "ui5/vizframe/app/utils/VizFramePopoverHelper"
+], function (BaseController, JSONModel, VizFramePopoverHelper) {
     "use strict";
 
     return BaseController.extend("ui5.vizframe.app.controller.R2R", {
-        onAfterRendering: function () {
-            var aChartIds = ["r2rFunnelChart", "r2rEntriesChart", "r2rCloseChart"];
-            aChartIds.forEach(function (sId) {
-                var oVizFrame = this.byId(sId);
-                if (oVizFrame) {
-                    var oPopover = new VizPopover({});
-                    oPopover.connect(oVizFrame.getVizUid());
-                }
-            }.bind(this));
+        onInit: function () {
+            this.getView().setModel(new JSONModel({ title: "Record to Report" }), "proc");
         },
+
+        onAfterRendering: function () {
+            VizFramePopoverHelper.connectPopovers(this, ["r2rFunnelChart", "r2rEntriesChart", "r2rDebitCreditChart"]);
+        },
+
         onNavBack: function () {
             this.getOwnerComponent().getRouter().navTo("main");
         }

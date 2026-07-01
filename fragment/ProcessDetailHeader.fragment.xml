@@ -1,0 +1,15 @@
+<core:FragmentDefinition
+    xmlns="sap.m"
+    xmlns:core="sap.ui.core">
+    <Bar>
+        <contentLeft>
+            <Button icon="sap-icon://nav-back" tooltip="Zurück" accessibleName="Zurück zur Startseite" press=".onNavBack"/>
+            <Title text="{proc>/title}" level="H2"/>
+        </contentLeft>
+        <contentMiddle/>
+        <contentRight>
+            <core:Fragment fragmentName="ui5.vizframe.app.fragment.HeaderKiButton" type="XML"/>
+            <Button id="burgerButton" icon="sap-icon://menu2" tooltip="Menü" accessibleName="Hauptmenü öffnen" press=".onBurgerPress" class="headerBurgerButton"/>
+        </contentRight>
+    </Bar>
+</core:FragmentDefinition>

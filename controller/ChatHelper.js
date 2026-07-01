@@ -1,0 +1,2 @@
+sap.ui.define([],function(){"use strict";function n(n){if(!n||!n.getOwnerComponent){return}var o=n.getOwnerComponent();var t=o.getRootControl();if(!t){return}var e=t.getController();if(e&&typeof e.openChatFromNavigation==="function"){e.openChatFromNavigation()}}return{openFrom:n}});
+//# sourceMappingURL=ChatHelper.js.map

@@ -1,0 +1,2 @@
+sap.ui.define(["sap/viz/ui5/controls/Popover"],function(n){"use strict";function r(r,i){if(!r||!Array.isArray(i)){return}i.forEach(function(i){var o=r.byId(i);if(o){var e=new n({});e.connect(o.getVizUid())}})}return{connectPopovers:r}});
+//# sourceMappingURL=VizFramePopoverHelper.js.map
