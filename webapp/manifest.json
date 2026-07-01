@@ -3,11 +3,19 @@
   "sap.app": {
     "id": "ui5.vizframe.app",
     "type": "application",
+    "i18n": {
+      "bundleUrl": "i18n/i18n.properties",
+      "supportedLocales": [
+        "de",
+        "en"
+      ],
+      "fallbackLocale": "de"
+    },
     "applicationVersion": {
       "version": "1.0.0"
     },
-    "title": "KPI Dashboard – Geschäftsprozesse",
-    "description": "SAPUI5 KPI-Dashboard mit Diagrammen, SAP-Sandbox-Daten (lokal) und KI-Assistent"
+    "title": "{{appTitle}}",
+    "description": "{{appDescription}}"
   },
   "sap.ui": {
     "technology": "UI5",
@@ -18,6 +26,19 @@
     }
   },
   "sap.ui5": {
+    "models": {
+      "i18n": {
+        "type": "sap.ui.model.resource.ResourceModel",
+        "settings": {
+          "bundleName": "ui5.vizframe.app.i18n.i18n",
+          "supportedLocales": [
+            "de",
+            "en"
+          ],
+          "fallbackLocale": "de"
+        }
+      }
+    },
     "dependencies": {
       "minUI5Version": "1.120.0",
       "libs": {

@@ -48,6 +48,7 @@ Proxy und Keys: `middleware/chat-proxy` – Routen `/api/chat` und `/api/sap/*` 
 
 - SAPUI5 **1.120** (XML-Views, JS-Controller), **sap.viz**, **sap.ui.layout**, **themelib_sap_horizon**
 - **`JSONModel` `sales`** – gesetzt in `webapp/Component.js`
+- **`ResourceModel` `i18n`** – UI-Texte zentral in `webapp/i18n/`
 - **`webapp/utils/SapDataLoader.js`** – Sandbox-Fetch unter `/api/sap/...`, Transformation in Mock-Strukturen
 - **Custom Middleware** `middleware/chat-proxy`: Chat + SAP-Proxy
 
@@ -65,6 +66,7 @@ Proxy und Keys: `middleware/chat-proxy` – Routen `/api/chat` und `/api/sap/*` 
 |------|--------|
 | `webapp/` | **Aktive App** – Component, Views, Manifest, Styles |
 | `webapp/Component.js` | `sales` als JSONModel; GitHub Pages → Mock; sonst SAP-Merge |
+| `webapp/i18n/` | Zentrale UI-Texte (`i18n.properties`, `i18n_en.properties`) |
 | `webapp/utils/SapDataLoader.js` | SAP-Sandbox laden und aggregieren |
 | `middleware/chat-proxy/` | Groq-Chat, SAP-Sandbox-Proxy |
 | `scripts/prepare-ghpages.js` | GitHub-Pages-Vorbereitung (CDN 1.120, SPA-404) |

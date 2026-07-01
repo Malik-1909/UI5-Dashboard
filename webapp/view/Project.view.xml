@@ -5,179 +5,179 @@
     xmlns:core="sap.ui.core"
     xmlns:l="sap.ui.layout"
     displayBlock="true">
-    <Page id="projectPage" title="Über dieses Projekt" enableScrolling="true" showHeader="true">
+    <Page id="projectPage" title="{i18n>project.pageTitle}" enableScrolling="true" showHeader="true">
         <customHeader>
             <Bar>
                 <contentLeft>
-                    <Button icon="sap-icon://nav-back" tooltip="Zurück" accessibleName="Zurück zur Startseite" press=".onNavBack"/>
-                    <Title text="Über dieses Projekt" level="H2"/>
+                    <Button icon="sap-icon://nav-back" tooltip="{i18n>project.backTooltip}" accessibleName="{i18n>project.backAccessible}" press=".onNavBack"/>
+                    <Title text="{i18n>project.headerTitle}" level="H2"/>
                 </contentLeft>
                 <contentMiddle/>
                 <contentRight>
                     <core:Fragment fragmentName="ui5.vizframe.app.fragment.HeaderKiButton" type="XML"/>
-                    <Button id="burgerButton" icon="sap-icon://menu2" tooltip="Menü" accessibleName="Hauptmenü öffnen" press=".onBurgerPress" class="headerBurgerButton"/>
+                    <Button id="burgerButton" icon="sap-icon://menu2" tooltip="{i18n>project.menuTooltip}" accessibleName="{i18n>project.menuAccessible}" press=".onBurgerPress" class="headerBurgerButton"/>
                 </contentRight>
             </Bar>
         </customHeader>
         <content>
             <ScrollContainer height="100%" vertical="true" class="sapUiSmallMargin">
                 <l:VerticalLayout width="100%">
-                    <Title text="KPI Dashboard – Geschäftsprozesse" level="H3"/>
-                    <Text text="SAPUI5-Dashboard mit fünf End-to-End-Prozessen, KPI-Tabellen und VizFrame-Diagrammen. Ein KI-Assistent erklärt Prozesse, beantwortet Fragen zu Kennzahlen und navigiert bei Bedarf durch die App."
+                    <Title text="{i18n>project.title}" level="H3"/>
+                    <Text text="{i18n>project.description}"
                         class="sapUiSmallMarginBottom"/>
 
-                    <Title text="Hosting" level="H4" class="sapUiSmallMarginTop"/>
+                    <Title text="{i18n>project.hostingTitle}" level="H4" class="sapUiSmallMarginTop"/>
                     <List class="sapUiSmallMarginBottom">
-                        <StandardListItem title="Lokal (npm run start)" info="SAP-Sandbox-Daten + KI-Assistent (Groq) – volle Funktion"/>
-                        <StandardListItem title="GitHub Pages" info="Öffentliche Demo – Mock-Daten, Offline-Chat"/>
-                        <StandardListItem title="SAP BTP" info="Geplant – Live-Daten und KI über geschütztes Backend"/>
+                        <StandardListItem title="{i18n>project.hostingLocalTitle}" info="{i18n>project.hostingLocalInfo}"/>
+                        <StandardListItem title="{i18n>project.hostingGithubTitle}" info="{i18n>project.hostingGithubInfo}"/>
+                        <StandardListItem title="{i18n>project.hostingBtpTitle}" info="{i18n>project.hostingBtpInfo}"/>
                     </List>
-                    <Link text="Repository auf GitHub" href="https://github.com/Malik-1909/UI5-Dashboard" target="_blank" class="sapUiSmallMarginBottom"/>
+                    <Link text="{i18n>project.repoLinkText}" href="https://github.com/Malik-1909/UI5-Dashboard" target="_blank" class="sapUiSmallMarginBottom"/>
 
-                    <Title text="Die fünf Geschäftsprozesse" level="H3" class="sapUiSmallMarginTop"/>
+                    <Title text="{i18n>project.processesTitle}" level="H3" class="sapUiSmallMarginTop"/>
                     <Table id="processOverviewTable" class="sapUiSmallMarginBottom">
                         <columns>
-                            <Column width="22%"><Text text="Prozess"/></Column>
-                            <Column width="78%"><Text text="Kurzbeschreibung"/></Column>
+                            <Column width="22%"><Text text="{i18n>project.processCol}"/></Column>
+                            <Column width="78%"><Text text="{i18n>project.shortDescCol}"/></Column>
                         </columns>
                         <items>
                             <ColumnListItem>
                                 <cells>
-                                    <Text text="Recruit to Retire" fontWeight="Bold"/>
-                                    <Text text="Rekrutierung bis Ruhestand – gesamter Mitarbeiterlebenszyklus."/>
+                                    <Text text="{i18n>process.rtr}" fontWeight="Bold"/>
+                                    <Text text="{i18n>project.rtrShort}"/>
                                 </cells>
                             </ColumnListItem>
                             <ColumnListItem>
                                 <cells>
-                                    <Text text="Record to Report" fontWeight="Bold"/>
-                                    <Text text="Buchung bis Abschluss – Finanz- und Rechnungswesen."/>
+                                    <Text text="{i18n>process.r2r}" fontWeight="Bold"/>
+                                    <Text text="{i18n>project.r2rShort}"/>
                                 </cells>
                             </ColumnListItem>
                             <ColumnListItem>
                                 <cells>
-                                    <Text text="Source to Pay" fontWeight="Bold"/>
-                                    <Text text="Beschaffung bis Zahlung – Einkauf und Lieferantenmanagement."/>
+                                    <Text text="{i18n>process.s2p}" fontWeight="Bold"/>
+                                    <Text text="{i18n>project.s2pShort}"/>
                                 </cells>
                             </ColumnListItem>
                             <ColumnListItem>
                                 <cells>
-                                    <Text text="Design to Operate" fontWeight="Bold"/>
-                                    <Text text="Design bis Betrieb – hier u. a. Warenbewegungen und Lagerbestände aus der Sandbox."/>
+                                    <Text text="{i18n>process.d2o}" fontWeight="Bold"/>
+                                    <Text text="{i18n>project.d2oShort}"/>
                                 </cells>
                             </ColumnListItem>
                             <ColumnListItem>
                                 <cells>
-                                    <Text text="Lead to Cash" fontWeight="Bold"/>
-                                    <Text text="Lead bis Zahlungseingang – Vertrieb und Forderungsmanagement."/>
+                                    <Text text="{i18n>process.l2c}" fontWeight="Bold"/>
+                                    <Text text="{i18n>project.l2cShort}"/>
                                 </cells>
                             </ColumnListItem>
                         </items>
                     </Table>
 
-                    <Title text="Prozessschritte" level="H3" class="sapUiSmallMarginTop"/>
-                    <Text text="Phasenüberblick je End-to-End-Prozess. Detailseiten fokussieren auf KPIs und Diagramme."
+                    <Title text="{i18n>project.stepsTitle}" level="H3" class="sapUiSmallMarginTop"/>
+                    <Text text="{i18n>project.stepsDescription}"
                         class="sapUiSmallMarginBottom"/>
 
                     <Panel expandable="true" expanded="false" width="100%" class="sapUiTinyMarginBottom">
                         <headerToolbar>
                             <OverflowToolbar style="Clear">
-                                <Title text="Lead to Cash" level="H5"/>
+                                <Title text="{i18n>process.l2c}" level="H5"/>
                             </OverflowToolbar>
                         </headerToolbar>
                         <content>
                             <List>
-                                <StandardListItem title="Lead" info="Interessent erfassen und qualifizieren"/>
-                                <StandardListItem title="Opportunity" info="Geschäftsmöglichkeit bewerten"/>
-                                <StandardListItem title="Quote" info="Angebot erstellen und versenden"/>
-                                <StandardListItem title="Order" info="Auftrag erfassen und freigeben"/>
-                                <StandardListItem title="Delivery" info="Lieferung und Übergabe"/>
-                                <StandardListItem title="Invoice" info="Rechnungsstellung"/>
-                                <StandardListItem title="Collection" info="Zahlungseingang"/>
+                                <StandardListItem title="{i18n>project.l2c.stepLead}" info="{i18n>project.l2c.infoLead}"/>
+                                <StandardListItem title="{i18n>project.l2c.stepOpportunity}" info="{i18n>project.l2c.infoOpportunity}"/>
+                                <StandardListItem title="{i18n>project.l2c.stepQuote}" info="{i18n>project.l2c.infoQuote}"/>
+                                <StandardListItem title="{i18n>project.l2c.stepOrder}" info="{i18n>project.l2c.infoOrder}"/>
+                                <StandardListItem title="{i18n>project.l2c.stepDelivery}" info="{i18n>project.l2c.infoDelivery}"/>
+                                <StandardListItem title="{i18n>project.l2c.stepInvoice}" info="{i18n>project.l2c.infoInvoice}"/>
+                                <StandardListItem title="{i18n>project.l2c.stepCollection}" info="{i18n>project.l2c.infoCollection}"/>
                             </List>
                         </content>
                     </Panel>
                     <Panel expandable="true" expanded="false" width="100%" class="sapUiTinyMarginBottom">
                         <headerToolbar>
                             <OverflowToolbar style="Clear">
-                                <Title text="Source to Pay" level="H5"/>
+                                <Title text="{i18n>process.s2p}" level="H5"/>
                             </OverflowToolbar>
                         </headerToolbar>
                         <content>
                             <List>
-                                <StandardListItem title="Bedarfsmeldung" info="Bedarf anfordern und freigeben"/>
-                                <StandardListItem title="Bestellung" info="Bestellung auslösen"/>
-                                <StandardListItem title="Wareneingang" info="Wareneingang und Prüfung"/>
-                                <StandardListItem title="Rechnungsprüfung" info="Dreiseitenabgleich"/>
-                                <StandardListItem title="Zahlung" info="Zahlung an Lieferant"/>
+                                <StandardListItem title="{i18n>project.s2p.stepRequirement}" info="{i18n>project.s2p.infoRequirement}"/>
+                                <StandardListItem title="{i18n>project.s2p.stepOrder}" info="{i18n>project.s2p.infoOrder}"/>
+                                <StandardListItem title="{i18n>project.s2p.stepGoodsReceipt}" info="{i18n>project.s2p.infoGoodsReceipt}"/>
+                                <StandardListItem title="{i18n>project.s2p.stepInvoiceCheck}" info="{i18n>project.s2p.infoInvoiceCheck}"/>
+                                <StandardListItem title="{i18n>project.s2p.stepPayment}" info="{i18n>project.s2p.infoPayment}"/>
                             </List>
                         </content>
                     </Panel>
                     <Panel expandable="true" expanded="false" width="100%" class="sapUiTinyMarginBottom">
                         <headerToolbar>
                             <OverflowToolbar style="Clear">
-                                <Title text="Record to Report" level="H5"/>
+                                <Title text="{i18n>process.r2r}" level="H5"/>
                             </OverflowToolbar>
                         </headerToolbar>
                         <content>
                             <List>
-                                <StandardListItem title="Buchung" info="Transaktionserfassung"/>
-                                <StandardListItem title="Kontenabstimmung" info="Bank- und Sachkonten"/>
-                                <StandardListItem title="Periodenabschluss" info="Monats- und Jahresabschluss"/>
-                                <StandardListItem title="Konsolidierung" info="Konzernabschluss"/>
-                                <StandardListItem title="Reporting" info="Finanzberichte"/>
+                                <StandardListItem title="{i18n>project.r2r.stepPosting}" info="{i18n>project.r2r.infoPosting}"/>
+                                <StandardListItem title="{i18n>project.r2r.stepReconciliation}" info="{i18n>project.r2r.infoReconciliation}"/>
+                                <StandardListItem title="{i18n>project.r2r.stepClose}" info="{i18n>project.r2r.infoClose}"/>
+                                <StandardListItem title="{i18n>project.r2r.stepConsolidation}" info="{i18n>project.r2r.infoConsolidation}"/>
+                                <StandardListItem title="{i18n>project.r2r.stepReporting}" info="{i18n>project.r2r.infoReporting}"/>
                             </List>
                         </content>
                     </Panel>
                     <Panel expandable="true" expanded="false" width="100%" class="sapUiTinyMarginBottom">
                         <headerToolbar>
                             <OverflowToolbar style="Clear">
-                                <Title text="Recruit to Retire" level="H5"/>
+                                <Title text="{i18n>process.rtr}" level="H5"/>
                             </OverflowToolbar>
                         </headerToolbar>
                         <content>
                             <List>
-                                <StandardListItem title="Recruiting" info="Stellenausschreibung"/>
-                                <StandardListItem title="Onboarding" info="Einarbeitung"/>
-                                <StandardListItem title="Performance" info="Leistungsbeurteilung"/>
-                                <StandardListItem title="Development" info="Weiterbildung"/>
-                                <StandardListItem title="Compensation" info="Vergütung"/>
-                                <StandardListItem title="Offboarding" info="Austritt"/>
+                                <StandardListItem title="{i18n>project.rtr.stepRecruiting}" info="{i18n>project.rtr.infoRecruiting}"/>
+                                <StandardListItem title="{i18n>project.rtr.stepOnboarding}" info="{i18n>project.rtr.infoOnboarding}"/>
+                                <StandardListItem title="{i18n>project.rtr.stepPerformance}" info="{i18n>project.rtr.infoPerformance}"/>
+                                <StandardListItem title="{i18n>project.rtr.stepDevelopment}" info="{i18n>project.rtr.infoDevelopment}"/>
+                                <StandardListItem title="{i18n>project.rtr.stepCompensation}" info="{i18n>project.rtr.infoCompensation}"/>
+                                <StandardListItem title="{i18n>project.rtr.stepOffboarding}" info="{i18n>project.rtr.infoOffboarding}"/>
                             </List>
                         </content>
                     </Panel>
                     <Panel expandable="true" expanded="false" width="100%" class="sapUiSmallMarginBottom">
                         <headerToolbar>
                             <OverflowToolbar style="Clear">
-                                <Title text="Design to Operate" level="H5"/>
+                                <Title text="{i18n>process.d2o}" level="H5"/>
                             </OverflowToolbar>
                         </headerToolbar>
                         <content>
                             <List>
-                                <StandardListItem title="Design" info="Produktdesign"/>
-                                <StandardListItem title="Engineering" info="Konstruktion"/>
-                                <StandardListItem title="Procure" info="Beschaffung"/>
-                                <StandardListItem title="Manufacture" info="Fertigung"/>
-                                <StandardListItem title="Deploy" info="Auslieferung"/>
-                                <StandardListItem title="Operate" info="Betrieb"/>
-                                <StandardListItem title="Service" info="Support"/>
+                                <StandardListItem title="{i18n>project.d2o.stepDesign}" info="{i18n>project.d2o.infoDesign}"/>
+                                <StandardListItem title="{i18n>project.d2o.stepEngineering}" info="{i18n>project.d2o.infoEngineering}"/>
+                                <StandardListItem title="{i18n>project.d2o.stepProcure}" info="{i18n>project.d2o.infoProcure}"/>
+                                <StandardListItem title="{i18n>project.d2o.stepManufacture}" info="{i18n>project.d2o.infoManufacture}"/>
+                                <StandardListItem title="{i18n>project.d2o.stepDeploy}" info="{i18n>project.d2o.infoDeploy}"/>
+                                <StandardListItem title="{i18n>project.d2o.stepOperate}" info="{i18n>project.d2o.infoOperate}"/>
+                                <StandardListItem title="{i18n>project.d2o.stepService}" info="{i18n>project.d2o.infoService}"/>
                             </List>
                         </content>
                     </Panel>
 
-                    <Title text="Technologie" level="H3" class="sapUiSmallMarginTop"/>
+                    <Title text="{i18n>project.techTitle}" level="H3" class="sapUiSmallMarginTop"/>
                     <List class="sapUiSmallMarginBottom">
-                        <StandardListItem title="SAPUI5 1.120" info="XML-Views, Horizon Theme"/>
-                        <StandardListItem title="sap.viz" info="VizFrame-Diagramme"/>
-                        <StandardListItem title="JSONModel sales" info="Mock-Bundle + optional SAP-Sandbox-Merge"/>
-                        <StandardListItem title="KI-Assistent" info="Groq lokal · Offline-Regeln auf GitHub Pages"/>
+                        <StandardListItem title="{i18n>project.techUi5Title}" info="{i18n>project.techUi5Info}"/>
+                        <StandardListItem title="{i18n>project.techVizTitle}" info="{i18n>project.techVizInfo}"/>
+                        <StandardListItem title="{i18n>project.techModelTitle}" info="{i18n>project.techModelInfo}"/>
+                        <StandardListItem title="{i18n>project.techAiTitle}" info="{i18n>project.techAiInfo}"/>
                     </List>
 
-                    <Title text="Funktionen" level="H3" class="sapUiSmallMarginTop"/>
+                    <Title text="{i18n>project.featuresTitle}" level="H3" class="sapUiSmallMarginTop"/>
                     <List>
-                        <StandardListItem title="Startseite" info="Fünf Prozesskacheln mit Mini-Charts"/>
-                        <StandardListItem title="Detailseiten" info="KPI-Tabelle, Diagramme, Datenquellen-Badge"/>
-                        <StandardListItem title="Navigation" info="Kacheln, Menü, KI-Button, Zurück"/>
-                        <StandardListItem title="Responsives Layout" info="Desktop → Tablet → Mobile"/>
+                        <StandardListItem title="{i18n>project.featureHomeTitle}" info="{i18n>project.featureHomeInfo}"/>
+                        <StandardListItem title="{i18n>project.featureDetailTitle}" info="{i18n>project.featureDetailInfo}"/>
+                        <StandardListItem title="{i18n>project.featureNavTitle}" info="{i18n>project.featureNavInfo}"/>
+                        <StandardListItem title="{i18n>project.featureResponsiveTitle}" info="{i18n>project.featureResponsiveInfo}"/>
                     </List>
                 </l:VerticalLayout>
             </ScrollContainer>

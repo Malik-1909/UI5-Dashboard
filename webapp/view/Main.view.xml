@@ -9,19 +9,19 @@
     xmlns:viz.data="sap.viz.ui5.data"
     xmlns:viz.feeds="sap.viz.ui5.controls.common.feeds"
     displayBlock="true">
-    <Page id="mainPage" title="KPI Dashboard" enableScrolling="true" showHeader="true">
+    <Page id="mainPage" title="{i18n>main.pageTitle}" enableScrolling="true" showHeader="true">
         <customHeader>
             <Bar>
                 <contentLeft>
                     <core:Icon src="sap-icon://sap-logo" size="1.5rem" decorative="true"/>
-                    <Title text="KPI Dashboard" level="H2"/>
+                    <Title text="{i18n>main.headerTitle}" level="H2"/>
                 </contentLeft>
                 <contentMiddle/>
                 <contentRight>
                     <core:Fragment fragmentName="ui5.vizframe.app.fragment.HeaderKiButton" type="XML"/>
-                    <Button id="burgerButton" icon="sap-icon://menu2" tooltip="Menü" accessibleName="Hauptmenü öffnen" press=".onBurgerPress" class="headerBurgerButton"/>
-                    <Button text="Über dieses Projekt" tooltip="Zur Projektseite" accessibleName="Über dieses Projekt" press=".onNavToProject" class="headerDesktopActions"/>
-                    <Button id="prozesseButton" text="Prozesse ▾" tooltip="Prozesse" accessibleName="Prozesse, Untermenü öffnen" press=".onProzessePress" class="headerDesktopActions"/>
+                    <Button id="burgerButton" icon="sap-icon://menu2" tooltip="{i18n>main.menuTooltip}" accessibleName="{i18n>main.menuAccessible}" press=".onBurgerPress" class="headerBurgerButton"/>
+                    <Button text="{i18n>main.aboutButton}" tooltip="{i18n>main.aboutTooltip}" accessibleName="{i18n>main.aboutAccessible}" press=".onNavToProject" class="headerDesktopActions"/>
+                    <Button id="prozesseButton" text="{i18n>main.processButton}" tooltip="{i18n>main.processTooltip}" accessibleName="{i18n>main.processAccessible}" press=".onProzessePress" class="headerDesktopActions"/>
                 </contentRight>
             </Bar>
         </customHeader>
