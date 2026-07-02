@@ -3,8 +3,9 @@ sap.ui.define([
     "sap/ui/model/json/JSONModel",
     "sap/m/MessageToast",
     "sap/ui/core/BusyIndicator",
-    "ui5/vizframe/app/utils/SapDataLoader"
-], function (UIComponent, JSONModel, MessageToast, BusyIndicator, SapDataLoader) {
+    "ui5/vizframe/app/utils/SapDataLoader",
+    "ui5/vizframe/app/utils/BtpHealthMonitor"
+], function (UIComponent, JSONModel, MessageToast, BusyIndicator, SapDataLoader, BtpHealthMonitor) {
     "use strict";
 
     return UIComponent.extend("ui5.vizframe.app.Component", {
@@ -16,6 +17,7 @@ sap.ui.define([
             UIComponent.prototype.init.apply(this, arguments);
             if (this._isGitHubPagesHost()) {
                 this._initSalesModelStaticHost();
+                this._initBtpHealthMonitor();
                 this.getRouter().initialize();
             } else {
                 var oThis = this;
@@ -37,6 +39,12 @@ sap.ui.define([
         /**
          * GitHub Pages: nur statisches Mock-Bundle, kein SAP-Proxy – Modell sofort, Router direkt.
          */
+        _initBtpHealthMonitor: function () {
+            var oModel = new JSONModel();
+            this.setModel(oModel, "btpHealth");
+            BtpHealthMonitor.start(oModel);
+        },
+
         _initSalesModelStaticHost: function () {
             var sBundleUrl = sap.ui.require.toUrl("ui5/vizframe/app/localService/static-mock-bundle.json");
             var oModel = new JSONModel();

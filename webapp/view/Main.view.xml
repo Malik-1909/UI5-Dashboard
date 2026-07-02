@@ -26,6 +26,17 @@
             </Bar>
         </customHeader>
         <content>
+            <MessageStrip
+                id="btpHealthStrip"
+                visible="{btpHealth>/visible}"
+                text="{i18n>main.btpHealthOffline}"
+                type="Warning"
+                showIcon="true"
+                showCloseButton="true"
+                close=".onBtpHealthStripClose"
+                link="{i18n>main.btpHealthLink}"
+                linkPress=".onBtpHealthLinkPress"
+                class="sapUiSmallMarginBeginEnd sapUiTinyMarginTop"/>
             <cssgrid:CSSGrid
                 id="processTilesGrid"
                 gridTemplateColumns="1fr 1fr 1fr 1fr 1fr 1fr"

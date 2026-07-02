@@ -34,6 +34,21 @@
                     </List>
                     <Link text="{i18n>project.repoLinkText}" href="https://github.com/Malik-1909/UI5-Dashboard" target="_blank" class="sapUiSmallMarginBottom"/>
 
+                    <Panel expandable="true" expanded="true" width="100%" class="sapUiSmallMarginTop sapUiSmallMarginBottom">
+                        <headerToolbar>
+                            <OverflowToolbar style="Clear">
+                                <Title text="{i18n>project.keepaliveTitle}" level="H5"/>
+                            </OverflowToolbar>
+                        </headerToolbar>
+                        <content>
+                            <Text text="{i18n>project.keepaliveDescription}" class="sapUiSmallMarginBottom"/>
+                            <List>
+                                <StandardListItem title="{i18n>project.keepaliveHowTitle}" info="{i18n>project.keepaliveHowInfo}"/>
+                                <StandardListItem title="{i18n>project.keepaliveLegalTitle}" info="{i18n>project.keepaliveLegalInfo}"/>
+                            </List>
+                        </content>
+                    </Panel>
+
                     <Title text="{i18n>project.processesTitle}" level="H3" class="sapUiSmallMarginTop"/>
                     <Table id="processOverviewTable" class="sapUiSmallMarginBottom">
                         <columns>
@@ -178,6 +193,7 @@
                         <StandardListItem title="{i18n>project.featureDetailTitle}" info="{i18n>project.featureDetailInfo}"/>
                         <StandardListItem title="{i18n>project.featureNavTitle}" info="{i18n>project.featureNavInfo}"/>
                         <StandardListItem title="{i18n>project.featureResponsiveTitle}" info="{i18n>project.featureResponsiveInfo}"/>
+                        <StandardListItem title="{i18n>project.featureKeepaliveTitle}" info="{i18n>project.featureKeepaliveInfo}"/>
                     </List>
                 </l:VerticalLayout>
             </ScrollContainer>

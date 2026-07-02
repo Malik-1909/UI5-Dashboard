@@ -49,6 +49,20 @@ sap.ui.define([
             this.getOwnerComponent().getRouter().navTo("project");
         },
 
+        onBtpHealthStripClose: function () {
+            var oModel = this.getView().getModel("btpHealth");
+            if (oModel) {
+                oModel.setProperty("/visible", false);
+            }
+        },
+
+        onBtpHealthLinkPress: function () {
+            var oModel = this.getView().getModel("btpHealth");
+            var sUrl = (oModel && oModel.getProperty("/liveUrl")) ||
+                "https://ui5-app-node.cfapps.us10-001.hana.ondemand.com/";
+            window.open(sUrl, "_blank", "noopener,noreferrer");
+        },
+
         onTilePress: function (oEvent) {
             var oTile = oEvent.getSource();
             var sId = oTile.getId();

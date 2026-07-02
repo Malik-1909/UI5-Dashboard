@@ -1,0 +1,154 @@
+name: BTP Trial Keep-Alive
+
+# Monitors BTP health hourly, logs status, starts CF app only when down.
+# Intended for portfolio/demo availability – not a production SLA replacement.
+on:
+  schedule:
+    - cron: "0 * * * *"  # every hour at :00 UTC
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: btp-keepalive
+  cancel-in-progress: false
+
+jobs:
+  monitor-and-start:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Check if app is already healthy
+        id: health
+        env:
+          CF_APP_URL: ${{ secrets.CF_APP_URL }}
+        run: |
+          URL="${CF_APP_URL:-https://ui5-app-node.cfapps.us10-001.hana.ondemand.com/health}"
+          echo "url=$URL" >> "$GITHUB_OUTPUT"
+          echo "Checking $URL"
+          if curl -fsS --max-time 15 "$URL" >/dev/null; then
+            echo "status=up" >> "$GITHUB_OUTPUT"
+            echo "App is already healthy – no restart needed."
+          else
+            echo "status=down" >> "$GITHUB_OUTPUT"
+            echo "App is down – will attempt cf start."
+          fi
+
+      - name: Install Cloud Foundry CLI
+        if: steps.health.outputs.status == 'down'
+        run: |
+          curl -fsSL "https://packages.cloudfoundry.org/stable?release=linux64-binary&source=github" -o cf-cli.tgz
+          tar -xzf cf-cli.tgz
+          sudo mv cf8 /usr/local/bin/cf
+          cf version
+
+      - name: Login and start app
+        if: steps.health.outputs.status == 'down'
+        env:
+          CF_API: ${{ secrets.CF_API }}
+          CF_USERNAME: ${{ secrets.CF_USERNAME }}
+          CF_PASSWORD: ${{ secrets.CF_PASSWORD }}
+          CF_ORG: ${{ secrets.CF_ORG }}
+          CF_SPACE: ${{ secrets.CF_SPACE }}
+          CF_APP: ${{ secrets.CF_APP }}
+        run: |
+          set -euo pipefail
+          : "${CF_API:?Missing secret CF_API}"
+          : "${CF_USERNAME:?Missing secret CF_USERNAME}"
+          : "${CF_PASSWORD:?Missing secret CF_PASSWORD}"
+          ORG="${CF_ORG:-94fccd54trial}"
+          SPACE="${CF_SPACE:-dev}"
+          APP="${CF_APP:-ui5-app-node}"
+
+          cf api "$CF_API"
+          cf auth "$CF_USERNAME" "$CF_PASSWORD"
+          cf target -o "$ORG" -s "$SPACE"
+          cf start "$APP"
+          cf app "$APP"
+
+      - name: Verify health after start
+        id: verify
+        if: steps.health.outputs.status == 'down'
+        env:
+          CF_APP_URL: ${{ secrets.CF_APP_URL }}
+        run: |
+          URL="${CF_APP_URL:-https://ui5-app-node.cfapps.us10-001.hana.ondemand.com/health}"
+          for i in 1 2 3 4 5; do
+            if curl -fsS --max-time 15 "$URL" >/dev/null; then
+              echo "final=up" >> "$GITHUB_OUTPUT"
+              echo "action=cf_start" >> "$GITHUB_OUTPUT"
+              echo "Health check OK after start: $URL"
+              exit 0
+            fi
+            echo "Waiting for app to become healthy (attempt $i/5)..."
+            sleep 15
+          done
+          echo "final=down" >> "$GITHUB_OUTPUT"
+          echo "action=cf_start_failed" >> "$GITHUB_OUTPUT"
+          echo "Health check failed after start – app may still be booting."
+
+      - name: Write monitor log
+        if: always()
+        env:
+          INITIAL: ${{ steps.health.outputs.status }}
+          FINAL: ${{ steps.verify.outputs.final || steps.health.outputs.status }}
+          ACTION: ${{ steps.verify.outputs.action || 'none' }}
+          HEALTH_URL: ${{ steps.health.outputs.url }}
+        run: |
+          set -euo pipefail
+          mkdir -p logs
+          touch logs/btp-keepalive.jsonl
+
+          TS="$(date -u +%Y-%m-%dT%H:%M:%SZ)"
+          RUN_URL="${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}"
+          ENTRY=$(jq -nc \
+            --arg ts "$TS" \
+            --arg initial "$INITIAL" \
+            --arg final "$FINAL" \
+            --arg action "$ACTION" \
+            --arg healthUrl "$HEALTH_URL" \
+            --arg workflowRun "$RUN_URL" \
+            '{ts:$ts,initial:$initial,final:$final,action:$action,healthUrl:$healthUrl,workflowRun:$workflowRun}')
+
+          echo "$ENTRY" >> logs/btp-keepalive.jsonl
+          tail -n 500 logs/btp-keepalive.jsonl > logs/btp-keepalive.jsonl.tmp
+          mv logs/btp-keepalive.jsonl.tmp logs/btp-keepalive.jsonl
+
+          {
+            echo "## BTP Keep-Alive – $TS"
+            echo ""
+            echo "| Feld | Wert |"
+            echo "|------|------|"
+            echo "| Initial | \`$INITIAL\` |"
+            echo "| Final | \`$FINAL\` |"
+            echo "| Aktion | \`$ACTION\` |"
+            echo "| Health | $HEALTH_URL |"
+            echo ""
+            if [ "$INITIAL" = "down" ]; then
+              if [ "$FINAL" = "up" ]; then
+                echo "✅ App war offline und wurde erfolgreich gestartet."
+              else
+                echo "⚠️ App war offline – Restart fehlgeschlagen oder noch am Booten."
+              fi
+            else
+              echo "✅ App war online – kein Restart nötig."
+            fi
+            echo ""
+            echo "Log: \`logs/btp-keepalive.jsonl\`"
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Commit monitor log
+        if: always()
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add logs/btp-keepalive.jsonl
+          if git diff --staged --quiet; then
+            echo "No log changes to commit."
+            exit 0
+          fi
+          git commit -m "chore(btp): keep-alive log $(date -u +%Y-%m-%dT%H:%MZ)"
+          git push

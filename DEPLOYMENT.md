@@ -87,7 +87,7 @@ Erzeugt `ui5-vizframe-app.zip` (~44 Dateien, UI5 vom CDN **1.120**).
 
 ---
 
-## SAP BTP – Vollständiges Setup (geplant)
+## SAP BTP – Node-Backend (Live-Daten + KI)
 
 Ziel: dieselbe Funktion wie lokal (`npm run start`).
 
@@ -117,3 +117,35 @@ cf logs ui5-app-node --recent
 4. GitHub Pages bleibt unverändert als Demo-Fallback
 
 Die UI5-Oberfläche bleibt unverändert; nur das Hosting-Backend wird ergänzt.
+
+---
+
+## BTP Trial Keep-Alive (GitHub Actions)
+
+**Problem:** Im BTP Trial werden Apps automatisch gestoppt (typisch nachts). Ein einfacher URL-Ping reicht nicht – die App hat 0 Instanzen und muss per `cf start` neu gestartet werden.
+
+**Lösung:** Workflow `.github/workflows/btp-keepalive.yml` prüft **stündlich** `/health`, startet `ui5-app-node` nur bei Ausfall und schreibt das Ergebnis nach `logs/btp-keepalive.jsonl`. Auf GitHub Pages zeigt die App einen Hinweis, wenn die Live-Demo offline ist.
+
+### Log prüfen
+
+1. Repo-Datei: `logs/btp-keepalive.jsonl` (jede Zeile = ein Check)
+2. GitHub → Actions → **BTP Trial Keep-Alive** → letzter Run → **Summary**
+3. Bei `action: cf_start_failed` → Secrets prüfen oder manuell `cf start ui5-app-node`
+
+### Secrets (GitHub → Settings → Secrets → Actions)
+
+| Secret | Pflicht | Beschreibung |
+|--------|---------|--------------|
+| `CF_API` | ja | z. B. `https://api.cf.us10-001.hana.ondemand.com` |
+| `CF_USERNAME` | ja | BTP-Login |
+| `CF_PASSWORD` | ja | BTP-Passwort |
+| `CF_ORG` | nein | Default `94fccd54trial` |
+| `CF_SPACE` | nein | Default `dev` |
+| `CF_APP` | nein | Default `ui5-app-node` |
+| `CF_APP_URL` | nein | Health-URL, Default `…/health` |
+
+### Hinweis zur Nutzung
+
+- Für **Portfolio-/Demo-Zwecke** im Trial ein pragmatischer Workaround ohne Pay-as-you-go.
+- Kein Ersatz für produktiven Betrieb (kein SLA, Trial max. 90 Tage).
+- Keys nur als GitHub Secrets – nie im Repo committen.

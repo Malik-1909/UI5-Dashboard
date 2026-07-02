@@ -13,6 +13,7 @@ const chatProxy = createChatProxy();
 app.disable("x-powered-by");
 
 app.get("/health", (_req, res) => {
+    res.set("Access-Control-Allow-Origin", "*");
     res.status(200).json({ status: "ok" });
 });
 
