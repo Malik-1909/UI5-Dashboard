@@ -8,7 +8,8 @@ sap.ui.define([
             var sSource = sHashOrRoute || (window.location.hash || "");
             var sRaw = sSource.replace(/^#/, "").replace(/^\//, "") || "main";
             var sRoute = ChatRouteConfig.normalizeRoute(sRaw);
-            var sPage = ChatRouteConfig.getRouteLabel(sRoute);
+            var oBundle = oComponent && oComponent.getModel("i18n") && oComponent.getModel("i18n").getResourceBundle();
+            var sPage = ChatRouteConfig.getRouteLabel(sRoute, oBundle);
             var aParts = ["Aktuell angezeigte Seite: " + sPage];
 
             var oSales = oComponent && oComponent.getModel("sales");

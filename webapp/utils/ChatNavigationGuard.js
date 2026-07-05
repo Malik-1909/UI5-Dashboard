@@ -34,13 +34,12 @@ sap.ui.define([
         if (!userExplicitlyRequestedNavigation(mOptions.lastUserMessage)) {
             return {
                 handled: true,
-                shouldNavigate: false,
-                hintHtml: "Für einen Seitenwechsel bitte ausdrücklich z. B. <strong>Gehe zu …</strong> oder <strong>Navigiere zu …</strong> schreiben.",
-                hintText: "Für einen Seitenwechsel bitte ausdrücklich z. B. Gehe zu ... oder Navigiere zu ... schreiben."
+                shouldNavigate: false
             };
         }
 
-        var sLabel = ChatRouteConfig.getRouteLabel(oIntent.route);
+        var oBundle = mOptions.bundle;
+        var sLabel = ChatRouteConfig.getRouteLabel(oIntent.route, oBundle);
         return {
             handled: true,
             shouldNavigate: true,

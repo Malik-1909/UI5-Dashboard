@@ -28,6 +28,20 @@ test("Chat context includes current page label and relevant KPI slice", () => {
   };
   const component = {
     getModel(name) {
+      if (name === "i18n") {
+        return {
+          getResourceBundle() {
+            return {
+              getText(key) {
+                const labels = {
+                  "process.r2r": "Buchung bis Abschluss"
+                };
+                return labels[key] || key;
+              }
+            };
+          }
+        };
+      }
       if (name !== "sales") {
         return null;
       }
@@ -40,7 +54,7 @@ test("Chat context includes current page label and relevant KPI slice", () => {
   };
 
   const context = ChatContextBuilder.buildContext(component, "#/r2r");
-  assert.match(context, /Aktuell angezeigte Seite: Record to Report/);
+  assert.match(context, /Aktuell angezeigte Seite: Buchung bis Abschluss/);
   assert.match(context, /KPI-Daten aus der App/);
   assert.match(context, /R2RKpiTable/);
   assert.doesNotMatch(context, /S2PKpiTable/);

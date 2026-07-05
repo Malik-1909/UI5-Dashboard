@@ -9,7 +9,7 @@
     xmlns:viz.data="sap.viz.ui5.data"
     xmlns:viz.feeds="sap.viz.ui5.controls.common.feeds"
     displayBlock="true">
-    <Page id="r2rPage" title="Record to Report" enableScrolling="true" showHeader="true">
+    <Page id="r2rPage" title="{i18n>process.r2r}" enableScrolling="true" showHeader="true">
         <customHeader>
             <core:Fragment fragmentName="ui5.vizframe.app.fragment.ProcessDetailHeader" type="XML"/>
         </customHeader>
@@ -23,18 +23,18 @@
                         visible="{= !!${sales>/_sapBadgeR2R}}"
                         class="sapUiSmallMarginBottom"/>
                     <MessageStrip
-                        text="Demo-Daten (Mock) · SAP API nicht konfiguriert oder nicht erreichbar"
+                        text="{i18n>detail.mockWarning}"
                         type="Warning"
                         showCloseButton="false"
                         visible="{= !${sales>/_sapBadgeR2R}}"
                         class="sapUiSmallMarginBottom"/>
                     <VBox width="100%" class="processDetailKpiBlock">
-                            <Title text="KPI-Übersicht" level="H4"/>
+                            <Title text="{i18n>detail.kpiOverview}" level="H4"/>
                             <Table id="r2rKpiTable" items="{sales>/R2RKpiTable}" class="processDetailKpiTable">
                                 <columns>
-                                    <Column width="50%"><Text text="KPI"/></Column>
-                                    <Column><Text text="Wert"/></Column>
-                                    <Column><Text text="Einheit"/></Column>
+                                    <Column width="50%"><Text text="{i18n>detail.colKpi}"/></Column>
+                                    <Column><Text text="{i18n>detail.colValue}"/></Column>
+                                    <Column><Text text="{i18n>detail.colUnit}"/></Column>
                                 </columns>
                                 <items>
                                     <ColumnListItem>
@@ -47,7 +47,7 @@
                                 </items>
                             </Table>
                     </VBox>
-                    <Title text="Diagramme" level="H3" class="sapUiSmallMarginTop"/>
+                    <Title text="{i18n>detail.charts}" level="H3" class="sapUiSmallMarginTop"/>
                     <cssgrid:CSSGrid
                         class="processDetailChartsGrid"
                         width="100%"

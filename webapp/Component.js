@@ -58,6 +58,7 @@ sap.ui.define([
          */
         _initSalesModelAfterSandbox: function () {
             var oThis = this;
+            var oBundle = this.getModel("i18n") && this.getModel("i18n").getResourceBundle();
             var sBundleUrl = sap.ui.require.toUrl("ui5/vizframe/app/localService/static-mock-bundle.json");
             var oModel = new JSONModel();
             oModel.loadData(sBundleUrl, null, false);
@@ -78,7 +79,7 @@ sap.ui.define([
                         d2oDocs: "D2O",
                         d2oStock: "D2O"
                     };
-                    if (aFailureKeys.length) {
+                    if (aFailureKeys.length && oBundle) {
                         var aLabels = [];
                         aFailureKeys.forEach(function (k) {
                             var lbl = mNames[k] || k;
@@ -86,16 +87,16 @@ sap.ui.define([
                         });
                         console.warn("[SapDataLoader] Teilweise Live-Ausfälle:", JSON.stringify(mFailures));
                         MessageToast.show(
-                            "Live-API aktuell teilweise nicht erreichbar (" + aLabels.join(", ") + "). Für diese Bereiche werden Demo-Daten angezeigt.",
+                            oBundle.getText("toast.livePartialFail", [aLabels.join(", ")]),
                             { duration: 7000 }
                         );
                     }
                     if (!nLoaded) {
                         console.info("[SapDataLoader] Keine Daten – Mock-Daten bleiben aktiv.");
-                        if (!oThis._sapDataNoticeShown) {
+                        if (!oThis._sapDataNoticeShown && oBundle) {
                             oThis._sapDataNoticeShown = true;
                             MessageToast.show(
-                                "SAP-Sandbox liefert keine Daten (z. B. kein API-Key). Es werden Demo-Daten angezeigt.",
+                                oBundle.getText("toast.sapNoData"),
                                 { duration: 4500 }
                             );
                         }
@@ -106,10 +107,12 @@ sap.ui.define([
                 })
                 .catch(function (err) {
                     console.warn("[SapDataLoader] Fehler – Mock-Fallback:", err && err.message);
-                    MessageToast.show(
-                        "Live-Daten konnten nicht geladen werden. Demo-Daten bleiben aktiv.",
-                        { duration: 5000 }
-                    );
+                    if (oBundle) {
+                        MessageToast.show(
+                            oBundle.getText("toast.liveLoadFail"),
+                            { duration: 5000 }
+                        );
+                    }
                 })
                 .finally(function () {
                     oThis.setModel(oModel, "sales");

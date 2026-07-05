@@ -1,11 +1,22 @@
 sap.ui.define([
     "sap/ui/core/mvc/Controller",
+    "sap/ui/model/json/JSONModel",
     "ui5/vizframe/app/utils/BurgerMenuHelper",
     "ui5/vizframe/app/controller/ChatHelper"
-], function (Controller, BurgerMenuHelper, ChatHelper) {
+], function (Controller, JSONModel, BurgerMenuHelper, ChatHelper) {
     "use strict";
 
     return Controller.extend("ui5.vizframe.app.controller.BaseController", {
+
+        getI18nText: function (sKey, aArgs) {
+            var oModel = this.getOwnerComponent() && this.getOwnerComponent().getModel("i18n");
+            var oBundle = oModel && oModel.getResourceBundle();
+            return oBundle ? oBundle.getText(sKey, aArgs) : sKey;
+        },
+
+        initProcTitle: function (sI18nKey) {
+            this.getView().setModel(new JSONModel({ title: this.getI18nText(sI18nKey) }), "proc");
+        },
 
         onOpenChatbot: function () {
             ChatHelper.openFrom(this);

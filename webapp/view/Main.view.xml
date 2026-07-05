@@ -47,9 +47,9 @@
                 <!-- Recruit to Retire Tile -->
                 <GenericTile
                     id="tileRtR"
-                    header="Recruit to Retire"
-                    subheader="Rekrutierung bis Ruhestand"
-                    tooltip="Recruit to Retire: Detailseite öffnen"
+                    header="{i18n>process.rtr}"
+                    subheader="{i18n>tile.rtr.subheader}"
+                    tooltip="{i18n>tile.rtr.tooltip}"
                     class="processTile tileThird"
                     press=".onTilePress">
                     <tileContent>
@@ -72,16 +72,16 @@
                                     <viz:dataset>
                                         <viz.data:FlattenedDataset data="{sales>/RtrHeadcountFunnel}">
                                             <viz.data:dimensions>
-                                                <viz.data:DimensionDefinition name="Stufe" value="{sales>stage}"/>
+                                                <viz.data:DimensionDefinition name="{i18n>chart.dim.stage}" value="{sales>stage}"/>
                                             </viz.data:dimensions>
                                             <viz.data:measures>
-                                                <viz.data:MeasureDefinition name="Anzahl" value="{sales>count}"/>
+                                                <viz.data:MeasureDefinition name="{i18n>chart.dim.count}" value="{sales>count}"/>
                                             </viz.data:measures>
                                         </viz.data:FlattenedDataset>
                                     </viz:dataset>
                                     <viz:feeds>
-                                        <viz.feeds:FeedItem uid="valueAxis" type="Measure" values="Anzahl"/>
-                                        <viz.feeds:FeedItem uid="categoryAxis" type="Dimension" values="Stufe"/>
+                                        <viz.feeds:FeedItem uid="valueAxis" type="Measure" values="{i18n>chart.dim.count}"/>
+                                        <viz.feeds:FeedItem uid="categoryAxis" type="Dimension" values="{i18n>chart.dim.stage}"/>
                                     </viz:feeds>
                                 </viz:VizFrame>
                             </content>
@@ -91,9 +91,9 @@
                 <!-- Record to Report Tile -->
                 <GenericTile
                     id="tileR2R"
-                    header="Record to Report"
-                    subheader="Buchung bis Abschluss"
-                    tooltip="Record to Report: Detailseite öffnen"
+                    header="{i18n>process.r2r}"
+                    subheader="{i18n>tile.r2r.subheader}"
+                    tooltip="{i18n>tile.r2r.tooltip}"
                     class="processTile tileThird"
                     press=".onTilePress">
                     <tileContent>
@@ -118,16 +118,16 @@
                                     <viz:dataset>
                                         <viz.data:FlattenedDataset data="{sales>/R2RByAccountType}">
                                             <viz.data:dimensions>
-                                                <viz.data:DimensionDefinition name="Kontenklasse" value="{sales>type}"/>
+                                                <viz.data:DimensionDefinition name="{i18n>chart.dim.accountClass}" value="{sales>type}"/>
                                             </viz.data:dimensions>
                                             <viz.data:measures>
-                                                <viz.data:MeasureDefinition name="Anteil %" value="{sales>share}"/>
+                                                <viz.data:MeasureDefinition name="{i18n>chart.dim.sharePercent}" value="{sales>share}"/>
                                             </viz.data:measures>
                                         </viz.data:FlattenedDataset>
                                     </viz:dataset>
                                     <viz:feeds>
-                                        <viz.feeds:FeedItem uid="size" type="Measure" values="Anteil %"/>
-                                        <viz.feeds:FeedItem uid="color" type="Dimension" values="Kontenklasse"/>
+                                        <viz.feeds:FeedItem uid="size" type="Measure" values="{i18n>chart.dim.sharePercent}"/>
+                                        <viz.feeds:FeedItem uid="color" type="Dimension" values="{i18n>chart.dim.accountClass}"/>
                                     </viz:feeds>
                                 </viz:VizFrame>
                             </content>
@@ -137,9 +137,9 @@
                 <!-- Source to Pay Tile -->
                 <GenericTile
                     id="tileS2P"
-                    header="Source to Pay"
-                    subheader="Bestelleingang pro Monat"
-                    tooltip="Source to Pay: Bestellungen je Monat · Detailseite öffnen"
+                    header="{i18n>process.s2p}"
+                    subheader="{i18n>tile.s2p.subheader}"
+                    tooltip="{i18n>tile.s2p.tooltip}"
                     class="processTile tileThird"
                     press=".onTilePress">
                     <tileContent>
@@ -166,16 +166,16 @@
                                     <viz:dataset>
                                         <viz.data:FlattenedDataset data="{sales>/S2POrdersByMonth}">
                                             <viz.data:dimensions>
-                                                <viz.data:DimensionDefinition name="Monat" value="{sales>month}"/>
+                                                <viz.data:DimensionDefinition name="{i18n>chart.dim.month}" value="{sales>month}"/>
                                             </viz.data:dimensions>
                                             <viz.data:measures>
-                                                <viz.data:MeasureDefinition name="Bestellungen" value="{sales>count}"/>
+                                                <viz.data:MeasureDefinition name="{i18n>chart.dim.orders}" value="{sales>count}"/>
                                             </viz.data:measures>
                                         </viz.data:FlattenedDataset>
                                     </viz:dataset>
                                     <viz:feeds>
-                                        <viz.feeds:FeedItem uid="valueAxis" type="Measure" values="Bestellungen"/>
-                                        <viz.feeds:FeedItem uid="categoryAxis" type="Dimension" values="Monat"/>
+                                        <viz.feeds:FeedItem uid="valueAxis" type="Measure" values="{i18n>chart.dim.orders}"/>
+                                        <viz.feeds:FeedItem uid="categoryAxis" type="Dimension" values="{i18n>chart.dim.month}"/>
                                     </viz:feeds>
                                 </viz:VizFrame>
                             </content>
@@ -186,9 +186,9 @@
                 <!-- Design to Operate Tile -->
                 <GenericTile
                     id="tileD2O"
-                    header="Design to Operate"
-                    subheader="Design bis Betrieb"
-                    tooltip="Design to Operate: Detailseite öffnen"
+                    header="{i18n>process.d2o}"
+                    subheader="{i18n>tile.d2o.subheader}"
+                    tooltip="{i18n>tile.d2o.tooltip}"
                     class="processTile tileHalf"
                     press=".onTilePress">
                     <tileContent>
@@ -211,16 +211,16 @@
                                     <viz:dataset>
                                         <viz.data:FlattenedDataset data="{sales>/D2OOutputTrend}">
                                             <viz.data:dimensions>
-                                                <viz.data:DimensionDefinition name="Monat" value="{sales>month}"/>
+                                                <viz.data:DimensionDefinition name="{i18n>chart.dim.month}" value="{sales>month}"/>
                                             </viz.data:dimensions>
                                             <viz.data:measures>
-                                                <viz.data:MeasureDefinition name="Output" value="{sales>output}"/>
+                                                <viz.data:MeasureDefinition name="{i18n>chart.dim.output}" value="{sales>output}"/>
                                             </viz.data:measures>
                                         </viz.data:FlattenedDataset>
                                     </viz:dataset>
                                     <viz:feeds>
-                                        <viz.feeds:FeedItem uid="valueAxis" type="Measure" values="Output"/>
-                                        <viz.feeds:FeedItem uid="categoryAxis" type="Dimension" values="Monat"/>
+                                        <viz.feeds:FeedItem uid="valueAxis" type="Measure" values="{i18n>chart.dim.output}"/>
+                                        <viz.feeds:FeedItem uid="categoryAxis" type="Dimension" values="{i18n>chart.dim.month}"/>
                                     </viz:feeds>
                                 </viz:VizFrame>
                             </content>
@@ -230,9 +230,9 @@
                 <!-- Lead to Cash Tile -->
                 <GenericTile
                     id="tileL2C"
-                    header="Lead to Cash"
-                    subheader="Lead bis Zahlungseingang"
-                    tooltip="Lead to Cash: Detailseite öffnen"
+                    header="{i18n>process.l2c}"
+                    subheader="{i18n>tile.l2c.subheader}"
+                    tooltip="{i18n>tile.l2c.tooltip}"
                     class="processTile tileHalf"
                     press=".onTilePress">
                     <tileContent>
@@ -255,16 +255,16 @@
                                     <viz:dataset>
                                         <viz.data:FlattenedDataset data="{sales>/L2CConversionFunnel}">
                                             <viz.data:dimensions>
-                                                <viz.data:DimensionDefinition name="Stufe" value="{sales>stage}"/>
+                                                <viz.data:DimensionDefinition name="{i18n>chart.dim.stage}" value="{sales>stage}"/>
                                             </viz.data:dimensions>
                                             <viz.data:measures>
-                                                <viz.data:MeasureDefinition name="Anzahl" value="{sales>count}"/>
+                                                <viz.data:MeasureDefinition name="{i18n>chart.dim.count}" value="{sales>count}"/>
                                             </viz.data:measures>
                                         </viz.data:FlattenedDataset>
                                     </viz:dataset>
                                     <viz:feeds>
-                                        <viz.feeds:FeedItem uid="valueAxis" type="Measure" values="Anzahl"/>
-                                        <viz.feeds:FeedItem uid="categoryAxis" type="Dimension" values="Stufe"/>
+                                        <viz.feeds:FeedItem uid="valueAxis" type="Measure" values="{i18n>chart.dim.count}"/>
+                                        <viz.feeds:FeedItem uid="categoryAxis" type="Dimension" values="{i18n>chart.dim.stage}"/>
                                     </viz:feeds>
                                 </viz:VizFrame>
                             </content>

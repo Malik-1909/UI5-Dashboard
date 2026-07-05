@@ -27,6 +27,17 @@ sap.ui.define([
 
     return Controller.extend("ui5.vizframe.app.controller.App", {
 
+        _getI18nBundle: function () {
+            var oComp = this.getOwnerComponent();
+            var oModel = oComp && oComp.getModel("i18n");
+            return oModel && oModel.getResourceBundle();
+        },
+
+        _getI18nText: function (sKey, aArgs) {
+            var oBundle = this._getI18nBundle();
+            return oBundle ? oBundle.getText(sKey, aArgs) : sKey;
+        },
+
         // ── Lifecycle ────────────────────────────────────────────────────────
 
         onInit: function () {
@@ -93,8 +104,8 @@ sap.ui.define([
             this._oFabBtn = new Button({
                 icon:           "sap-icon://message-popup",
                 type:           "Emphasized",
-                tooltip:        "KI Assistent",
-                accessibleName: "KI Assistent: Chat öffnen oder schließen",
+                tooltip:        this._getI18nText("chat.fabTooltip"),
+                accessibleName: this._getI18nText("chat.fabAccessible"),
                 press:          this._onFabPress.bind(this)
             });
             this._oFabBtn.addStyleClass("chatFabBtn chatFabAi");
@@ -133,12 +144,12 @@ sap.ui.define([
 
                 var oComp = that.getOwnerComponent();
                 var sGh = oComp && oComp.isRunningOnGitHubPages && oComp.isRunningOnGitHubPages()
-                    ? "Auf GitHub Pages nutze ich Demo-Daten und eine <strong>Offline-Simulation</strong> (kein API-Key). Lokal mit <code>npm run start</code> ist die echte KI aktiv.<br><br>"
+                    ? that._getI18nText("chat.welcomeGhPages")
                     : "";
                 that._addBotMsg(
-                    "Hallo! Ich bin dein KI-Assistent für dieses Dashboard.<br>" +
+                    that._getI18nText("chat.welcome") + "<br>" +
                     sGh +
-                    "Frag zu den Prozessen, Kacheln oder KPIs. Für einen Seitenwechsel z. B. <em>„Navigiere zu R2R“</em> oder <em>„Gehe zur Startseite“</em>."
+                    that._getI18nText("chat.welcomeHint")
                 );
 
                 return oPopover;
@@ -196,35 +207,36 @@ sap.ui.define([
                 that._hideTyping();
                 if (data.error) {
                     // escape so FormattedText renders it correctly
-                    that._addBotMsg("<strong>Hinweis:</strong> " + ChatTextFormat.escapeHtml(String(data.error)));
+                    that._addBotMsg("<strong>" + that._getI18nText("chat.note") + "</strong> " + ChatTextFormat.escapeHtml(String(data.error)));
                     return;
                 }
                 that._handleReply(data.reply || "", sText);
             })
             .catch(function (err) {
                 that._hideTyping();
-                that._addBotMsg("<strong>Verbindungsfehler:</strong> " + ChatTextFormat.escapeHtml(err.message));
+                that._addBotMsg("<strong>" + that._getI18nText("chat.connectionError") + "</strong> " + ChatTextFormat.escapeHtml(err.message));
             });
         },
 
         _handleReply: function (sReply, sLastUserMessage) {
             if (!sReply || !sReply.trim()) {
-                this._addBotMsg("Keine Antwort erhalten – bitte erneut versuchen.");
+                this._addBotMsg(this._getI18nText("chat.noReply"));
                 return;
             }
 
             var oNavResult = ChatNavigationGuard.tryNavigateFromReply({
                 reply: sReply,
-                lastUserMessage: sLastUserMessage
+                lastUserMessage: sLastUserMessage,
+                bundle: this._getI18nBundle()
             });
             if (oNavResult.handled) {
                 if (!oNavResult.shouldNavigate) {
-                    this._chatHistory.push({ role: "bot", text: oNavResult.hintText });
-                    this._addBotMsg(oNavResult.hintHtml);
+                    this._chatHistory.push({ role: "bot", text: this._getI18nText("chat.navHintText") });
+                    this._addBotMsg(this._getI18nText("chat.navHint"));
                     return;
                 }
 
-                this._addBotMsg("Navigiere zu <strong>" + oNavResult.label + "</strong> ...");
+                this._addBotMsg(this._getI18nText("chat.navigating", [oNavResult.label]));
                 this._chatHistory.push({ role: "bot", text: "Navigation: " + oNavResult.label });
                 if (this._oChatPopover) {
                     this._oChatPopover.close();

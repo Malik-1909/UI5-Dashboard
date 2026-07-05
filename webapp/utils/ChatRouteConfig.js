@@ -12,15 +12,15 @@ sap.ui.define([], function () {
         project: []
     };
 
-    var mRouteLabels = {
-        "":      "Startseite",
-        main:    "Startseite",
-        r2r:     "Record to Report",
-        rtr:     "Recruit to Retire",
-        s2p:     "Source to Pay",
-        d2o:     "Design to Operate",
-        l2c:     "Lead to Cash",
-        project: "Projektseite"
+    var mRouteI18nKeys = {
+        "":      "nav.startseite",
+        main:    "nav.startseite",
+        r2r:     "process.r2r",
+        rtr:     "process.rtr",
+        s2p:     "process.s2p",
+        d2o:     "process.d2o",
+        l2c:     "process.l2c",
+        project: "process.project"
     };
 
     function normalizeRoute(sRoute) {
@@ -32,9 +32,13 @@ sap.ui.define([], function () {
         return mContextKeys[sNormalizedRoute] || mContextKeys.main;
     }
 
-    function getRouteLabel(sRoute) {
+    function getRouteLabel(sRoute, oBundle) {
         var sNormalizedRoute = normalizeRoute(sRoute);
-        return mRouteLabels[sNormalizedRoute] || sNormalizedRoute;
+        var sKey = mRouteI18nKeys[sNormalizedRoute];
+        if (sKey && oBundle && oBundle.getText) {
+            return oBundle.getText(sKey);
+        }
+        return sNormalizedRoute;
     }
 
     return {

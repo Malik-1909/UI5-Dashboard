@@ -1,13 +1,12 @@
 sap.ui.define([
     "ui5/vizframe/app/controller/BaseController",
-    "sap/ui/model/json/JSONModel",
     "ui5/vizframe/app/utils/VizFramePopoverHelper"
-], function (BaseController, JSONModel, VizFramePopoverHelper) {
+], function (BaseController, VizFramePopoverHelper) {
     "use strict";
 
     return BaseController.extend("ui5.vizframe.app.controller.S2P", {
         onInit: function () {
-            this.getView().setModel(new JSONModel({ title: "Source to Pay" }), "proc");
+            this.initProcTitle("process.s2p");
         },
 
         onAfterRendering: function () {

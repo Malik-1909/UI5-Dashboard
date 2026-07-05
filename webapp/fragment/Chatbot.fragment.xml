@@ -4,7 +4,7 @@
 
     <Popover
         id="chatPopover"
-        title="KI Assistent"
+        title="{i18n>chat.assistant}"
         placement="Top"
         contentWidth="340px"
         contentHeight="420px"
@@ -35,8 +35,8 @@
                     <Input
                         id="chatInput"
                         class="chatComposerInput"
-                        placeholder="Nachricht eingeben …"
-                        accessibleName="Nachricht an den KI-Assistenten">
+                        placeholder="{i18n>chat.placeholder}"
+                        accessibleName="{i18n>chat.inputAccessible}">
                         <layoutData>
                             <FlexItemData growFactor="1" shrinkFactor="1" baseSize="0"/>
                         </layoutData>
@@ -46,8 +46,8 @@
                         class="chatComposerSendBtn"
                         icon="sap-icon://paper-plane"
                         type="Emphasized"
-                        tooltip="Senden"
-                        accessibleName="Nachricht senden" />
+                        tooltip="{i18n>chat.send}"
+                        accessibleName="{i18n>chat.sendAccessible}" />
                 </HBox>
             </VBox>
         </footer>

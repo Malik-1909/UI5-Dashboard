@@ -5,9 +5,21 @@ sap.ui.define([
     "sap/m/Popover",
     "sap/m/List",
     "sap/m/StandardListItem",
+    "sap/ui/core/CustomData",
     "ui5/vizframe/app/controller/ChatHelper"
-], function (Popover, List, StandardListItem, ChatHelper) {
+], function (Popover, List, StandardListItem, CustomData, ChatHelper) {
     "use strict";
+
+    var aMenuDefs = [
+        { route: "main",    i18nKey: "nav.startseite" },
+        { route: "__chat__", i18nKey: "chat.assistant", icon: "sap-icon://message-popup" },
+        { route: "r2r",     i18nKey: "process.r2r" },
+        { route: "rtr",     i18nKey: "process.rtr" },
+        { route: "s2p",     i18nKey: "process.s2p" },
+        { route: "d2o",     i18nKey: "process.d2o" },
+        { route: "l2c",     i18nKey: "process.l2c" },
+        { route: "project", i18nKey: "process.project" }
+    ];
 
     /**
      * @param {sap.ui.core.mvc.Controller} oController Controller mit getView() und getOwnerComponent()
@@ -16,41 +28,39 @@ sap.ui.define([
      */
     function createBurgerPopover(oController, bIncludeStartseite) {
         var that = oController;
+        var oBundle = oController.getOwnerComponent().getModel("i18n").getResourceBundle();
         var aItems = [];
-        if (bIncludeStartseite) {
-            aItems.push(new StandardListItem({ title: "Startseite", type: "Navigation" }));
-        }
-        aItems.push(
-            new StandardListItem({ title: "KI Assistent", icon: "sap-icon://message-popup", type: "Navigation" }),
-            new StandardListItem({ title: "Record to Report", type: "Navigation" }),
-            new StandardListItem({ title: "Recruit to Retire", type: "Navigation" }),
-            new StandardListItem({ title: "Source to Pay", type: "Navigation" }),
-            new StandardListItem({ title: "Design to Operate", type: "Navigation" }),
-            new StandardListItem({ title: "Lead to Cash", type: "Navigation" }),
-            new StandardListItem({ title: "Über dieses Projekt", type: "Navigation" })
-        );
+
+        aMenuDefs.forEach(function (oDef) {
+            if (oDef.route === "main" && !bIncludeStartseite) {
+                return;
+            }
+            var mItem = {
+                title: oBundle.getText(oDef.i18nKey),
+                type: "Navigation",
+                customData: [new CustomData({ key: "navRoute", value: oDef.route })]
+            };
+            if (oDef.icon) {
+                mItem.icon = oDef.icon;
+            }
+            aItems.push(new StandardListItem(mItem));
+        });
 
         var oList = new List({
             items: aItems,
             itemPress: function (oEv) {
                 var oItem = oEv.getParameter("listItem");
-                var sTitle = oItem.getTitle();
-                if (sTitle === "KI Assistent") {
-                    if (that._oBurgerPopover) { that._oBurgerPopover.close(); }
+                var sRoute = null;
+                oItem.getCustomData().forEach(function (oData) {
+                    if (oData.getKey() === "navRoute") {
+                        sRoute = oData.getValue();
+                    }
+                });
+                if (that._oBurgerPopover) { that._oBurgerPopover.close(); }
+                if (sRoute === "__chat__") {
                     ChatHelper.openFrom(that);
                     return;
                 }
-                var mRouteMap = {
-                    "Startseite": "main",
-                    "Record to Report": "r2r",
-                    "Recruit to Retire": "rtr",
-                    "Source to Pay": "s2p",
-                    "Design to Operate": "d2o",
-                    "Lead to Cash": "l2c",
-                    "Über dieses Projekt": "project"
-                };
-                if (that._oBurgerPopover) { that._oBurgerPopover.close(); }
-                var sRoute = mRouteMap[sTitle];
                 if (sRoute) {
                     that.getOwnerComponent().getRouter().navTo(sRoute);
                 }
@@ -58,7 +68,7 @@ sap.ui.define([
         });
 
         return new Popover({
-            title:               "Menü",
+            title:               oBundle.getText("nav.menu"),
             placement:           "Bottom",
             contentMinWidth:     "220px",
             horizontalScrolling: false,

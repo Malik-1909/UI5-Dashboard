@@ -2,9 +2,19 @@ sap.ui.define([
     "ui5/vizframe/app/controller/BaseController",
     "sap/m/Popover",
     "sap/m/List",
-    "sap/m/StandardListItem"
-], function (BaseController, Popover, List, StandardListItem) {
+    "sap/m/StandardListItem",
+    "sap/ui/core/CustomData"
+], function (BaseController, Popover, List, StandardListItem, CustomData) {
     "use strict";
+
+    var aProcessRoutes = ["r2r", "rtr", "s2p", "d2o", "l2c"];
+    var aProcessI18nKeys = [
+        "process.r2r",
+        "process.rtr",
+        "process.s2p",
+        "process.d2o",
+        "process.l2c"
+    ];
 
     return BaseController.extend("ui5.vizframe.app.controller.Main", {
 
@@ -12,29 +22,34 @@ sap.ui.define([
             var oButton = oEvent.getSource();
             if (!this._oProzessePopover) {
                 var that = this;
+                var oBundle = this.getOwnerComponent().getModel("i18n").getResourceBundle();
+                var aItems = aProcessI18nKeys.map(function (sKey, iIndex) {
+                    return new StandardListItem({
+                        title: oBundle.getText(sKey),
+                        type: "Navigation",
+                        customData: [new CustomData({ key: "navRoute", value: aProcessRoutes[iIndex] })]
+                    });
+                });
                 this._oProzessePopover = new Popover({
-                    title:               "Prozesse",
+                    title:               oBundle.getText("nav.processes"),
                     placement:           "Bottom",
                     contentMinWidth:     "200px",
                     horizontalScrolling: false,
                     verticalScrolling:   true,
                     content: [
                         new List({
-                            items: [
-                                new StandardListItem({ title: "Record to Report", type: "Navigation" }),
-                                new StandardListItem({ title: "Recruit to Retire", type: "Navigation" }),
-                                new StandardListItem({ title: "Source to Pay", type: "Navigation" }),
-                                new StandardListItem({ title: "Design to Operate", type: "Navigation" }),
-                                new StandardListItem({ title: "Lead to Cash", type: "Navigation" })
-                            ],
+                            items: aItems,
                             itemPress: function (oEv) {
                                 var oItem = oEv.getParameter("listItem");
-                                var oList = oEv.getSource();
-                                var iIndex = oList.indexOfItem(oItem);
-                                var aRoutes = ["r2r", "rtr", "s2p", "d2o", "l2c"];
+                                var sRoute = null;
+                                oItem.getCustomData().forEach(function (oData) {
+                                    if (oData.getKey() === "navRoute") {
+                                        sRoute = oData.getValue();
+                                    }
+                                });
                                 if (that._oProzessePopover) { that._oProzessePopover.close(); }
-                                if (iIndex >= 0 && iIndex < aRoutes.length) {
-                                    that.getOwnerComponent().getRouter().navTo(aRoutes[iIndex]);
+                                if (sRoute) {
+                                    that.getOwnerComponent().getRouter().navTo(sRoute);
                                 }
                             }
                         })

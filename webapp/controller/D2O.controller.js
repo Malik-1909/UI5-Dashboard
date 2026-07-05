@@ -5,6 +5,10 @@ sap.ui.define([
     "use strict";
 
     return BaseController.extend("ui5.vizframe.app.controller.D2O", {
+        onInit: function () {
+            this.initProcTitle("process.d2o");
+        },
+
         onAfterRendering: function () {
             VizFramePopoverHelper.connectPopovers(this, ["d2oFunnelChart", "d2oCapacityChart", "d2oOutputChart"]);
         },

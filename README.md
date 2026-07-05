@@ -66,7 +66,7 @@ Proxy und Keys: `middleware/chat-proxy` – Routen `/api/chat` und `/api/sap/*` 
 |------|--------|
 | `webapp/` | **Aktive App** – Component, Views, Manifest, Styles |
 | `webapp/Component.js` | `sales` als JSONModel; GitHub Pages → Mock; sonst SAP-Merge |
-| `webapp/i18n/` | Zentrale UI-Texte (`i18n.properties`, `i18n_en.properties`) |
+| `webapp/i18n/` | Zentrale UI-Texte (`i18n.properties`, nur Deutsch) |
 | `webapp/utils/SapDataLoader.js` | SAP-Sandbox laden und aggregieren |
 | `webapp/utils/BtpHealthMonitor.js` | BTP-Live-Demo Health-Check (GitHub Pages) |
 | `middleware/chat-proxy/` | Groq-Chat, SAP-Sandbox-Proxy |

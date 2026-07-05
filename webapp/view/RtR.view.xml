@@ -9,19 +9,9 @@
     xmlns:viz.data="sap.viz.ui5.data"
     xmlns:viz.feeds="sap.viz.ui5.controls.common.feeds"
     displayBlock="true">
-    <Page id="rtrPage" title="Recruit to Retire" enableScrolling="true" showHeader="true">
+    <Page id="rtrPage" title="{i18n>process.rtr}" enableScrolling="true" showHeader="true">
         <customHeader>
-            <Bar>
-                <contentLeft>
-                    <Button icon="sap-icon://nav-back" tooltip="Zurück" accessibleName="Zurück zur Startseite" press=".onNavBack"/>
-                    <Title text="Recruit to Retire" level="H2"/>
-                </contentLeft>
-                <contentMiddle/>
-                <contentRight>
-                    <core:Fragment fragmentName="ui5.vizframe.app.fragment.HeaderKiButton" type="XML"/>
-                    <Button id="burgerButton" icon="sap-icon://menu2" tooltip="Menü" accessibleName="Hauptmenü öffnen" press=".onBurgerPress" class="headerBurgerButton"/>
-                </contentRight>
-            </Bar>
+            <core:Fragment fragmentName="ui5.vizframe.app.fragment.ProcessDetailHeader" type="XML"/>
         </customHeader>
         <content>
             <ScrollContainer height="100%" vertical="true" class="processDetailScroll">
@@ -33,18 +23,18 @@
                         visible="{= !!${sales>/_sapBadgeRtR}}"
                         class="sapUiSmallMarginBottom"/>
                     <MessageStrip
-                        text="Demo-Daten (Mock) · SAP API nicht konfiguriert oder nicht erreichbar"
+                        text="{i18n>detail.mockWarning}"
                         type="Warning"
                         showCloseButton="false"
                         visible="{= !${sales>/_sapBadgeRtR}}"
                         class="sapUiSmallMarginBottom"/>
                     <VBox width="100%" class="processDetailKpiBlock">
-                            <Title text="KPI-Übersicht" level="H4"/>
+                            <Title text="{i18n>detail.kpiOverview}" level="H4"/>
                             <Table id="rtrKpiTable" items="{sales>/RtrKpiTable}" class="processDetailKpiTable">
                                 <columns>
-                                    <Column width="50%"><Text text="KPI"/></Column>
-                                    <Column><Text text="Wert"/></Column>
-                                    <Column><Text text="Einheit"/></Column>
+                                    <Column width="50%"><Text text="{i18n>detail.colKpi}"/></Column>
+                                    <Column><Text text="{i18n>detail.colValue}"/></Column>
+                                    <Column><Text text="{i18n>detail.colUnit}"/></Column>
                                 </columns>
                                 <items>
                                     <ColumnListItem>
@@ -57,7 +47,7 @@
                                 </items>
                             </Table>
                     </VBox>
-                    <Title text="Diagramme" level="H3" class="sapUiSmallMarginTop"/>
+                    <Title text="{i18n>detail.charts}" level="H3" class="sapUiSmallMarginTop"/>
                     <cssgrid:CSSGrid
                         class="processDetailChartsGrid"
                         width="100%"
