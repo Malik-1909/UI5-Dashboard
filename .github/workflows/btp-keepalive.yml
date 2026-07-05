@@ -1,6 +1,6 @@
 name: BTP Trial Keep-Alive
 
-# Monitors BTP health hourly, logs status, starts CF app only when down.
+# Monitors BTP health hourly, logs status in the Actions summary, starts CF app only when down.
 # Intended for portfolio/demo availability – not a production SLA replacement.
 on:
   schedule:
@@ -8,7 +8,7 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: write
+  contents: read
 
 concurrency:
   group: btp-keepalive
@@ -90,7 +90,7 @@ jobs:
           echo "action=cf_start_failed" >> "$GITHUB_OUTPUT"
           echo "Health check failed after start – app may still be booting."
 
-      - name: Write monitor log
+      - name: Write monitor summary
         if: always()
         env:
           INITIAL: ${{ steps.health.outputs.status }}
@@ -99,9 +99,6 @@ jobs:
           HEALTH_URL: ${{ steps.health.outputs.url }}
         run: |
           set -euo pipefail
-          mkdir -p logs
-          touch logs/btp-keepalive.jsonl
-
           TS="$(date -u +%Y-%m-%dT%H:%M:%SZ)"
           RUN_URL="${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}"
           ENTRY=$(jq -nc \
@@ -112,10 +109,6 @@ jobs:
             --arg healthUrl "$HEALTH_URL" \
             --arg workflowRun "$RUN_URL" \
             '{ts:$ts,initial:$initial,final:$final,action:$action,healthUrl:$healthUrl,workflowRun:$workflowRun}')
-
-          echo "$ENTRY" >> logs/btp-keepalive.jsonl
-          tail -n 500 logs/btp-keepalive.jsonl > logs/btp-keepalive.jsonl.tmp
-          mv logs/btp-keepalive.jsonl.tmp logs/btp-keepalive.jsonl
 
           {
             echo "## BTP Keep-Alive – $TS"
@@ -137,18 +130,11 @@ jobs:
               echo "✅ App war online – kein Restart nötig."
             fi
             echo ""
-            echo "Log: \`logs/btp-keepalive.jsonl\`"
+            echo "<details><summary>JSON</summary>"
+            echo ""
+            echo '```json'
+            echo "$ENTRY"
+            echo '```'
+            echo ""
+            echo "</details>"
           } >> "$GITHUB_STEP_SUMMARY"
-
-      - name: Commit monitor log
-        if: always()
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add logs/btp-keepalive.jsonl
-          if git diff --staged --quiet; then
-            echo "No log changes to commit."
-            exit 0
-          fi
-          git commit -m "chore(btp): keep-alive log $(date -u +%Y-%m-%dT%H:%MZ)"
-          git push

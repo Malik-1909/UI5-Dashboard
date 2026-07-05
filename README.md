@@ -72,8 +72,8 @@ Proxy und Keys: `middleware/chat-proxy` – Routen `/api/chat` und `/api/sap/*` 
 | `middleware/chat-proxy/` | Groq-Chat, SAP-Sandbox-Proxy |
 | `server.js` | Node Runtime für CF (`dist` + `/api/chat` + `/api/sap/*`) |
 | `manifest-node.yml` | CF Node Deploy (Phase 2, mit Backend) |
-| `.github/workflows/btp-keepalive.yml` | Trial Keep-Alive: stündlicher Check + Log |
-| `logs/README.md` | Doku zum Keep-Alive-Log (`btp-keepalive.jsonl`) |
+| `.github/workflows/btp-keepalive.yml` | Trial Keep-Alive: stündlicher Check + Summary |
+| `logs/README.md` | Doku zum Keep-Alive-Log (GitHub Actions Summary) |
 | `scripts/prepare-ghpages.js` | GitHub-Pages-Vorbereitung (CDN 1.120, SPA-404) |
 | `.env` / `.env.example` | `GROQ_API_KEY`, `SAP_API_KEY`, optional `MOCK_MODE` |
 
@@ -134,7 +134,7 @@ Im **BTP Trial** stoppt SAP Apps automatisch (typisch nachts). Für eine dauerha
 
 - Workflow: `.github/workflows/btp-keepalive.yml`
 - Rhythmus: **stündlich** Health-Check – `cf start` nur wenn die App down ist
-- **Log:** `logs/btp-keepalive.jsonl` (wird von der Action gepflegt, max. 500 Einträge)
+- **Log:** GitHub Actions → Job **Summary** (kein Git-Commit mehr)
 - **Job Summary** in GitHub Actions zeigt pro Lauf: online / offline / Restart
 - UI-Monitoring auf GitHub Pages: MessageStrip warnt, wenn die Live-Demo offline ist
 - Manuell auslösbar per `workflow_dispatch`

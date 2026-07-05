@@ -124,13 +124,12 @@ Die UI5-Oberfläche bleibt unverändert; nur das Hosting-Backend wird ergänzt.
 
 **Problem:** Im BTP Trial werden Apps automatisch gestoppt (typisch nachts). Ein einfacher URL-Ping reicht nicht – die App hat 0 Instanzen und muss per `cf start` neu gestartet werden.
 
-**Lösung:** Workflow `.github/workflows/btp-keepalive.yml` prüft **stündlich** `/health`, startet `ui5-app-node` nur bei Ausfall und schreibt das Ergebnis nach `logs/btp-keepalive.jsonl`. Auf GitHub Pages zeigt die App einen Hinweis, wenn die Live-Demo offline ist.
+**Lösung:** Workflow `.github/workflows/btp-keepalive.yml` prüft **stündlich** `/health`, startet `ui5-app-node` nur bei Ausfall und protokolliert das Ergebnis in der **GitHub Actions Job Summary**. Auf GitHub Pages zeigt die App einen Hinweis, wenn die Live-Demo offline ist.
 
 ### Log prüfen
 
-1. Repo-Datei: `logs/btp-keepalive.jsonl` (jede Zeile = ein Check)
-2. GitHub → Actions → **BTP Trial Keep-Alive** → letzter Run → **Summary**
-3. Bei `action: cf_start_failed` → Secrets prüfen oder manuell `cf start ui5-app-node`
+1. GitHub → Actions → **BTP Trial Keep-Alive** → letzter Run → **Summary**
+2. Bei `action: cf_start_failed` → Secrets prüfen oder manuell `cf start ui5-app-node`
 
 ### Secrets (GitHub → Settings → Secrets → Actions)
 

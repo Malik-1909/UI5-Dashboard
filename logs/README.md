@@ -1,10 +1,12 @@
 # BTP Keep-Alive Log
 
-Die GitHub Action **BTP Trial Keep-Alive** schreibt hier stündlich einen Eintrag nach `btp-keepalive.jsonl`.
+Die GitHub Action **BTP Trial Keep-Alive** protokolliert jeden stündlichen Check in der **Job Summary** des Workflow-Laufs (nicht mehr als Git-Commit im Repo).
 
-## Format (JSON Lines)
+## Ansehen
 
-Jede Zeile ist ein JSON-Objekt:
+GitHub → **Actions** → **BTP Trial Keep-Alive** → Lauf öffnen → **Summary**
+
+## Format (JSON)
 
 ```json
 {"ts":"2026-07-02T20:00:00Z","initial":"up","final":"up","action":"none","healthUrl":"https://ui5-app-node.cfapps.us10-001.hana.ondemand.com/health","workflowRun":"https://github.com/..."}
@@ -18,10 +20,3 @@ Jede Zeile ist ein JSON-Objekt:
 | `action` | `none`, `cf_start` oder `cf_start_failed` |
 | `healthUrl` | Geprüfte Health-URL |
 | `workflowRun` | Link zum GitHub-Actions-Lauf |
-
-## Ansehen
-
-- Datei im Repo: `logs/btp-keepalive.jsonl`
-- GitHub Actions → **BTP Trial Keep-Alive** → Job Summary (lesbare Kurzfassung)
-
-Es werden maximal **500** Einträge behalten.
