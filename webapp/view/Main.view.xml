@@ -72,16 +72,16 @@
                                     <viz:dataset>
                                         <viz.data:FlattenedDataset data="{sales>/RtrHeadcountFunnel}">
                                             <viz.data:dimensions>
-                                                <viz.data:DimensionDefinition name="{i18n>chart.dim.stage}" value="{sales>stage}"/>
+                                                <viz.data:DimensionDefinition name="Stufe" value="{sales>stage}"/>
                                             </viz.data:dimensions>
                                             <viz.data:measures>
-                                                <viz.data:MeasureDefinition name="{i18n>chart.dim.count}" value="{sales>count}"/>
+                                                <viz.data:MeasureDefinition name="Anzahl" value="{sales>count}"/>
                                             </viz.data:measures>
                                         </viz.data:FlattenedDataset>
                                     </viz:dataset>
                                     <viz:feeds>
-                                        <viz.feeds:FeedItem uid="valueAxis" type="Measure" values="{i18n>chart.dim.count}"/>
-                                        <viz.feeds:FeedItem uid="categoryAxis" type="Dimension" values="{i18n>chart.dim.stage}"/>
+                                        <viz.feeds:FeedItem uid="valueAxis" type="Measure" values="Anzahl"/>
+                                        <viz.feeds:FeedItem uid="categoryAxis" type="Dimension" values="Stufe"/>
                                     </viz:feeds>
                                 </viz:VizFrame>
                             </content>
@@ -118,16 +118,16 @@
                                     <viz:dataset>
                                         <viz.data:FlattenedDataset data="{sales>/R2RByAccountType}">
                                             <viz.data:dimensions>
-                                                <viz.data:DimensionDefinition name="{i18n>chart.dim.accountClass}" value="{sales>type}"/>
+                                                <viz.data:DimensionDefinition name="Kontenklasse" value="{sales>type}"/>
                                             </viz.data:dimensions>
                                             <viz.data:measures>
-                                                <viz.data:MeasureDefinition name="{i18n>chart.dim.sharePercent}" value="{sales>share}"/>
+                                                <viz.data:MeasureDefinition name="Anteil %" value="{sales>share}"/>
                                             </viz.data:measures>
                                         </viz.data:FlattenedDataset>
                                     </viz:dataset>
                                     <viz:feeds>
-                                        <viz.feeds:FeedItem uid="size" type="Measure" values="{i18n>chart.dim.sharePercent}"/>
-                                        <viz.feeds:FeedItem uid="color" type="Dimension" values="{i18n>chart.dim.accountClass}"/>
+                                        <viz.feeds:FeedItem uid="size" type="Measure" values="Anteil %"/>
+                                        <viz.feeds:FeedItem uid="color" type="Dimension" values="Kontenklasse"/>
                                     </viz:feeds>
                                 </viz:VizFrame>
                             </content>
@@ -166,16 +166,16 @@
                                     <viz:dataset>
                                         <viz.data:FlattenedDataset data="{sales>/S2POrdersByMonth}">
                                             <viz.data:dimensions>
-                                                <viz.data:DimensionDefinition name="{i18n>chart.dim.month}" value="{sales>month}"/>
+                                                <viz.data:DimensionDefinition name="Monat" value="{sales>month}"/>
                                             </viz.data:dimensions>
                                             <viz.data:measures>
-                                                <viz.data:MeasureDefinition name="{i18n>chart.dim.orders}" value="{sales>count}"/>
+                                                <viz.data:MeasureDefinition name="Bestellungen" value="{sales>count}"/>
                                             </viz.data:measures>
                                         </viz.data:FlattenedDataset>
                                     </viz:dataset>
                                     <viz:feeds>
-                                        <viz.feeds:FeedItem uid="valueAxis" type="Measure" values="{i18n>chart.dim.orders}"/>
-                                        <viz.feeds:FeedItem uid="categoryAxis" type="Dimension" values="{i18n>chart.dim.month}"/>
+                                        <viz.feeds:FeedItem uid="valueAxis" type="Measure" values="Bestellungen"/>
+                                        <viz.feeds:FeedItem uid="categoryAxis" type="Dimension" values="Monat"/>
                                     </viz:feeds>
                                 </viz:VizFrame>
                             </content>
@@ -211,16 +211,16 @@
                                     <viz:dataset>
                                         <viz.data:FlattenedDataset data="{sales>/D2OOutputTrend}">
                                             <viz.data:dimensions>
-                                                <viz.data:DimensionDefinition name="{i18n>chart.dim.month}" value="{sales>month}"/>
+                                                <viz.data:DimensionDefinition name="Monat" value="{sales>month}"/>
                                             </viz.data:dimensions>
                                             <viz.data:measures>
-                                                <viz.data:MeasureDefinition name="{i18n>chart.dim.output}" value="{sales>output}"/>
+                                                <viz.data:MeasureDefinition name="Leistung" value="{sales>output}"/>
                                             </viz.data:measures>
                                         </viz.data:FlattenedDataset>
                                     </viz:dataset>
                                     <viz:feeds>
-                                        <viz.feeds:FeedItem uid="valueAxis" type="Measure" values="{i18n>chart.dim.output}"/>
-                                        <viz.feeds:FeedItem uid="categoryAxis" type="Dimension" values="{i18n>chart.dim.month}"/>
+                                        <viz.feeds:FeedItem uid="valueAxis" type="Measure" values="Leistung"/>
+                                        <viz.feeds:FeedItem uid="categoryAxis" type="Dimension" values="Monat"/>
                                     </viz:feeds>
                                 </viz:VizFrame>
                             </content>
@@ -255,16 +255,16 @@
                                     <viz:dataset>
                                         <viz.data:FlattenedDataset data="{sales>/L2CConversionFunnel}">
                                             <viz.data:dimensions>
-                                                <viz.data:DimensionDefinition name="{i18n>chart.dim.stage}" value="{sales>stage}"/>
+                                                <viz.data:DimensionDefinition name="Stufe" value="{sales>stage}"/>
                                             </viz.data:dimensions>
                                             <viz.data:measures>
-                                                <viz.data:MeasureDefinition name="{i18n>chart.dim.count}" value="{sales>count}"/>
+                                                <viz.data:MeasureDefinition name="Anzahl" value="{sales>count}"/>
                                             </viz.data:measures>
                                         </viz.data:FlattenedDataset>
                                     </viz:dataset>
                                     <viz:feeds>
-                                        <viz.feeds:FeedItem uid="valueAxis" type="Measure" values="{i18n>chart.dim.count}"/>
-                                        <viz.feeds:FeedItem uid="categoryAxis" type="Dimension" values="{i18n>chart.dim.stage}"/>
+                                        <viz.feeds:FeedItem uid="valueAxis" type="Measure" values="Anzahl"/>
+                                        <viz.feeds:FeedItem uid="categoryAxis" type="Dimension" values="Stufe"/>
                                     </viz:feeds>
                                 </viz:VizFrame>
                             </content>

@@ -18,13 +18,10 @@ sap.ui.define([
             if (this._isGitHubPagesHost()) {
                 this._initSalesModelStaticHost();
                 this._initBtpHealthMonitor();
-                this.getRouter().initialize();
             } else {
-                var oThis = this;
-                this._initSalesModelAfterSandbox().then(function () {
-                    oThis.getRouter().initialize();
-                });
+                this._initSalesModelAfterSandbox();
             }
+            this.getRouter().initialize();
         },
 
         _isGitHubPagesHost: function () {
@@ -63,6 +60,7 @@ sap.ui.define([
             var oModel = new JSONModel();
             oModel.loadData(sBundleUrl, null, false);
             var oBaseData = oModel.getData() || {};
+            this.setModel(oModel, "sales");
 
             BusyIndicator.show(0);
 
