@@ -20,196 +20,68 @@
             </Bar>
         </customHeader>
         <content>
-            <ScrollContainer height="100%" vertical="true" class="sapUiSmallMargin">
+            <ScrollContainer height="100%" vertical="true" class="projectScroll">
                 <l:VerticalLayout width="100%">
-                    <Title text="{i18n>project.title}" level="H3"/>
-                    <Text text="{i18n>project.description}"
-                        class="sapUiSmallMarginBottom"/>
 
-                    <Title text="{i18n>project.hostingTitle}" level="H4" class="sapUiSmallMarginTop"/>
-                    <List class="sapUiSmallMarginBottom">
-                        <StandardListItem title="{i18n>project.hostingLocalTitle}" info="{i18n>project.hostingLocalInfo}"/>
-                        <StandardListItem title="{i18n>project.hostingGithubTitle}" info="{i18n>project.hostingGithubInfo}"/>
-                        <StandardListItem title="{i18n>project.hostingBtpTitle}" info="{i18n>project.hostingBtpInfo}"/>
-                    </List>
-                    <Link text="{i18n>project.repoLinkText}" href="https://github.com/Malik-1909/UI5-Dashboard" target="_blank" class="sapUiSmallMarginBottom"/>
+                    <l:VerticalLayout width="100%" class="sapUiMediumMarginBottom">
+                        <Title text="{i18n>project.title}" level="H3"/>
+                        <Text text="{i18n>project.intro1}" class="projectProse sapUiTinyMarginTop"/>
+                    </l:VerticalLayout>
 
-                    <Panel expandable="true" expanded="true" width="100%" class="sapUiSmallMarginTop sapUiSmallMarginBottom">
-                        <headerToolbar>
-                            <OverflowToolbar style="Clear">
-                                <Title text="{i18n>project.keepaliveTitle}" level="H5"/>
-                            </OverflowToolbar>
-                        </headerToolbar>
-                        <content>
-                            <Text text="{i18n>project.keepaliveDescription}" class="sapUiSmallMarginBottom"/>
-                            <List>
-                                <StandardListItem title="{i18n>project.keepaliveHowTitle}" info="{i18n>project.keepaliveHowInfo}"/>
-                                <StandardListItem title="{i18n>project.keepaliveLegalTitle}" info="{i18n>project.keepaliveLegalInfo}"/>
-                            </List>
-                        </content>
-                    </Panel>
+                    <l:VerticalLayout width="100%" class="sapUiMediumMarginBottom">
+                        <Title text="{i18n>project.whatTitle}" level="H4"/>
+                        <Text text="{i18n>project.whatBody}" class="projectProse sapUiTinyMarginTop"/>
+                    </l:VerticalLayout>
 
-                    <Title text="{i18n>project.processesTitle}" level="H3" class="sapUiSmallMarginTop"/>
-                    <Table id="processOverviewTable" class="sapUiSmallMarginBottom">
-                        <columns>
-                            <Column width="22%"><Text text="{i18n>project.processCol}"/></Column>
-                            <Column width="78%"><Text text="{i18n>project.shortDescCol}"/></Column>
-                        </columns>
-                        <items>
-                            <ColumnListItem>
-                                <cells>
-                                    <Text text="{i18n>process.rtr}" fontWeight="Bold"/>
-                                    <Text text="{i18n>project.rtrShort}"/>
-                                </cells>
-                            </ColumnListItem>
-                            <ColumnListItem>
-                                <cells>
-                                    <Text text="{i18n>process.r2r}" fontWeight="Bold"/>
-                                    <Text text="{i18n>project.r2rShort}"/>
-                                </cells>
-                            </ColumnListItem>
-                            <ColumnListItem>
-                                <cells>
-                                    <Text text="{i18n>process.s2p}" fontWeight="Bold"/>
-                                    <Text text="{i18n>project.s2pShort}"/>
-                                </cells>
-                            </ColumnListItem>
-                            <ColumnListItem>
-                                <cells>
-                                    <Text text="{i18n>process.d2o}" fontWeight="Bold"/>
-                                    <Text text="{i18n>project.d2oShort}"/>
-                                </cells>
-                            </ColumnListItem>
-                            <ColumnListItem>
-                                <cells>
-                                    <Text text="{i18n>process.l2c}" fontWeight="Bold"/>
-                                    <Text text="{i18n>project.l2cShort}"/>
-                                </cells>
-                            </ColumnListItem>
-                        </items>
-                    </Table>
+                    <l:VerticalLayout width="100%" class="sapUiMediumMarginBottom">
+                        <Title text="{i18n>project.processesTitle}" level="H3"/>
+                        <Text text="{i18n>project.processesIntro}" class="projectProse sapUiTinyMarginTop"/>
+                        <Panel headerText="{i18n>process.rtr}" expandable="true" expanded="false" class="projectProcessPanel sapUiTinyMarginTop">
+                            <content>
+                                <Text text="{i18n>project.rtrNarrative}" class="projectProse projectProseInPanel"/>
+                            </content>
+                        </Panel>
+                        <Panel headerText="{i18n>process.r2r}" expandable="true" expanded="false" class="projectProcessPanel">
+                            <content>
+                                <Text text="{i18n>project.r2rNarrative}" class="projectProse projectProseInPanel"/>
+                            </content>
+                        </Panel>
+                        <Panel headerText="{i18n>process.s2p}" expandable="true" expanded="false" class="projectProcessPanel">
+                            <content>
+                                <Text text="{i18n>project.s2pNarrative}" class="projectProse projectProseInPanel"/>
+                            </content>
+                        </Panel>
+                        <Panel headerText="{i18n>process.d2o}" expandable="true" expanded="false" class="projectProcessPanel">
+                            <content>
+                                <Text text="{i18n>project.d2oNarrative}" class="projectProse projectProseInPanel"/>
+                            </content>
+                        </Panel>
+                        <Panel headerText="{i18n>process.l2c}" expandable="true" expanded="false" class="projectProcessPanel">
+                            <content>
+                                <Text text="{i18n>project.l2cNarrative}" class="projectProse projectProseInPanel"/>
+                            </content>
+                        </Panel>
+                    </l:VerticalLayout>
 
-                    <Title text="{i18n>project.stepsTitle}" level="H3" class="sapUiSmallMarginTop"/>
-                    <Text text="{i18n>project.stepsDescription}"
-                        class="sapUiSmallMarginBottom"/>
+                    <l:VerticalLayout width="100%" class="sapUiMediumMarginBottom">
+                        <Title text="{i18n>project.hostingTitle}" level="H3"/>
+                        <Text text="{i18n>project.hostingBody}" class="projectProse sapUiTinyMarginTop"/>
+                        <Text text="{i18n>project.keepaliveBody}" class="projectProse sapUiTinyMarginTop"/>
+                    </l:VerticalLayout>
 
-                    <Panel expandable="true" expanded="false" width="100%" class="sapUiTinyMarginBottom">
-                        <headerToolbar>
-                            <OverflowToolbar style="Clear">
-                                <Title text="{i18n>process.l2c}" level="H5"/>
-                            </OverflowToolbar>
-                        </headerToolbar>
-                        <content>
-                            <List>
-                                <StandardListItem title="{i18n>project.l2c.stepLead}" info="{i18n>project.l2c.infoLead}"/>
-                                <StandardListItem title="{i18n>project.l2c.stepOpportunity}" info="{i18n>project.l2c.infoOpportunity}"/>
-                                <StandardListItem title="{i18n>project.l2c.stepQuote}" info="{i18n>project.l2c.infoQuote}"/>
-                                <StandardListItem title="{i18n>project.l2c.stepOrder}" info="{i18n>project.l2c.infoOrder}"/>
-                                <StandardListItem title="{i18n>project.l2c.stepDelivery}" info="{i18n>project.l2c.infoDelivery}"/>
-                                <StandardListItem title="{i18n>project.l2c.stepInvoice}" info="{i18n>project.l2c.infoInvoice}"/>
-                                <StandardListItem title="{i18n>project.l2c.stepCollection}" info="{i18n>project.l2c.infoCollection}"/>
-                            </List>
-                        </content>
-                    </Panel>
-                    <Panel expandable="true" expanded="false" width="100%" class="sapUiTinyMarginBottom">
-                        <headerToolbar>
-                            <OverflowToolbar style="Clear">
-                                <Title text="{i18n>process.s2p}" level="H5"/>
-                            </OverflowToolbar>
-                        </headerToolbar>
-                        <content>
-                            <List>
-                                <StandardListItem title="{i18n>project.s2p.stepRequirement}" info="{i18n>project.s2p.infoRequirement}"/>
-                                <StandardListItem title="{i18n>project.s2p.stepOrder}" info="{i18n>project.s2p.infoOrder}"/>
-                                <StandardListItem title="{i18n>project.s2p.stepGoodsReceipt}" info="{i18n>project.s2p.infoGoodsReceipt}"/>
-                                <StandardListItem title="{i18n>project.s2p.stepInvoiceCheck}" info="{i18n>project.s2p.infoInvoiceCheck}"/>
-                                <StandardListItem title="{i18n>project.s2p.stepPayment}" info="{i18n>project.s2p.infoPayment}"/>
-                            </List>
-                        </content>
-                    </Panel>
-                    <Panel expandable="true" expanded="false" width="100%" class="sapUiTinyMarginBottom">
-                        <headerToolbar>
-                            <OverflowToolbar style="Clear">
-                                <Title text="{i18n>process.r2r}" level="H5"/>
-                            </OverflowToolbar>
-                        </headerToolbar>
-                        <content>
-                            <List>
-                                <StandardListItem title="{i18n>project.r2r.stepPosting}" info="{i18n>project.r2r.infoPosting}"/>
-                                <StandardListItem title="{i18n>project.r2r.stepReconciliation}" info="{i18n>project.r2r.infoReconciliation}"/>
-                                <StandardListItem title="{i18n>project.r2r.stepClose}" info="{i18n>project.r2r.infoClose}"/>
-                                <StandardListItem title="{i18n>project.r2r.stepConsolidation}" info="{i18n>project.r2r.infoConsolidation}"/>
-                                <StandardListItem title="{i18n>project.r2r.stepReporting}" info="{i18n>project.r2r.infoReporting}"/>
-                            </List>
-                        </content>
-                    </Panel>
-                    <Panel expandable="true" expanded="false" width="100%" class="sapUiTinyMarginBottom">
-                        <headerToolbar>
-                            <OverflowToolbar style="Clear">
-                                <Title text="{i18n>process.rtr}" level="H5"/>
-                            </OverflowToolbar>
-                        </headerToolbar>
-                        <content>
-                            <List>
-                                <StandardListItem title="{i18n>project.rtr.stepRecruiting}" info="{i18n>project.rtr.infoRecruiting}"/>
-                                <StandardListItem title="{i18n>project.rtr.stepOnboarding}" info="{i18n>project.rtr.infoOnboarding}"/>
-                                <StandardListItem title="{i18n>project.rtr.stepPerformance}" info="{i18n>project.rtr.infoPerformance}"/>
-                                <StandardListItem title="{i18n>project.rtr.stepDevelopment}" info="{i18n>project.rtr.infoDevelopment}"/>
-                                <StandardListItem title="{i18n>project.rtr.stepCompensation}" info="{i18n>project.rtr.infoCompensation}"/>
-                                <StandardListItem title="{i18n>project.rtr.stepOffboarding}" info="{i18n>project.rtr.infoOffboarding}"/>
-                            </List>
-                        </content>
-                    </Panel>
-                    <Panel expandable="true" expanded="false" width="100%" class="sapUiSmallMarginBottom">
-                        <headerToolbar>
-                            <OverflowToolbar style="Clear">
-                                <Title text="{i18n>process.d2o}" level="H5"/>
-                            </OverflowToolbar>
-                        </headerToolbar>
-                        <content>
-                            <List>
-                                <StandardListItem title="{i18n>project.d2o.stepDesign}" info="{i18n>project.d2o.infoDesign}"/>
-                                <StandardListItem title="{i18n>project.d2o.stepEngineering}" info="{i18n>project.d2o.infoEngineering}"/>
-                                <StandardListItem title="{i18n>project.d2o.stepProcure}" info="{i18n>project.d2o.infoProcure}"/>
-                                <StandardListItem title="{i18n>project.d2o.stepManufacture}" info="{i18n>project.d2o.infoManufacture}"/>
-                                <StandardListItem title="{i18n>project.d2o.stepDeploy}" info="{i18n>project.d2o.infoDeploy}"/>
-                                <StandardListItem title="{i18n>project.d2o.stepOperate}" info="{i18n>project.d2o.infoOperate}"/>
-                                <StandardListItem title="{i18n>project.d2o.stepService}" info="{i18n>project.d2o.infoService}"/>
-                            </List>
-                        </content>
-                    </Panel>
+                    <l:VerticalLayout width="100%" class="sapUiMediumMarginBottom">
+                        <Title text="{i18n>project.techTitle}" level="H3"/>
+                        <Text text="{i18n>project.techBody1}" class="projectProse sapUiTinyMarginTop"/>
+                        <Text text="{i18n>project.techBody2}" class="projectProse sapUiTinyMarginTop"/>
+                    </l:VerticalLayout>
 
-                    <Title text="{i18n>project.techTitle}" level="H3" class="sapUiSmallMarginTop"/>
-                    <Text text="{i18n>project.techIntro}"
-                        class="sapUiSmallMarginBottom"/>
-                    <List class="sapUiSmallMarginBottom">
-                        <StandardListItem title="{i18n>project.techUi5Title}" info="{i18n>project.techUi5Info}"/>
-                        <StandardListItem title="{i18n>project.techVizTitle}" info="{i18n>project.techVizInfo}"/>
-                        <StandardListItem title="{i18n>project.techModelTitle}" info="{i18n>project.techModelInfo}"/>
-                        <StandardListItem title="{i18n>project.techDataTitle}" info="{i18n>project.techDataInfo}"/>
-                        <StandardListItem title="{i18n>project.techProxyTitle}" info="{i18n>project.techProxyInfo}"/>
-                        <StandardListItem title="{i18n>project.techAiTitle}" info="{i18n>project.techAiInfo}"/>
-                        <StandardListItem title="{i18n>project.techI18nTitle}" info="{i18n>project.techI18nInfo}"/>
-                    </List>
+                    <l:VerticalLayout width="100%" class="sapUiMediumMarginBottom">
+                        <Title text="{i18n>project.featuresTitle}" level="H3"/>
+                        <Text text="{i18n>project.featuresBody}" class="projectProse sapUiTinyMarginTop"/>
+                    </l:VerticalLayout>
 
-                    <Title text="{i18n>project.implTitle}" level="H3" class="sapUiSmallMarginTop"/>
-                    <Text text="{i18n>project.implIntro}"
-                        class="sapUiSmallMarginBottom"/>
-                    <List class="sapUiSmallMarginBottom">
-                        <StandardListItem title="{i18n>project.implGoalTitle}" info="{i18n>project.implGoalInfo}"/>
-                        <StandardListItem title="{i18n>project.implDataTitle}" info="{i18n>project.implDataInfo}"/>
-                        <StandardListItem title="{i18n>project.implDeployTitle}" info="{i18n>project.implDeployInfo}"/>
-                        <StandardListItem title="{i18n>project.implLearnTitle}" info="{i18n>project.implLearnInfo}"/>
-                    </List>
+                    <Link text="{i18n>project.repoLinkText}" href="https://github.com/Malik-1909/UI5-Dashboard" target="_blank"/>
 
-                    <Title text="{i18n>project.featuresTitle}" level="H3" class="sapUiSmallMarginTop"/>
-                    <List>
-                        <StandardListItem title="{i18n>project.featureHomeTitle}" info="{i18n>project.featureHomeInfo}"/>
-                        <StandardListItem title="{i18n>project.featureDetailTitle}" info="{i18n>project.featureDetailInfo}"/>
-                        <StandardListItem title="{i18n>project.featureNavTitle}" info="{i18n>project.featureNavInfo}"/>
-                        <StandardListItem title="{i18n>project.featureResponsiveTitle}" info="{i18n>project.featureResponsiveInfo}"/>
-                        <StandardListItem title="{i18n>project.featureKeepaliveTitle}" info="{i18n>project.featureKeepaliveInfo}"/>
-                    </List>
                 </l:VerticalLayout>
             </ScrollContainer>
         </content>

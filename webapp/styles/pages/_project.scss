@@ -1,0 +1,22 @@
+@use "../abstracts/mixins" as m;
+
+.projectScroll {
+  width: 100%;
+  max-width: none;
+  box-sizing: border-box;
+  @include m.page-inner-padding;
+}
+
+.projectProse.sapMText {
+  display: block;
+  line-height: 1.7;
+}
+
+.projectProcessPanel {
+  width: 100%;
+  max-width: none;
+}
+
+.projectProseInPanel.sapMText {
+  padding: 0.25rem 0 0.5rem;
+}

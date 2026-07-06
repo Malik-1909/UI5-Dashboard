@@ -79,11 +79,26 @@ body {
     transition: none !important;
   }
 }
-/* Page-Content: Padding rechts und links, damit Cards nicht aus dem Bild laufen */
+/* Seiten-Container: Nav + Inhalt gemeinsam max. 1500px, zentriert */
+#content .sapMPage {
+  width: 100%;
+  max-width: 1500px;
+  margin-left: auto;
+  margin-right: auto;
+  box-sizing: border-box;
+}
+
+/* Einheitliches Seiten-Padding (wie Homepage) für alle Views */
 #content .sapMPage .sapMPageContent,
 #content .sapMPageSection {
   padding: 1rem 1.5rem 1.5rem !important;
   box-sizing: border-box;
+}
+@media (max-width: 600px) {
+  #content .sapMPage .sapMPageContent,
+  #content .sapMPageSection {
+    padding: 0.75rem 1rem 1rem !important;
+  }
 }
 
 /* Responsive Header: Burger-Menü auf Mobile, normale Buttons auf Desktop */
@@ -105,10 +120,6 @@ body {
   /* Mobile: Kompakterer Header */
   .sapMBar .sapMBarChild {
     margin: 0 0.25rem;
-  }
-  /* Mobile: Detailseiten-Content Padding */
-  .sapMPage .sapMScrollCont {
-    padding: 0.75rem 1rem !important;
   }
 }
 .chartCard {
@@ -135,6 +146,12 @@ body {
   min-height: 80vh;
   box-sizing: border-box;
   padding: 1rem 1.5rem 1.5rem;
+  box-sizing: border-box;
+}
+@media (max-width: 600px) {
+  .processTilesGrid {
+    padding: 0.75rem 1rem 1rem;
+  }
 }
 .processTilesGrid .processTile {
   width: 100% !important;
@@ -206,7 +223,6 @@ body {
   }
   /* Mobile: Tiles und Grid anpassen */
   .processTilesGrid {
-    padding: 0.75rem 1rem 1rem;
     min-height: auto;
   }
   .processTilesGrid .sapMTile,
@@ -445,12 +461,13 @@ body {
   width: 100%;
   max-width: none;
   box-sizing: border-box;
-  padding: 0.25rem 0.5rem 1.25rem;
+  padding: 1rem 1.5rem 1.5rem;
+  box-sizing: border-box;
 }
-
-#content .sapMPage:has(.processDetailScroll) .sapMPageContent {
-  padding-left: 0.5rem !important;
-  padding-right: 0.5rem !important;
+@media (max-width: 600px) {
+  #content .processDetailScroll {
+    padding: 0.75rem 1rem 1rem;
+  }
 }
 
 #content .processDetailMain {
@@ -495,4 +512,30 @@ body {
   #content .processDetailScroll .processDetailChartsGrid {
     grid-template-columns: 1fr !important;
   }
+}
+.projectScroll {
+  width: 100%;
+  max-width: none;
+  box-sizing: border-box;
+  padding: 1rem 1.5rem 1.5rem;
+  box-sizing: border-box;
+}
+@media (max-width: 600px) {
+  .projectScroll {
+    padding: 0.75rem 1rem 1rem;
+  }
+}
+
+.projectProse.sapMText {
+  display: block;
+  line-height: 1.7;
+}
+
+.projectProcessPanel {
+  width: 100%;
+  max-width: none;
+}
+
+.projectProseInPanel.sapMText {
+  padding: 0.25rem 0 0.5rem;
 }

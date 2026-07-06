@@ -1,4 +1,5 @@
 @use "../abstracts/tokens" as t;
+@use "../abstracts/mixins" as m;
 
 .chartCard {
   background: #fff;
@@ -24,7 +25,7 @@
   max-width: none;
   min-height: 80vh;
   box-sizing: border-box;
-  padding: 1rem 1.5rem 1.5rem;
+  @include m.page-inner-padding;
 
   .processTile {
     width: 100% !important;
@@ -102,7 +103,6 @@
 
   /* Mobile: Tiles und Grid anpassen */
   .processTilesGrid {
-    padding: 0.75rem 1rem 1rem;
     min-height: auto;
   }
 

@@ -1,15 +1,11 @@
 @use "../abstracts/tokens" as t;
+@use "../abstracts/mixins" as m;
 
 #content .processDetailScroll {
   width: 100%;
   max-width: none;
   box-sizing: border-box;
-  padding: 0.25rem 0.5rem 1.25rem;
-}
-
-#content .sapMPage:has(.processDetailScroll) .sapMPageContent {
-  padding-left: 0.5rem !important;
-  padding-right: 0.5rem !important;
+  @include m.page-inner-padding;
 }
 
 #content .processDetailMain {

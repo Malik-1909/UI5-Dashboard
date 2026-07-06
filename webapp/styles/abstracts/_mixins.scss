@@ -25,6 +25,16 @@
   outline-offset: $offset;
 }
 
+/// Inner page inset – matches homepage `.processTilesGrid` spacing.
+@mixin page-inner-padding {
+  padding: t.$page-padding-top t.$page-padding-x t.$page-padding-bottom;
+  box-sizing: border-box;
+
+  @include bp-mobile {
+    padding: t.$page-padding-top-mobile t.$page-padding-x-mobile t.$page-padding-bottom-mobile;
+  }
+}
+
 /// Card lift on hover (GenericTile / custom cards).
 @mixin card-hover-lift($shadow: t.$shadow-card-hover, $translate: -4px) {
   transform: translateY($translate);
