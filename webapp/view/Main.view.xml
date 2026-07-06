@@ -28,7 +28,7 @@
         <content>
             <MessageStrip
                 id="btpHealthStrip"
-                visible="{btpHealth>/visible}"
+                visible="{= ${btpHealth>/visible} === true}"
                 text="{i18n>main.btpHealthOffline}"
                 type="Warning"
                 showIcon="true"

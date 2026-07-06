@@ -44,21 +44,21 @@ const SYSTEM_PROMPT = `Du bist ein intelligenter Dashboard-Assistent für eine S
 
 LAYOUT DER STARTSEITE (Kacheln):
   Zeile 1 (je 1/3 Breite, von links nach rechts):
-    1. LINKS:  Rekrutierung bis Ruhestand (RtR) – Balkendiagramm – Rekrutierungsstufen
-    2. MITTE:  Buchung bis Abschluss (R2R)  – Kreisdiagramm  – Kontenklassen-Anteile
-    3. RECHTS: Beschaffung bis Zahlung (S2P)     – Donut-Diagramm – Ausgabenkategorien
+    1. LINKS:  Recruit to Retire (RtR) – Balkendiagramm – Rekrutierungsstufen
+    2. MITTE:  Record to Report (R2R)  – Kreisdiagramm  – Kontenklassen-Anteile
+    3. RECHTS: Source to Pay (S2P)     – Donut-Diagramm – Ausgabenkategorien
   Zeile 2 (je 50% Breite, von links nach rechts):
-    4. LINKS:  Design bis Betrieb (D2O) – Liniendiagramm – Leistungstrend
-    5. RECHTS: Lead bis Zahlungseingang (L2C)      – Balkendiagramm – Conversion-Funnel
+    4. LINKS:  Design to Operate (D2O) – Liniendiagramm – Leistungstrend
+    5. RECHTS: Lead to Cash (L2C)      – Balkendiagramm – Conversion-Funnel
 
 TECHNIK: SAPUI5 1.120, sap.viz VizFrame, OData v2, SAP Horizon Theme.
 
 SAP-GESCHÄFTSPROZESSE:
-  • Buchung bis Abschluss (R2R) – Finanz- und Rechnungswesen
-  • Rekrutierung bis Ruhestand (RtR) – HR: Einstellung bis Ruhestand
-  • Beschaffung bis Zahlung (S2P) – Einkauf & Lieferantenmanagement
-  • Design bis Betrieb (D2O) – Produktentwicklung & Fertigung
-  • Lead bis Zahlungseingang (L2C) – Vertrieb & Umsatzrealisierung
+  • Record to Report (R2R) – Finanz- und Rechnungswesen
+  • Recruit to Retire (RtR) – HR: Einstellung bis Ruhestand
+  • Source to Pay (S2P) – Einkauf & Lieferantenmanagement
+  • Design to Operate (D2O) – Produktentwicklung & Fertigung
+  • Lead to Cash (L2C) – Vertrieb & Umsatzrealisierung
 
 THEMENBEREICH:
   Nur diese SAPUI5-Demo (Oberfläche, Kacheln, Diagramme, Navigation, Demo-/Mock-Daten) sowie die genannten Geschäftsprozesse und KPIs in diesem Kontext.
@@ -99,17 +99,17 @@ const MOCK_RESPONSES = [
   { test: /\b(hallo|hi|hey|moin|guten\s*(morgen|tag|abend))\b/i,
     reply: "Hallo! 👋 Ich bin dein KI-Assistent für dieses Dashboard.\n\nIch helfe bei den Prozessen (R2R, RtR, S2P, D2O, L2C), den Kacheln und KPIs. Wobei darf ich helfen?" },
   { test: /\b(kachel|kackel|tile|oben links|oben rechts|mitte oben|links oben|rechts oben)\b/i,
-    reply: "Die Startseite hat 5 Prozesskacheln in 2 Reihen:<br><br><strong>Reihe 1 (oben, je 1/3):</strong><br>• Links: <strong>Rekrutierung bis Ruhestand (RtR)</strong> – Balkendiagramm<br>• Mitte: <strong>Buchung bis Abschluss (R2R)</strong> – Kreisdiagramm<br>• Rechts: <strong>Beschaffung bis Zahlung (S2P)</strong> – Donut-Diagramm<br><br><strong>Reihe 2 (unten, je 1/2):</strong><br>• Links: <strong>Design bis Betrieb (D2O)</strong> – Liniendiagramm<br>• Rechts: <strong>Lead bis Zahlungseingang (L2C)</strong> – Balkendiagramm<br><br>Klick auf eine Kachel für die Detailseite!" },
+    reply: "Die Startseite hat 5 Prozesskacheln in 2 Reihen:<br><br><strong>Reihe 1 (oben, je 1/3):</strong><br>• Links: <strong>Recruit to Retire (RtR)</strong> – Balkendiagramm<br>• Mitte: <strong>Record to Report (R2R)</strong> – Kreisdiagramm<br>• Rechts: <strong>Source to Pay (S2P)</strong> – Donut-Diagramm<br><br><strong>Reihe 2 (unten, je 1/2):</strong><br>• Links: <strong>Design to Operate (D2O)</strong> – Liniendiagramm<br>• Rechts: <strong>Lead to Cash (L2C)</strong> – Balkendiagramm<br><br>Klick auf eine Kachel für die Detailseite!" },
   { test: /\b(was ist|erkl|bedeutet).*(r2r|record|buchung)\b/i,
-    reply: "<strong>Buchung bis Abschluss (R2R)</strong> ist der Finanz-Abschlussprozess:\nBuchungen → Abstimmung → Abschluss → Bericht.\n\nKPIs: Abschlussqualität, Buchungsvolumen, Fehlerquote." },
+    reply: "<strong>Record to Report (R2R)</strong> ist der Finanz-Abschlussprozess:\nBuchungen → Abstimmung → Abschluss → Bericht.\n\nKPIs: Abschlussqualität, Buchungsvolumen, Fehlerquote." },
   { test: /\b(was ist|erkl|bedeutet).*(rtr|recruit|rekrutierung)\b/i,
-    reply: "<strong>Rekrutierung bis Ruhestand (RtR)</strong> umfasst alle HR-Prozesse:\nRekrutierung → Einarbeitung → Entwicklung → Vergütung.\n\nKPIs: Time-to-Hire, Fluktuationsrate, Mitarbeiterzahl." },
+    reply: "<strong>Recruit to Retire (RtR)</strong> umfasst alle HR-Prozesse:\nRekrutierung → Einarbeitung → Entwicklung → Vergütung.\n\nKPIs: Time-to-Hire, Fluktuationsrate, Mitarbeiterzahl." },
   { test: /\b(was ist|erkl|bedeutet).*(s2p|source|einkauf|beschaffung)\b/i,
-    reply: "<strong>Beschaffung bis Zahlung (S2P)</strong> ist der Einkaufsprozess:\nBedarf → Lieferant → Bestellung → Rechnung.\n\nKPIs: Einkaufsvolumen, Lieferantenperformance, Durchlaufzeit." },
+    reply: "<strong>Source to Pay (S2P)</strong> ist der Einkaufsprozess:\nBedarf → Lieferant → Bestellung → Rechnung.\n\nKPIs: Einkaufsvolumen, Lieferantenperformance, Durchlaufzeit." },
   { test: /\b(was ist|erkl|bedeutet).*(d2o|design|produk|betrieb)\b/i,
-    reply: "<strong>Design bis Betrieb (D2O)</strong> umfasst den Produktentstehungsprozess:\nKonstruktion → Produktion → Qualität → Betrieb.\n\nKPIs: Time-to-Market, OEE, Ausschussrate." },
+    reply: "<strong>Design to Operate (D2O)</strong> umfasst den Produktentstehungsprozess:\nKonstruktion → Produktion → Qualität → Betrieb.\n\nKPIs: Time-to-Market, OEE, Ausschussrate." },
   { test: /\b(was ist|erkl|bedeutet).*(l2c|lead|cash|vertrieb|zahlungseingang)\b/i,
-    reply: "<strong>Lead bis Zahlungseingang (L2C)</strong> ist der Vertriebsprozess:\nInteressent → Angebot → Auftrag → Zahlung.\n\nKPIs: Conversion Rate, Umsatz, DSO." },
+    reply: "<strong>Lead to Cash (L2C)</strong> ist der Vertriebsprozess:\nInteressent → Angebot → Auftrag → Zahlung.\n\nKPIs: Conversion Rate, Umsatz, DSO." },
   { test: /\b(kpi|kennzahl|daten|zahlen|metr)\b/i,
     reply: "Die KPI-Daten kommen im lokalen Modus aus dem <strong>OData-Mock-Service</strong>. Im Produktivbetrieb aus SAP BW oder S/4HANA." },
   { test: /\b(hilfe|help|was kannst|fähigkeit)\b/i,

@@ -15,9 +15,10 @@ sap.ui.define([
 
         init: function () {
             UIComponent.prototype.init.apply(this, arguments);
+            this._initBtpHealthModel();
             if (this._isGitHubPagesHost()) {
                 this._initSalesModelStaticHost();
-                this._initBtpHealthMonitor();
+                BtpHealthMonitor.start(this.getModel("btpHealth"));
             } else {
                 this._initSalesModelAfterSandbox();
             }
@@ -34,12 +35,14 @@ sap.ui.define([
         },
 
         /**
-         * GitHub Pages: nur statisches Mock-Bundle, kein SAP-Proxy – Modell sofort, Router direkt.
+         * btpHealth-Modell immer anlegen (lokal: Hinweis aus). Monitoring nur auf GitHub Pages.
          */
-        _initBtpHealthMonitor: function () {
-            var oModel = new JSONModel();
-            this.setModel(oModel, "btpHealth");
-            BtpHealthMonitor.start(oModel);
+        _initBtpHealthModel: function () {
+            this.setModel(new JSONModel({
+                status: "local",
+                visible: false,
+                liveUrl: "https://ui5-app-node.cfapps.us10-001.hana.ondemand.com/"
+            }), "btpHealth");
         },
 
         _initSalesModelStaticHost: function () {

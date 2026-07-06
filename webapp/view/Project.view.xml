@@ -180,11 +180,26 @@
                     </Panel>
 
                     <Title text="{i18n>project.techTitle}" level="H3" class="sapUiSmallMarginTop"/>
+                    <Text text="{i18n>project.techIntro}"
+                        class="sapUiSmallMarginBottom"/>
                     <List class="sapUiSmallMarginBottom">
                         <StandardListItem title="{i18n>project.techUi5Title}" info="{i18n>project.techUi5Info}"/>
                         <StandardListItem title="{i18n>project.techVizTitle}" info="{i18n>project.techVizInfo}"/>
                         <StandardListItem title="{i18n>project.techModelTitle}" info="{i18n>project.techModelInfo}"/>
+                        <StandardListItem title="{i18n>project.techDataTitle}" info="{i18n>project.techDataInfo}"/>
+                        <StandardListItem title="{i18n>project.techProxyTitle}" info="{i18n>project.techProxyInfo}"/>
                         <StandardListItem title="{i18n>project.techAiTitle}" info="{i18n>project.techAiInfo}"/>
+                        <StandardListItem title="{i18n>project.techI18nTitle}" info="{i18n>project.techI18nInfo}"/>
+                    </List>
+
+                    <Title text="{i18n>project.implTitle}" level="H3" class="sapUiSmallMarginTop"/>
+                    <Text text="{i18n>project.implIntro}"
+                        class="sapUiSmallMarginBottom"/>
+                    <List class="sapUiSmallMarginBottom">
+                        <StandardListItem title="{i18n>project.implGoalTitle}" info="{i18n>project.implGoalInfo}"/>
+                        <StandardListItem title="{i18n>project.implDataTitle}" info="{i18n>project.implDataInfo}"/>
+                        <StandardListItem title="{i18n>project.implDeployTitle}" info="{i18n>project.implDeployInfo}"/>
+                        <StandardListItem title="{i18n>project.implLearnTitle}" info="{i18n>project.implLearnInfo}"/>
                     </List>
 
                     <Title text="{i18n>project.featuresTitle}" level="H3" class="sapUiSmallMarginTop"/>

@@ -34,7 +34,7 @@ test("Chat context includes current page label and relevant KPI slice", () => {
             return {
               getText(key) {
                 const labels = {
-                  "process.r2r": "Buchung bis Abschluss"
+                  "process.r2r": "Record to Report"
                 };
                 return labels[key] || key;
               }
@@ -54,7 +54,7 @@ test("Chat context includes current page label and relevant KPI slice", () => {
   };
 
   const context = ChatContextBuilder.buildContext(component, "#/r2r");
-  assert.match(context, /Aktuell angezeigte Seite: Buchung bis Abschluss/);
+  assert.match(context, /Aktuell angezeigte Seite: Record to Report/);
   assert.match(context, /KPI-Daten aus der App/);
   assert.match(context, /R2RKpiTable/);
   assert.doesNotMatch(context, /S2PKpiTable/);

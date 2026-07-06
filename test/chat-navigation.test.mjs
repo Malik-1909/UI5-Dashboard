@@ -12,7 +12,7 @@ const navigationGuardPath = path.join(root, "webapp/utils/ChatNavigationGuard.js
 const mockBundle = {
   getText(key) {
     const labels = {
-      "process.s2p": "Beschaffung bis Zahlung"
+      "process.s2p": "Source to Pay"
     };
     return labels[key] || key;
   }
@@ -42,5 +42,5 @@ test("Chat navigation guard allows explicit navigation command", () => {
   assert.equal(explicit.handled, true);
   assert.equal(explicit.shouldNavigate, true);
   assert.equal(explicit.route, "s2p");
-  assert.equal(explicit.label, "Beschaffung bis Zahlung");
+  assert.equal(explicit.label, "Source to Pay");
 });
