@@ -2,6 +2,7 @@ const fs = require("fs");
 const path = require("path");
 const express = require("express");
 const createChatProxy = require("ui5-middleware-chat-proxy");
+const visitTracker = require("./middleware/visit-tracker");
 
 const app = express();
 const port = Number(process.env.PORT) || 8080;
@@ -16,6 +17,8 @@ app.get("/health", (_req, res) => {
     res.set("Access-Control-Allow-Origin", "*");
     res.status(200).json({ status: "ok" });
 });
+
+app.post("/api/track", express.json({ limit: "4kb" }), visitTracker.expressHandler);
 
 app.use((req, res, next) => chatProxy(req, res, next));
 

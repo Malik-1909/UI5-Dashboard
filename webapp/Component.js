@@ -4,8 +4,9 @@ sap.ui.define([
     "sap/m/MessageToast",
     "sap/ui/core/BusyIndicator",
     "ui5/vizframe/app/utils/SapDataLoader",
-    "ui5/vizframe/app/utils/BtpHealthMonitor"
-], function (UIComponent, JSONModel, MessageToast, BusyIndicator, SapDataLoader, BtpHealthMonitor) {
+    "ui5/vizframe/app/utils/BtpHealthMonitor",
+    "ui5/vizframe/app/utils/VisitTracker"
+], function (UIComponent, JSONModel, MessageToast, BusyIndicator, SapDataLoader, BtpHealthMonitor, VisitTracker) {
     "use strict";
 
     return UIComponent.extend("ui5.vizframe.app.Component", {
@@ -23,6 +24,7 @@ sap.ui.define([
                 this._initSalesModelAfterSandbox();
             }
             this.getRouter().initialize();
+            VisitTracker.start(this);
         },
 
         _isGitHubPagesHost: function () {

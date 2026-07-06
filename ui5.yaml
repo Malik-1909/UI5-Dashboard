@@ -13,6 +13,8 @@ framework:
     - name: themelib_sap_horizon
 server:
   customMiddleware:
+    - name: visit-tracker
+      afterMiddleware: compression
     - name: chat-proxy
       afterMiddleware: compression
     - name: sap-fe-mockserver

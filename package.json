@@ -23,7 +23,8 @@
   },
   "dependencies": {
     "express": "^4.22.1",
-    "ui5-middleware-chat-proxy": "file:./middleware/chat-proxy"
+    "ui5-middleware-chat-proxy": "file:./middleware/chat-proxy",
+    "ui5-middleware-visit-tracker": "file:./middleware/visit-tracker"
   },
   "devDependencies": {
     "@sap-ux/ui5-middleware-fe-mockserver": "^2.4.10",

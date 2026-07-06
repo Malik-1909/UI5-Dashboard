@@ -1,0 +1,6 @@
+{
+  "name": "ui5-middleware-visit-tracker",
+  "version": "1.0.0",
+  "description": "Logs /api/track visit events for BTP portfolio analytics",
+  "main": "index.js"
+}

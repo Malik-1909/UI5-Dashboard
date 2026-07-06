@@ -2,7 +2,7 @@ node_modules
 dist/
 *.zip
 webapp/localService/static-mock-bundle.json
-logs/btp-keepalive.jsonl
+logs/*.jsonl
 
 # API keys – never commit this file
 .env
