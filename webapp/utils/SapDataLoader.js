@@ -18,7 +18,6 @@ sap.ui.define([], function () {
     var REQUEST_TIMEOUT_MS = 10000;
     var MAX_RETRIES = 2;
     var RETRY_DELAY_MS = 600;
-    var STAGGER_DELAY_MS = 220;
 
     var URLS = {
         salesOrders:
@@ -91,7 +90,8 @@ sap.ui.define([], function () {
                 })
                 .catch(function (err) {
                     var retryable = !err || err.name === "AbortError" ||
-                        (err.kind === "http" && (err.status >= 500 || err.status === 429));
+                        (err.kind === "http" && err.status >= 500 && err.status !== 502 && err.status !== 503) ||
+                        (err.kind === "http" && err.status === 429);
                     if (retryable && attempt <= MAX_RETRIES) {
                         return _sleep(RETRY_DELAY_MS * attempt).then(run);
                     }
@@ -373,17 +373,20 @@ sap.ui.define([], function () {
                 { key: "d2oStock", url: URLS.materialStock }
             ];
 
-            return endpoints.reduce(function (chain, endpoint) {
-                return chain.then(function (state) {
-                    return _fetch(endpoint.url).then(function (result) {
-                        state.results[endpoint.key] = result.rows;
-                        if (result.error) {
-                            state.failures[endpoint.key] = result.error + " (Versuche: " + result.attempts + ")";
-                        }
-                        return _sleep(STAGGER_DELAY_MS).then(function () { return state; });
-                    });
+            return Promise.all(endpoints.map(function (endpoint) {
+                return _fetch(endpoint.url).then(function (result) {
+                    return { key: endpoint.key, result: result };
                 });
-            }, Promise.resolve({ results: {}, failures: {} })).then(function (state) {
+            })).then(function (aResponses) {
+                var state = { results: {}, failures: {} };
+                aResponses.forEach(function (entry) {
+                    state.results[entry.key] = entry.result.rows;
+                    if (entry.result.error) {
+                        state.failures[entry.key] = entry.result.error + " (Versuche: " + entry.result.attempts + ")";
+                    }
+                });
+                return state;
+            }).then(function (state) {
                 var res = state.results;
                 var merged = Object.assign(
                     {},

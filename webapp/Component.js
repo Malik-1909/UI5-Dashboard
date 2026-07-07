@@ -2,11 +2,10 @@ sap.ui.define([
     "sap/ui/core/UIComponent",
     "sap/ui/model/json/JSONModel",
     "sap/m/MessageToast",
-    "sap/ui/core/BusyIndicator",
     "ui5/vizframe/app/utils/SapDataLoader",
     "ui5/vizframe/app/utils/BtpHealthMonitor",
     "ui5/vizframe/app/utils/VisitTracker"
-], function (UIComponent, JSONModel, MessageToast, BusyIndicator, SapDataLoader, BtpHealthMonitor, VisitTracker) {
+], function (UIComponent, JSONModel, MessageToast, SapDataLoader, BtpHealthMonitor, VisitTracker) {
     "use strict";
 
     return UIComponent.extend("ui5.vizframe.app.Component", {
@@ -67,8 +66,7 @@ sap.ui.define([
             var oBaseData = oModel.getData() || {};
             this.setModel(oModel, "sales");
 
-            BusyIndicator.show(0);
-
+            // Mock-Daten sind bereits sichtbar – Live-Laden im Hintergrund, ohne UI zu blockieren.
             return SapDataLoader.loadAll()
                 .then(function (result) {
                     var nLoaded = Object.keys(result.sources).reduce(function (s, k) { return s + result.sources[k]; }, 0);
@@ -119,7 +117,6 @@ sap.ui.define([
                 })
                 .finally(function () {
                     oThis.setModel(oModel, "sales");
-                    BusyIndicator.hide();
                 });
         }
     });
