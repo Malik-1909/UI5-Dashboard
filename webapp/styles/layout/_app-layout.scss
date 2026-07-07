@@ -10,6 +10,50 @@
   box-sizing: border-box;
 }
 
+/* Floating Pill-Nav: Kapsel schwebt, Header-Hülle unsichtbar */
+#content .sapMPage > header.sapMPageHeader {
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  padding: t.$header-float-gap 0;
+  overflow: visible;
+  flex-shrink: 0;
+
+  &::after {
+    display: none !important;
+    content: none !important;
+  }
+
+  .sapMBar,
+  .sapMBar.sapMHeader-CTX,
+  .sapMBar.sapMPageHeader {
+    width: calc(100% - #{t.$header-float-gap * 2});
+    margin: 0 auto;
+    border-radius: t.$header-pill-radius;
+    box-shadow: t.$shadow-card !important;
+    background: #fff !important;
+    border: none !important;
+    overflow: hidden;
+    box-sizing: border-box;
+  }
+
+  @include m.bp-mobile {
+    .sapMBar,
+    .sapMBar.sapMHeader-CTX,
+    .sapMBar.sapMPageHeader {
+      width: calc(100% - #{t.$page-padding-x-mobile * 2});
+    }
+  }
+}
+
+/* UI5 setzt Scroll-top nur nach Bar-Höhe (ohne Margin) → Flex statt absolute */
+#content .sapMPage .sapMPageEnableScrolling {
+  position: relative !important;
+  top: auto !important;
+  bottom: auto !important;
+  height: auto !important;
+}
+
 /* Einheitliches Seiten-Padding (wie Homepage) für alle Views */
 #content .sapMPage .sapMPageContent,
 #content .sapMPageSection {

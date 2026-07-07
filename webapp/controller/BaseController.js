@@ -30,7 +30,11 @@ sap.ui.define([
                 this._oBurgerPopover = BurgerMenuHelper.createBurgerPopover(this, !bIsMain);
                 this.getView().addDependent(this._oBurgerPopover);
             }
-            this._oBurgerPopover.openBy(oButton);
+            if (this._oBurgerPopover.isOpen()) {
+                this._oBurgerPopover.close();
+            } else {
+                this._oBurgerPopover.openBy(oButton);
+            }
         }
     });
 });

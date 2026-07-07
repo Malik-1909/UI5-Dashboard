@@ -33,7 +33,7 @@
 }
 
 /* Fokus sichtbar (WCAG 2.4.7) – FAB außerhalb UI5-Theme */
-#chatFabHost .chatFabBtn.chatFabAi.sapMBtn:focus-visible {
+#chatFabHost .chatFabBtn.chatFabAi.sapMBtn:focus-visible .sapMBtnInner {
   outline: 3px solid var(--sapContent_FocusColor, #000);
   outline-offset: 3px;
 }

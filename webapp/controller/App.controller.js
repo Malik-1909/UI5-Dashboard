@@ -103,7 +103,7 @@ sap.ui.define([
 
             this._oFabBtn = new Button({
                 icon:           "sap-icon://message-popup",
-                type:           "Emphasized",
+                type:           "Transparent",
                 tooltip:        this._getI18nText("chat.fabTooltip"),
                 accessibleName: this._getI18nText("chat.fabAccessible"),
                 press:          this._onFabPress.bind(this)
