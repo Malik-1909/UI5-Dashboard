@@ -66,6 +66,8 @@
                     <l:VerticalLayout width="100%" class="sapUiMediumMarginBottom">
                         <Title text="{i18n>project.hostingTitle}" level="H3"/>
                         <Text text="{i18n>project.hostingBody}" class="projectProse sapUiTinyMarginTop"/>
+                        <Title text="{i18n>project.sapProxyTitle}" level="H4" class="sapUiSmallMarginTop"/>
+                        <Text text="{i18n>project.sapProxyBody}" class="projectProse sapUiTinyMarginTop"/>
                         <Text text="{i18n>project.keepaliveBody}" class="projectProse sapUiTinyMarginTop"/>
                     </l:VerticalLayout>
 
