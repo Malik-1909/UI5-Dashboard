@@ -1,0 +1,74 @@
+name: SAP Data Cache
+
+# Holt stündlich SAP-Sandbox-Daten und publiziert sie als JSON auf den
+# Branch "sap-cache-data". Grund: Der BTP-Trial-Egress erreicht
+# sandbox.api.sap.com nicht; GitHub-Runner und raw.githubusercontent schon.
+on:
+  schedule:
+    - cron: "17 * * * *"  # stündlich um :17 (versetzt zum Keep-Alive)
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: sap-cache
+  cancel-in-progress: false
+
+jobs:
+  fetch-and-publish:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Fetch SAP sandbox data
+        env:
+          SAP_API_KEY: ${{ secrets.SAP_API_KEY }}
+        run: node scripts/fetch-sap-cache.mjs
+
+      - name: Publish to sap-cache-data branch
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          cp sap-cache/sap-cache.json "$RUNNER_TEMP/sap-cache.json"
+
+          git fetch origin sap-cache-data || true
+          if git show-ref --verify --quiet refs/remotes/origin/sap-cache-data; then
+            git checkout -B sap-cache-data origin/sap-cache-data
+          else
+            git checkout --orphan sap-cache-data
+            git rm -rf . >/dev/null 2>&1 || true
+          fi
+
+          cp "$RUNNER_TEMP/sap-cache.json" sap-cache.json
+          git add sap-cache.json
+
+          if git diff --cached --quiet; then
+            echo "Keine Änderungen am Cache."
+          else
+            git commit -m "chore(sap-cache): update $(date -u +%Y-%m-%dT%H:%M:%SZ)"
+            git push origin sap-cache-data
+          fi
+
+      - name: Summary
+        if: always()
+        run: |
+          {
+            echo "## SAP Data Cache – $(date -u +%Y-%m-%dT%H:%M:%SZ)"
+            echo ""
+            if [ -f sap-cache/sap-cache.json ]; then
+              echo '```json'
+              node -e "const c=require('./sap-cache/sap-cache.json');console.log(JSON.stringify({fetchedAt:c.fetchedAt,sources:c.sources,failures:c.failures},null,2))"
+              echo '```'
+            else
+              echo "Keine Cache-Datei erzeugt (Fetch fehlgeschlagen)."
+            fi
+          } >> "$GITHUB_STEP_SUMMARY"

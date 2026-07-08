@@ -7,9 +7,11 @@
 | GitHub Pages | `npm run deploy` | Mock | StaticChatMock | Öffentliche Demo (Standard) |
 | GitHub Pages (legacy) | `npm run deploy:gh-pages-branch` | Mock | StaticChatMock | Nur optional/fallback |
 | BTP Staticfile (interim) | `npm run deploy:zip` | Mock* | Nein* | Nur Frontend – siehe unten |
-| BTP mit Backend (Node) | `cf push -f manifest-node.yml` | Sandbox | Groq | API-Keys als CF Env Vars |
+| BTP mit Backend (Node) | `cf push -f manifest-node.yml` | SAP via GitHub-Cache† | Groq | API-Keys als CF Env Vars |
 
 \* Ohne Backend versucht die App `/api/sap/*` und `/api/chat` – Antworten scheitern, Mock-Fallback greift.
+
+† BTP-Trial erreicht die SAP-Sandbox nicht direkt; die App liest einen stündlich per GitHub Action befüllten Cache. Details unten unter „SAP-Daten auf BTP“.
 
 ---
 
@@ -148,3 +150,44 @@ Die UI5-Oberfläche bleibt unverändert; nur das Hosting-Backend wird ergänzt.
 - Für **Portfolio-/Demo-Zwecke** im Trial ein pragmatischer Workaround ohne Pay-as-you-go.
 - Kein Ersatz für produktiven Betrieb (kein SLA, Trial max. 90 Tage).
 - Keys nur als GitHub Secrets – nie im Repo committen.
+
+---
+
+## SAP-Daten auf BTP (Cache über GitHub Actions)
+
+**Problem:** Der BTP-Trial-Egress erreicht `sandbox.api.sap.com` (IP `157.133.171.110`) **nicht** – der TCP-Connect läuft in ein Timeout. Allgemeiner Internetzugang aus dem Container funktioniert (z. B. Groq/KI). Es ist eine Netzwerk-/Routing-Einschränkung im Trial, kein Code- oder Key-Fehler.
+
+**Lösung:** Ein GitHub-Runner (freier Internetzugang) holt die SAP-Daten und legt sie als JSON ab; die BTP-App liest den Cache statt der Sandbox.
+
+```
+Workflow sap-cache.yml (stündlich)
+  └─ scripts/fetch-sap-cache.mjs holt 6 SAP-Endpoints mit SAP_API_KEY
+  └─ schreibt sap-cache/sap-cache.json
+  └─ published auf Branch sap-cache-data
+
+BTP: server.js  →  GET /api/sap-cache
+  └─ holt raw.githubusercontent.com/.../sap-cache-data/sap-cache.json (erreichbar)
+  └─ In-Memory-Cache 10 Min, stale-while-error
+
+Browser: SapDataLoader
+  └─ auf *.cfapps.* → /api/sap-cache (Cache), sonst → direkt Sandbox (lokal)
+```
+
+- **Lokal** (`npm run start`): unverändert direkter Sandbox-Zugriff (real-time).
+- **BTP**: Daten stündlich frisch; bei Cache-Ausfall greift der Mock-Fallback.
+- **API-Key** bleibt serverseitig im GitHub Secret – nie im Browser oder im JSON.
+
+### Secret
+
+| Secret | Pflicht | Beschreibung |
+|--------|---------|--------------|
+| `SAP_API_KEY` | ja | API-Key von https://api.sap.com (Settings → Show API Key) |
+
+### Aktivieren
+
+1. Secret `SAP_API_KEY` in GitHub → Settings → Secrets → Actions anlegen.
+2. Workflow einmalig manuell starten: Actions → **SAP Data Cache** → **Run workflow** (erzeugt den Branch `sap-cache-data`).
+3. BTP neu deployen (`npm run build:cf && cf push -f manifest-node.yml`).
+4. Prüfen: `curl …/api/sap-cache` liefert JSON; Detailseiten-Badges zeigen „SAP API“.
+
+Optionale Env-Var auf BTP: `SAP_CACHE_URL` überschreibt die Standard-Cache-URL.

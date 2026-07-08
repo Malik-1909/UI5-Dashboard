@@ -18,6 +18,46 @@ app.get("/health", (_req, res) => {
     res.status(200).json({ status: "ok" });
 });
 
+// SAP-Daten kommen aus einem stündlich per GitHub Action erzeugten Cache.
+// Grund: Der BTP-Trial-Egress erreicht sandbox.api.sap.com nicht direkt
+// (TCP-Connect-Timeout auf 157.133.171.110). raw.githubusercontent.com ist erreichbar.
+const SAP_CACHE_URL = process.env.SAP_CACHE_URL ||
+    "https://raw.githubusercontent.com/Malik-1909/UI5-Dashboard/sap-cache-data/sap-cache.json";
+const SAP_CACHE_TTL_MS = 10 * 60 * 1000;
+let sapCache = { at: 0, body: null };
+
+app.get("/api/sap-cache", async (_req, res) => {
+    res.set("Cache-Control", "public, max-age=300");
+
+    if (sapCache.body && (Date.now() - sapCache.at) < SAP_CACHE_TTL_MS) {
+        res.type("application/json").send(sapCache.body);
+        return;
+    }
+
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), 8000);
+    try {
+        const r = await fetch(SAP_CACHE_URL, {
+            headers: { Accept: "application/json" },
+            signal: controller.signal,
+            cache: "no-store"
+        });
+        if (!r.ok) { throw new Error("cache source HTTP " + r.status); }
+        const body = await r.text();
+        sapCache = { at: Date.now(), body };
+        res.type("application/json").send(body);
+    } catch (err) {
+        console.error("[sap-cache] Fehler:", err.message);
+        if (sapCache.body) {
+            res.type("application/json").send(sapCache.body); // stale-while-error
+            return;
+        }
+        res.status(502).json({ error: "SAP-Cache nicht erreichbar: " + err.message });
+    } finally {
+        clearTimeout(timer);
+    }
+});
+
 app.post("/api/track", express.json({ limit: "4kb" }), visitTracker.expressHandler);
 
 app.use((req, res, next) => chatProxy(req, res, next));

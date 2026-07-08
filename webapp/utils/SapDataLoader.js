@@ -357,57 +357,88 @@ sap.ui.define([], function () {
 
     // ── Public API ────────────────────────────────────────────────────────────
 
+    function _mergeAndReport(res, failures) {
+        var merged = Object.assign(
+            {},
+            _l2c(res.l2c || []),
+            _s2p(res.s2p || []),
+            _r2r(res.r2r || []),
+            _rtr(res.rtr || []),
+            _d2o(res.d2oDocs || [], res.d2oStock || [])
+        );
+        return {
+            data: merged,
+            sources: {
+                l2c: (res.l2c || []).length,
+                s2p: (res.s2p || []).length,
+                r2r: (res.r2r || []).length,
+                rtr: (res.rtr || []).length,
+                d2o: (res.d2oDocs || []).length + (res.d2oStock || []).length
+            },
+            failures: failures || {}
+        };
+    }
+
+    function _runningOnBtp() {
+        var h = (typeof window !== "undefined" && window.location && window.location.hostname) || "";
+        return /cfapps\./i.test(h);
+    }
+
+    // BTP-Trial erreicht sandbox.api.sap.com nicht direkt (TCP-Connect-Timeout).
+    // Deshalb liest die App auf BTP den stündlich per GitHub Action befüllten
+    // Cache unter /api/sap-cache (serverseitig von raw.githubusercontent geholt).
+    function _loadFromCache() {
+        return _fetchWithTimeout("/api/sap-cache", REQUEST_TIMEOUT_MS)
+            .then(function (res) {
+                if (!res.ok) { throw new Error("HTTP " + res.status); }
+                return res.json();
+            })
+            .then(function (cache) {
+                return _mergeAndReport((cache && cache.data) || {}, (cache && cache.failures) || {});
+            })
+            .catch(function (err) {
+                // Cache nicht erreichbar → leeres Ergebnis → Component nutzt Mock-Fallback
+                return _mergeAndReport({}, { cache: (err && err.message) || "Cache-Fehler" });
+            });
+    }
+
+    // Lokal/Direktzugriff: Sandbox-APIs parallel mit Retry/Timeout laden.
+    function _loadFromSandbox() {
+        var endpoints = [
+            { key: "l2c", url: URLS.salesOrders },
+            { key: "s2p", url: URLS.purchaseOrders },
+            { key: "r2r", url: URLS.journalEntries },
+            { key: "rtr", url: URLS.sfUsers },
+            { key: "d2oDocs", url: URLS.materialDocuments },
+            { key: "d2oStock", url: URLS.materialStock }
+        ];
+
+        return Promise.all(endpoints.map(function (endpoint) {
+            return _fetch(endpoint.url).then(function (result) {
+                return { key: endpoint.key, result: result };
+            });
+        })).then(function (aResponses) {
+            var results = {};
+            var failures = {};
+            aResponses.forEach(function (entry) {
+                results[entry.key] = entry.result.rows;
+                if (entry.result.error) {
+                    failures[entry.key] = entry.result.error + " (Versuche: " + entry.result.attempts + ")";
+                }
+            });
+            return _mergeAndReport(results, failures);
+        });
+    }
+
     return {
         /**
-         * Lädt SAP Sandbox-Daten gestaffelt mit Retry/Timeout.
-         * Gibt { data: {EntitySet: [...], ...}, sources: {l2c:n, s2p:n, ...}, failures: {...} } zurück.
-         * Schlägt eine API fehl, bleibt ihr Teil leer → Component.js nutzt Mock-Fallback.
+         * Lädt SAP-Daten und transformiert sie in die Mock-Struktur.
+         * Auf BTP aus dem stündlichen Cache (/api/sap-cache), sonst direkt aus der Sandbox.
+         * Gibt { data: {EntitySet: [...], ...}, sources: {...}, failures: {...} } zurück.
+         * Schlägt es fehl, bleiben die Teile leer → Component.js nutzt Mock-Fallback.
          */
         loadAll: function () {
-            var endpoints = [
-                { key: "l2c", url: URLS.salesOrders },
-                { key: "s2p", url: URLS.purchaseOrders },
-                { key: "r2r", url: URLS.journalEntries },
-                { key: "rtr", url: URLS.sfUsers },
-                { key: "d2oDocs", url: URLS.materialDocuments },
-                { key: "d2oStock", url: URLS.materialStock }
-            ];
-
-            return Promise.all(endpoints.map(function (endpoint) {
-                return _fetch(endpoint.url).then(function (result) {
-                    return { key: endpoint.key, result: result };
-                });
-            })).then(function (aResponses) {
-                var state = { results: {}, failures: {} };
-                aResponses.forEach(function (entry) {
-                    state.results[entry.key] = entry.result.rows;
-                    if (entry.result.error) {
-                        state.failures[entry.key] = entry.result.error + " (Versuche: " + entry.result.attempts + ")";
-                    }
-                });
-                return state;
-            }).then(function (state) {
-                var res = state.results;
-                var merged = Object.assign(
-                    {},
-                    _l2c(res.l2c || []),
-                    _s2p(res.s2p || []),
-                    _r2r(res.r2r || []),
-                    _rtr(res.rtr || []),
-                    _d2o(res.d2oDocs || [], res.d2oStock || [])
-                );
-                return {
-                    data: merged,
-                    sources: {
-                        l2c: (res.l2c || []).length,
-                        s2p: (res.s2p || []).length,
-                        r2r: (res.r2r || []).length,
-                        rtr: (res.rtr || []).length,
-                        d2o: (res.d2oDocs || []).length + (res.d2oStock || []).length
-                    },
-                    failures: state.failures
-                };
-            });
+            return _runningOnBtp() ? _loadFromCache() : _loadFromSandbox();
         }
     };
 });
