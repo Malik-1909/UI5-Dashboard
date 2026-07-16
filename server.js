@@ -62,15 +62,28 @@ app.post("/api/track", express.json({ limit: "4kb" }), visitTracker.expressHandl
 
 app.use((req, res, next) => chatProxy(req, res, next));
 
+// App-Shell-Dateien (HTML, Manifest, i18n, Preload) ändern sich bei jedem Deploy,
+// tragen aber keinen Hash im Namen. Ohne Revalidierung sehen wiederkehrende Besucher
+// bis zu maxAge lang die alte Version. Daher: immer revalidieren (ETag → 304),
+// nur echte statische Assets dürfen länger gecacht werden.
+const REVALIDATE = "no-cache";
+const SHELL_FILE = /(index\.html|manifest\.json|Component-preload\.js|\.properties)$/i;
+
 app.use(express.static(distDir, {
     index: false,
-    maxAge: "1h"
+    maxAge: "1h",
+    setHeaders: (res, filePath) => {
+        if (SHELL_FILE.test(filePath)) {
+            res.set("Cache-Control", REVALIDATE);
+        }
+    }
 }));
 
 app.get("*", (req, res, next) => {
     if (req.path.startsWith("/api/")) {
         return next();
     }
+    res.set("Cache-Control", REVALIDATE);
     return res.sendFile(indexFile);
 });
 

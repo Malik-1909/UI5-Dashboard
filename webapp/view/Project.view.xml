@@ -82,6 +82,11 @@
                         <Text text="{i18n>project.featuresBody}" class="projectProse sapUiTinyMarginTop"/>
                     </l:VerticalLayout>
 
+                    <l:VerticalLayout width="100%" class="sapUiMediumMarginBottom">
+                        <Title text="{i18n>project.privacyTitle}" level="H3"/>
+                        <Text text="{i18n>project.privacyBody}" class="projectProse sapUiTinyMarginTop"/>
+                    </l:VerticalLayout>
+
                     <Link text="{i18n>project.repoLinkText}" href="https://github.com/Malik-1909/UI5-Dashboard" target="_blank"/>
 
                 </l:VerticalLayout>

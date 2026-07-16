@@ -1,92 +1,48 @@
 /**
- * Sendet Besucher-Events an POST /api/track (lokal + BTP, nicht GitHub Pages).
- * ref-Slug aus ?ref=… wird in sessionStorage gehalten.
+ * Minimales, datensparsames Referral-Tracking.
+ *
+ * Sendet beim Laden EINMAL POST /api/track mit dem ref-Kürzel aus der URL (?ref=...).
+ * Bewusst reduziert: kein Cookie, kein sessionStorage, keine Session-ID, keine IP,
+ * keine Routen/Verweildauer – nur das selbst vergebene Kürzel; der Zeitpunkt wird
+ * serverseitig gesetzt. Nicht aktiv auf GitHub Pages (statisch, kein Backend).
  */
 sap.ui.define([], function () {
     "use strict";
 
-    var SESSION_ID_KEY = "ui5_visit_session_id";
-    var REF_KEY = "ui5_visit_ref";
     var TRACK_URL = "/api/track";
+    var REF_MAX_LEN = 64;
 
     function isEnabled(hostname) {
         return !!hostname && !/\.github\.io$/i.test(hostname);
     }
 
-    function readRefFromUrl() {
+    function readRef() {
         try {
-            return new URLSearchParams(window.location.search).get("ref") || "";
-        } catch (_e) {
+            var raw = new URLSearchParams(window.location.search).get("ref") || "";
+            return raw.slice(0, REF_MAX_LEN).replace(/[^a-zA-Z0-9._-]/g, "");
+        } catch (e) {
             return "";
         }
     }
 
-    function getRef() {
-        var stored = sessionStorage.getItem(REF_KEY);
-        if (stored) {
-            return stored;
-        }
-        var ref = readRefFromUrl();
-        if (ref) {
-            sessionStorage.setItem(REF_KEY, ref);
-        }
-        return ref || "";
-    }
-
-    function getSessionId() {
-        var id = sessionStorage.getItem(SESSION_ID_KEY);
-        if (!id) {
-            id = "s_" + Date.now().toString(36) + "_" + Math.random().toString(36).slice(2, 10);
-            sessionStorage.setItem(SESSION_ID_KEY, id);
-        }
-        return id;
-    }
-
-    function sendPayload(payload) {
-        var body = JSON.stringify(Object.assign({
-            ref: getRef(),
-            sessionId: getSessionId()
-        }, payload));
-
-        if (payload.event === "session_end" && typeof navigator.sendBeacon === "function") {
-            navigator.sendBeacon(TRACK_URL, new Blob([body], { type: "application/json" }));
-            return;
-        }
-
-        fetch(TRACK_URL, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: body,
-            keepalive: true
-        }).catch(function () { /* stiller Fehler – Tracking darf App nicht stören */ });
-    }
-
-    function track(event, route, extra) {
-        sendPayload(Object.assign({
-            event: event,
-            route: route || ""
-        }, extra || {}));
-    }
-
-    function start(oComponent) {
+    function start() {
         if (!isEnabled(window.location.hostname)) {
             return;
         }
 
-        var iSessionStart = Date.now();
+        var sRef = readRef();
+        if (!sRef) {
+            return; // ohne Kürzel gibt es nichts zuzuordnen -> nichts senden
+        }
 
-        track("session_start", "");
-
-        var oRouter = oComponent.getRouter();
-        oRouter.attachRouteMatched(function (oEvent) {
-            track("page_view", oEvent.getParameter("name") || "");
-        });
-
-        window.addEventListener("beforeunload", function () {
-            track("session_end", "", {
-                durationSec: Math.round((Date.now() - iSessionStart) / 1000)
-            });
-        });
+        try {
+            fetch(TRACK_URL, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ ref: sRef }),
+                keepalive: true
+            }).catch(function () { /* Tracking darf die App nie stören */ });
+        } catch (e) { /* still */ }
     }
 
     return {

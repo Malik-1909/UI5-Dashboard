@@ -1,54 +1,60 @@
 # Logs
 
-## Besucher-Tracking (`visits.jsonl`)
+## Besucher-Tracking (Referral)
 
-Lokal schreibt `POST /api/track` Einträge nach `logs/visits.jsonl` (gitignored).
-Auf **BTP** landen dieselben Zeilen in **stdout** → `cf logs ui5-app-node --recent`.
+Minimal und datensparsam: `POST /api/track` speichert pro geöffnetem Link **nur** den
+Zeitpunkt und das selbst vergebene Kürzel aus `?ref=…`. **Keine** Cookies, IP-Adressen,
+Session-IDs, Routen oder Verweildauer. Ohne `ref` im Link wird nichts erfasst.
 
-### Test lokal
+**Persistenz:**
 
-1. Dev-Server neu starten (`npm run start`)
-2. App öffnen mit Slug, z. B. `http://localhost:8080/index.html?ref=test-slug`
-3. Eine Seite anklicken (z. B. Projekt)
-4. Log prüfen:
-
-```bash
-tail -f logs/visits.jsonl
-```
+- **BTP / Produktiv:** Insert nach **Supabase** (Tabelle `visits`), sofern `SUPABASE_URL`
+  und `SUPABASE_SERVICE_ROLE_KEY` gesetzt sind → überlebt App-Neustarts (Keep-Alive).
+- **Lokal ohne Supabase:** `logs/visits.jsonl` (gitignored).
+- **Immer zusätzlich:** stdout → `cf logs ui5-app-node --recent`.
 
 ### Bewerbungs-Links
 
-Gleiche BTP-URL, pro Bewerbung eigener Slug:
+Gleiche BTP-URL, pro Kanal/Firma ein eigener Slug (muss `?ref=` **vor** einem `#` stehen):
 
 ```
 https://ui5-app-node.cfapps.us10-001.hana.ondemand.com/?ref=sap-jul26
 ```
 
-Der Slug muss nirgends vorab registriert werden – er wird aus der URL gelesen und mitgeloggt.
+Der Slug muss nirgends vorab registriert werden – er wird aus der URL gelesen und gespeichert.
+Erlaubte Zeichen: `a–z A–Z 0–9 . _ -` (max. 64), Rest wird serverseitig entfernt.
 
-### Format (JSON pro Zeile)
+### Format (JSON pro Zeile / Tabellenzeile)
 
 ```json
-{"ts":"2026-07-06T19:30:00.000Z","event":"session_start","ref":"sap-jul26"}
-{"ts":"2026-07-06T19:30:05.000Z","event":"page_view","ref":"sap-jul26","route":"project"}
-{"ts":"2026-07-06T19:33:00.000Z","event":"session_end","ref":"sap-jul26","durationSec":175}
+{"ts":"2026-07-16T19:30:00.000Z","ref":"sap-jul26"}
 ```
 
 | Feld | Bedeutung |
 |------|-----------|
 | `ts` | Zeitstempel (UTC) |
-| `event` | `session_start`, `page_view`, `session_end` |
-| `ref` | Slug aus `?ref=…` (Bewerbungs-Zuordnung) |
-| `route` | Nur bei `page_view` – UI5-Route (`main`, `project`, …) |
-| `durationSec` | Nur bei `session_end` – Verweildauer in Sekunden |
+| `ref` | Slug aus `?ref=…` (Kanal-/Firmen-Zuordnung) |
 
-Neuesten Eintrag ansehen: `tail -1 logs/visits.jsonl`
+### Auswertung
 
-### Logs auf BTP lesen
+**Supabase (dauerhaft, empfohlen)** – im SQL Editor:
 
-```bash
-cf logs ui5-app-node --recent | grep visit-track
+```sql
+select ref, count(*) as opens, min(ts) as first_open, max(ts) as last_open
+from visits
+group by ref
+order by opens desc;
 ```
+
+**Lokal:** `tail -f logs/visits.jsonl`
+
+**BTP-Puffer (kurzlebig):** `cf logs ui5-app-node --recent | grep visit-track`
+
+### Test lokal
+
+1. Dev-Server neu starten (`npm run start`)
+2. App öffnen mit Slug, z. B. `http://localhost:8080/index.html?ref=test-slug`
+3. Log prüfen: `tail -f logs/visits.jsonl`
 
 ---
 
