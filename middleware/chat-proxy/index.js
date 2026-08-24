@@ -36,7 +36,7 @@ function loadDotEnv() {
 loadDotEnv();
 
 const GROQ_URL        = "https://api.groq.com/openai/v1/chat/completions";
-const GROQ_MODEL      = "llama-3.3-70b-versatile";
+const GROQ_MODEL      = "openai/gpt-oss-120b"; // llama-3.3-70b-versatile seit 16.08.2026 eingestellt
 const SAP_SANDBOX     = "https://sandbox.api.sap.com";
 const SAP_API_PREFIX  = "/api/sap";
 
