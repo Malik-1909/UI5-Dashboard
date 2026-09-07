@@ -140,7 +140,7 @@ Die UI5-Oberfläche bleibt unverändert; nur das Hosting-Backend wird ergänzt.
 | `CF_API` | ja | z. B. `https://api.cf.us10-001.hana.ondemand.com` |
 | `CF_USERNAME` | ja | BTP-Login |
 | `CF_PASSWORD` | ja | BTP-Passwort |
-| `CF_ORG` | nein | Default `94fccd54trial` |
+| `CF_ORG` | nein | Default `00952f1etrial` |
 | `CF_SPACE` | nein | Default `dev` |
 | `CF_APP` | nein | Default `ui5-app-node` |
 | `CF_APP_URL` | nein | Health-URL, Default `…/health` |

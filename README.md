@@ -167,7 +167,7 @@ Im **BTP Trial** stoppt SAP Apps automatisch (typisch nachts). Für eine dauerha
 | `CF_API` | `https://api.cf.us10-001.hana.ondemand.com` |
 | `CF_USERNAME` | BTP-Login (E-Mail) |
 | `CF_PASSWORD` | BTP-Passwort |
-| `CF_ORG` | optional, Default: `94fccd54trial` |
+| `CF_ORG` | optional, Default: `00952f1etrial` |
 | `CF_SPACE` | optional, Default: `dev` |
 | `CF_APP` | optional, Default: `ui5-app-node` |
 | `CF_APP_URL` | optional, Default: `https://ui5-app-node.cfapps.us10-001.hana.ondemand.com/health` |

@@ -28,7 +28,7 @@ fi
 gh secret set CF_API --body "$CF_API"
 gh secret set CF_USERNAME --body "$CF_USERNAME"
 gh secret set CF_PASSWORD --body "$CF_PASSWORD"
-gh secret set CF_ORG --body "${CF_ORG:-94fccd54trial}"
+gh secret set CF_ORG --body "${CF_ORG:-00952f1etrial}"
 gh secret set CF_SPACE --body "${CF_SPACE:-dev}"
 gh secret set CF_APP --body "${CF_APP:-ui5-app-node}"
 gh secret set CF_APP_URL --body "${CF_APP_URL:-https://ui5-app-node.cfapps.us10-001.hana.ondemand.com/health}"

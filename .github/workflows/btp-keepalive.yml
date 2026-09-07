@@ -59,7 +59,7 @@ jobs:
           : "${CF_API:?Missing secret CF_API}"
           : "${CF_USERNAME:?Missing secret CF_USERNAME}"
           : "${CF_PASSWORD:?Missing secret CF_PASSWORD}"
-          ORG="${CF_ORG:-94fccd54trial}"
+          ORG="${CF_ORG:-00952f1etrial}"
           SPACE="${CF_SPACE:-dev}"
           APP="${CF_APP:-ui5-app-node}"
 
